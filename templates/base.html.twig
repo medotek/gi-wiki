@@ -4,9 +4,15 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap-grid.min.css">
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            {# encore css#}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
 
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            {# encore js#}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
 
     </head>
     <body>
