@@ -3,17 +3,47 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {# Run `composer require symfony/webpack-encore-bundle`
-           and uncomment the following Encore helpers to start using Symfony UX #}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap-grid.min.css">
         {% block stylesheets %}
-            {#{{ encore_entry_link_tags('app') }}#}
+            {# encore css#}
+            {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
-            {#{{ encore_entry_script_tags('app') }}#}
+            {# encore js#}
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
+
     </head>
     <body>
-        {% block body %}{% endblock %}
+    <div class="row">
+        <div class="col-md-3">
+            <header>
+                {% if (app.request.get('_route') == 'admin') %}
+                    <h1>admin</h1>
+                {% else %}
+                    <h1>menu</h1>
+                    <div class="logo">
+                        <img src="" alt="">
+                    </div>
+                    <div class="nav">
+                        <ul>
+                            <li>Accueil</li>
+                            <li>News</li>
+                            <li>Personnages</li>
+                            <li>Armes</li>
+                            <li>Connexion</li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </header>
+        </div>
+        <div class="col-md-9">
+            {% block body %}{% endblock %}
+        </div>
+    </div>
+
+
+
     </body>
 </html>
