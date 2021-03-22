@@ -1,51 +1,46 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap-grid.min.css">
-        {% block stylesheets %}
-            {# encore css#}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap-grid.min.css">
+    {% block stylesheets %}
+        {# encore css #}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
 
-        {% block javascripts %}
-            {# encore js#}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
+    {% block javascripts %}
+        {# encore js #}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
 
-    </head>
-    <body>
-    <div class="row">
-        <div class="col-md-3">
-            <header>
-                {% if (app.request.get('_route') == 'admin') %}
-                    <h1>admin</h1>
-                {% else %}
-                    <h1>menu</h1>
-                    <div class="logo">
-                        <img src="" alt="">
-                    </div>
-                    <div class="nav">
-                        <ul>
-                            <li>Accueil</li>
-                            <li>News</li>
-                            <li>Personnages</li>
-                            <li>Armes</li>
-                            <li>Connexion</li>
-                        </ul>
-                    </div>
-                {% endif %}
-            </header>
-        </div>
-        <div class="col-md-9">
-            <div class="page">
-                {% block body %}{% endblock %}
+</head>
+<body>
+<div class="menu">
+    <header>
+        {% if (app.request.get('_route') == 'admin') %}
+            <h1>admin</h1>
+        {% else %}
+            <div class="logo">
+                <img src="" alt="">
             </div>
-        </div>
-    </div>
+            <div class="nav">
+                <ul>
+                    <li>Accueil</li>
+                    <li>News</li>
+                    <li>Personnages</li>
+                    <li>Armes</li>
+                    <li>Connexion</li>
+                </ul>
+            </div>
+        {% endif %}
+    </header>
+</div>
+<div class="page">
+    {% block body %}{% endblock %}
+</div>
 
 
-
-    </body>
+</body>
 </html>
