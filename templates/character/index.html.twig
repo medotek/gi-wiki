@@ -10,17 +10,18 @@
 {% block body %}
 
     <div class="character-controller">
-        <div class="gi-container">
             <div class="banner"></div>
 
             <div class="character-container">
                 {% for character in characters %}
-                    <div class="character-card">
-                        {{ character.name }}
-                    </div>
+                    <a href="{{ path('character',  {'id': character.id }) }}">
+                        <div class="character-card">
+                            <img src="{{  character.image }}" alt="{{ character.name }}">
+                            {{ character.name }}
+                        </div>
+                    </a>
                 {% endfor %}
             </div>
-        </div>
     </div>
 
 {% endblock %}

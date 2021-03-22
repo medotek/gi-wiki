@@ -17,8 +17,6 @@ class CharacterController extends AbstractController
      */
     private EntityManagerInterface $entityManager;
 
-    protected Serializer $serializer;
-
     public function __construct(
         EntityManagerInterface $entityManager
     ) {
@@ -28,7 +26,6 @@ class CharacterController extends AbstractController
     /**
      * @Route("/characters", name="characters")
      * @return Response
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     public function index(): Response
     {
@@ -39,6 +36,20 @@ class CharacterController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/character/{id}", name="character")
+     * @param int $id
+     * @return Response
+     */
+    public function characterPage(int $id): Response
+    {
+        $character = $this->entityManager->getRepository(Character::class)->find($id);
+
+        return $this->render('character/character.html.twig', [
+            'character' => $character
+        ]);
+
+    }
     /**
      * Returns all characters from the database
      *
