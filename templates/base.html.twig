@@ -20,56 +20,54 @@
 <body>
 <div class="menu">
     <header>
-        {% if (app.request.get('_route') == 'admin') %}
-            <h1>admin</h1>
-        {% else %}
-            <div class="logo">
-                <img src="" alt="">
-            </div>
-            <div class="nav">
-                <ul>
-                    <li>
+        <div class="logo">
+            <img src="" alt="">
+        </div>
+        <div class="nav">
+            <ul>
+                <li>
+                    <a href="{{ path('home') }}">
                         <div class="menu-button">
                             Accueil
                         </div>
-                        <div class="menu-logo">
+                    </a>
+                    <div class="menu-logo">
 
-                        </div>
-                    </li>
-                    <li>
-                        <div class="menu-button">
-                            News
-                        </div>
-                        <div class="menu-logo">
-                            a
-                        </div>
-                    </li>
-                    <li>
-                        <div class="menu-button">
-                            Personnages
-                        </div>
-                        <div class="menu-logo">
-                            P
-                        </div>
-                    </li>
-                    <li>
-                        <div class="menu-button">
-                            Armes
-                        </div>
-                        <div class="menu-logo">Ar
-                        </div>
-                    </li>
-                    <li>
-                        <div class="menu-button">
-                            Connexion
-                        </div>
-                        <div class="menu-logo">
-                            C
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        {% endif %}
+                    </div>
+                </li>
+                <li>
+                    <div class="menu-button">
+                        News
+                    </div>
+                    <div class="menu-logo">
+                        a
+                    </div>
+                </li>
+                <li>
+                    <div class="menu-button">
+                        Personnages
+                    </div>
+                    <div class="menu-logo">
+                        P
+                    </div>
+                </li>
+                <li>
+                    <div class="menu-button">
+                        Armes
+                    </div>
+                    <div class="menu-logo">Ar
+                    </div>
+                </li>
+                <li>
+                    <div class="menu-button">
+                        Connexion
+                    </div>
+                    <div class="menu-logo">
+                        C
+                    </div>
+                </li>
+            </ul>
+        </div>
     </header>
 </div>
 <div class="page">

@@ -16,6 +16,11 @@ body {
     width: 165px;
     margin: 0 auto;
 
+    a {
+      text-decoration: none;
+      color:$giwiki-white;
+    }
+
     li {
       position: relative;
       background-color: $giwiki-dark-blue;
@@ -27,14 +32,21 @@ body {
       text-align: center;
       padding: 15px 30px;
       font-size: 16px;
+      cursor: pointer;
 
       .menu-button {
         display: block;
+
       }
 
       .menu-logo {
         display: none;
       }
+    }
+
+    li:hover {
+      border:5px solid $giwiki-orange;
+      padding: 10px 25px
     }
 
     li:last-of-type {
