@@ -14,7 +14,7 @@ final class Version20210321172000 extends AbstractMigration
 {
     public function getDescription() : string
     {
-        return '';
+        return 'Setup of the database';
     }
 
     public function up(Schema $schema) : void

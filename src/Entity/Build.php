@@ -45,6 +45,11 @@ class Build
      */
     private $sets;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $buildCategory;
+
     public function __construct()
     {
         $this->weapons = new ArrayCollection();
@@ -142,6 +147,18 @@ class Build
                 $set->setBuild(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBuildCategory(): ?string
+    {
+        return $this->buildCategory;
+    }
+
+    public function setBuildCategory(string $buildCategory): self
+    {
+        $this->buildCategory = $buildCategory;
 
         return $this;
     }
