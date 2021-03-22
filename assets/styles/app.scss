@@ -53,12 +53,21 @@ body {
       background-color: $giwiki-orange;
     }
   }
-
+  .copyright-header {
+    position:absolute;
+    bottom:0;
+    margin-bottom: 50px;
+    left:30px;
+  }
 }
 @media screen and (max-width: 767px) {
   body {
     .gi-container {
       margin: 0 20px;
+    }
+
+    .copyright-header {
+      display: none;
     }
 
     .logo {
@@ -120,6 +129,11 @@ body {
     .gi-container {
       margin: 0 50px;
     }
+
+    .copyright-header {
+      display: block;
+    }
+
     .menu {
       top: 0;
       width: 225px;
