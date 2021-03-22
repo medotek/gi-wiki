@@ -32,14 +32,10 @@ class CharacterController extends AbstractController
      */
     public function index(): Response
     {
-        $id = 1;
-        $character = $this->entityManager->getRepository(Character::class)->find($id);
-        /* @var Character $character */
-        $characterImage = $character->getImage();
+
         return $this->render('character/index.html.twig', [
             'controller_name' => 'CharacterController',
-            'characters' => $this->getAllCharacters(),
-            'image' => $characterImage
+            'characters' => $this->getAllCharacters()
         ]);
     }
 
