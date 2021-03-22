@@ -6,6 +6,12 @@
 
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
-    <div>{{ characters }}</div>
+    <ul>
+        {% for character in characters %}
+        <li> {{ character.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h1>{{ image }}</h1>
 </div>
 {% endblock %}
