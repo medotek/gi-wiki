@@ -1,0 +1,100 @@
+@import "../global";
+
+.home-controller {
+  padding-top: 30px;
+
+  .banner {
+    width: 100%;
+    height: 200px;
+    background-color: $giwiki-light-blue;
+    border-radius: 20px;
+  }
+
+
+  .news, .charactersNwp {
+    margin-bottom: 30px;
+
+    .title-header {
+      margin-bottom: 2em;
+      position: relative;
+
+      h3 {
+        padding: 0 20px;
+        color: $giwiki-dark-blue;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      .blue-bar {
+        position: absolute;
+        z-index: -1;
+        bottom: 0;
+        width: 100%;
+        height: 20px;
+        border-radius: 50px;
+        background-color: $giwiki-light-blue;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .home-controller {
+    .news, .charactersNwp {
+      .title-header {
+        h3 {
+          font-size: 30px;
+        }
+      }
+    }
+
+    .charactersNwp {
+      .title-header {
+        h3 {
+          line-height: 20px;
+        }
+        .blue-bar {
+          transform: translateY(50%);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .home-controller {
+    .news, .charactersNwp {
+
+      .title-header {
+
+        h3 {
+          font-size: 38px;
+        }
+
+        .blue-bar {
+          height: 25px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1199px) {
+
+}
+
+@media screen and (min-width: 1200px) {
+  .home-controller {
+    .news, .charactersNwp {
+
+      .title-header {
+
+        h3 {
+          font-size: 48px;
+        }
+
+        .blue-bar {
+        }
+      }
+    }
+  }
+}
