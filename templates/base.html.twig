@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <title>{% block title %}Welcome!{% endblock %}</title>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap-grid.min.css">
@@ -27,11 +28,45 @@
             </div>
             <div class="nav">
                 <ul>
-                    <li>Accueil</li>
-                    <li>News</li>
-                    <li>Personnages</li>
-                    <li>Armes</li>
-                    <li>Connexion</li>
+                    <li>
+                        <div class="menu-button">
+                            Accueil
+                        </div>
+                        <div class="menu-logo">
+
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu-button">
+                            News
+                        </div>
+                        <div class="menu-logo">
+                            a
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu-button">
+                            Personnages
+                        </div>
+                        <div class="menu-logo">
+                            P
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu-button">
+                            Armes
+                        </div>
+                        <div class="menu-logo">Ar
+                        </div>
+                    </li>
+                    <li>
+                        <div class="menu-button">
+                            Connexion
+                        </div>
+                        <div class="menu-logo">
+                            C
+                        </div>
+                    </li>
                 </ul>
             </div>
         {% endif %}
@@ -39,6 +74,11 @@
 </div>
 <div class="page">
     {% block body %}{% endblock %}
+    <footer>
+        <div class="copyright">
+            © gudako.club
+        </div>
+    </footer>
 </div>
 
 
