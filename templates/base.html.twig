@@ -44,9 +44,11 @@
                     </div>
                 </li>
                 <li>
-                    <div class="menu-button">
-                        Personnages
-                    </div>
+                    <a href="{{ path('characters') }}">
+                        <div class="menu-button">
+                            Personnages
+                        </div>
+                    </a>
                     <div class="menu-logo">
                         P
                     </div>
@@ -68,15 +70,20 @@
                 </li>
             </ul>
         </div>
+        <div class="copyright-header">
+            © gudako.club
+        </div>
     </header>
 </div>
 <div class="page">
+    <div class="gi-container">
     {% block body %}{% endblock %}
     <footer>
         <div class="copyright">
             © gudako.club
         </div>
     </footer>
+    </div>
 </div>
 
 
