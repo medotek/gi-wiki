@@ -41,14 +41,14 @@ class Character
     private $weaponType;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $image;
-
-    /**
      * @ORM\OneToMany(targetEntity=Build::class, mappedBy="gameCharacter", orphanRemoval=true)
      */
     private $builds;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
 
     public function __construct()
     {
@@ -108,18 +108,6 @@ class Character
         return $this;
     }
 
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(?string $image): self
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Build[]
      */
@@ -146,6 +134,18 @@ class Character
                 $build->setGameCharacter(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }
