@@ -3,15 +3,24 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use ContainerOcq7WVR\getSecurity_EncoderFactory_GenericService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Encoder\EncoderFactory;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\User\UserInterface;
+use function Couchbase\defaultEncoder;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User
+class User implements UserInterface
 {
+    private $encoderFactory;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -86,12 +95,12 @@ class User
     public function getPassword(): ?string
     {
         return $this->password;
+
     }
 
     public function setPassword(string $password): self
     {
         $this->password = $password;
-
         return $this;
     }
 
@@ -147,5 +156,21 @@ class User
         $this->roles = $roles;
 
         return $this;
+    }
+
+    //Méthodes d'Authentification
+
+    public function getUsername()
+    {
+        return $this->email;
+    }
+
+    public function getSalt()
+    {
+        return null;
+    }
+
+    public function eraseCredentials()
+    {
     }
 }
