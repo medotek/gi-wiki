@@ -50,9 +50,23 @@
     .charactersNwp {
       .title-header {
         h3 {
-          line-height: 20px;
+          line-height: 35px;
         }
         .blue-bar {
+          top:20px;
+          bottom:inherit;
+        }
+        /* second underline css for a long title in home
+           Really adjusted for a fixed element
+        */
+        .blue-bar-second {
+          position: absolute;
+          z-index: -1;
+          bottom: 5px;
+          width: 150px;
+          height: 20px;
+          border-radius: 50px;
+          background-color: $giwiki-light-blue;
           transform: translateY(50%);
         }
       }
