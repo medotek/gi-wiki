@@ -93,4 +93,20 @@ class Set
 
         return $this;
     }
+
+    public function __toString(): ?string
+    {
+        $str = "";
+
+        try {
+            foreach ($this->artifacts->getIterator() as $artifact) {
+                $str += (string)$artifact . ", ";
+            }
+        } catch (\Exception $e) {
+            return null;
+            throw($e);
+        }
+
+        return $str;
+    }
 }
