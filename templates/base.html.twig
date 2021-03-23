@@ -20,30 +20,33 @@
 <body>
 <div class="menu">
     <header>
-        {% if (app.request.get('_route') == 'admin') %}
-            <h1>admin</h1>
-        {% else %}
-            <div class="logo">
-                <img src="" alt="">
-            </div>
-            <div class="nav">
-                <ul>
+        <div class="logo">
+            <img src="" alt="">
+        </div>
+        <div class="nav">
+            <ul>
+                <a href="{{ path('home') }}">
                     <li>
                         <div class="menu-button">
                             Accueil
                         </div>
+
                         <div class="menu-logo">
 
                         </div>
                     </li>
-                    <li>
-                        <div class="menu-button">
-                            News
-                        </div>
-                        <div class="menu-logo">
-                            a
-                        </div>
-                    </li>
+                </a>
+                <li>
+                    <div class="menu-button">
+                        News
+                    </div>
+                    <div class="menu-logo">
+                        a
+                    </div>
+                </li>
+
+                {# Characters button #}
+                <a href="{{ path('characters') }}">
                     <li>
                         <div class="menu-button">
                             Personnages
@@ -52,33 +55,40 @@
                             P
                         </div>
                     </li>
-                    <li>
-                        <div class="menu-button">
-                            Armes
-                        </div>
-                        <div class="menu-logo">Ar
-                        </div>
-                    </li>
-                    <li>
-                        <div class="menu-button">
-                            Connexion
-                        </div>
-                        <div class="menu-logo">
-                            C
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        {% endif %}
+                </a>
+
+
+                <li>
+                    <div class="menu-button">
+                        Armes
+                    </div>
+                    <div class="menu-logo">Ar
+                    </div>
+                </li>
+                <li class="active">
+                    <div class="menu-button">
+                        Connexion
+                    </div>
+                    <div class="menu-logo">
+                        C
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="copyright-header">
+            © gudako.club
+        </div>
     </header>
 </div>
 <div class="page">
-    {% block body %}{% endblock %}
-    <footer>
-        <div class="copyright">
-            © gudako.club
-        </div>
-    </footer>
+    <div class="gi-container">
+        {% block body %}{% endblock %}
+        <footer>
+            <div class="copyright">
+                © gudako.club
+            </div>
+        </footer>
+    </div>
 </div>
 
 

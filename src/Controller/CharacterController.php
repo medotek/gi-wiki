@@ -6,15 +6,12 @@ use App\Entity\Character;
 use App\Repository\CharacterRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Serializer;
 
 class CharacterController extends AbstractController
 {
-    private CharacterRepository $characterRepository;
-
     /**
      * @var EntityManagerInterface
      */
@@ -40,15 +37,27 @@ class CharacterController extends AbstractController
     }
 
     /**
+     * @Route("/character/{id}", name="character")
+     * @param int $id
+     * @return Response
+     */
+    public function characterPage(int $id): Response
+    {
+        $character = $this->entityManager->getRepository(Character::class)->find($id);
+
+        return $this->render('character/character.html.twig', [
+            'character' => $character
+        ]);
+
+    }
+    /**
      * Returns all characters from the database
      *
-     * @return JsonResponse
+     * @return object[]
      */
-    public function getAllCharacters(): JsonResponse
+    public function getAllCharacters(): array
     {
-        $characters = $this->entityManager->getRepository(Character::class)->findAll();
-
-        return $this->json($characters);
+        return $characters = $this->entityManager->getRepository(Character::class)->findAll();
     }
 
 }
