@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ character.name }}{% endblock %}
+
+{% block body %}
+    <div class="character-profile">
+        {{ form(new) }}
+    </div>
+
+{% endblock %}
