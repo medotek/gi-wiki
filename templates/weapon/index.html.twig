@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('weapon') }}
+{% endblock %}
+
+{% block title %}Armes{% endblock %}
+
+{% block body %}
+    <div class="weapon-controller">
+        <div class="banner"></div>
+        <div class="weapons-container">
+            {% for weapon in weapons %}
+                <div class="weapon-card">
+                    <img src="{{ weapon.image }}" alt="{{ weapon.name }}">
+                    <div class="weapon-name">{{ weapon.name }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
