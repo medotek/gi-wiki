@@ -31,6 +31,13 @@
                 <h3>Recommended Build</h3>
                 <div class="blue-bar"></div>
             </div>
+            <div class="community-build-box">
+                {% for officialBuild in officialBuilds %}
+                <ul>
+                    <li>{{ officialBuild.name }}</li>
+                </ul>
+                {% endfor %}
+            </div>
         </div>
 
         <div class="section-community-build"  id="community-build">
@@ -39,7 +46,8 @@
                 <div class="blue-bar"></div>
             </div>
             <div class="community-build-box">
-
+                <a href="{{ path('community-build-new',  {'id': character.id }) }}">Create a build</a>
+                <a href="{{ path('community-build',  {'id': character.id }) }}">See more</a>
             </div>
         </div>
 
