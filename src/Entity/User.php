@@ -44,6 +44,11 @@ class User
      */
     private $builds;
 
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $roles = [];
+
     public function __construct()
     {
         $this->builds = new ArrayCollection();
@@ -128,6 +133,18 @@ class User
                 $build->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRoles(): ?array
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(?array $roles): self
+    {
+        $this->roles = $roles;
 
         return $this;
     }
