@@ -28,7 +28,7 @@ class Weapon
     private $type;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $second_stat;
 
@@ -36,6 +36,16 @@ class Weapon
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $image;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $rarity;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $baseAttack;
 
     public function getId(): ?int
     {
@@ -86,6 +96,30 @@ class Weapon
     public function setImage(string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getRarity(): ?int
+    {
+        return $this->rarity;
+    }
+
+    public function setRarity(int $rarity): self
+    {
+        $this->rarity = $rarity;
+
+        return $this;
+    }
+
+    public function getBaseAttack(): ?int
+    {
+        return $this->baseAttack;
+    }
+
+    public function setBaseAttack(?int $baseAttack): self
+    {
+        $this->baseAttack = $baseAttack;
 
         return $this;
     }

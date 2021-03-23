@@ -27,6 +27,11 @@ class Artifact
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $rarity;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +57,18 @@ class Artifact
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getRarity(): ?int
+    {
+        return $this->rarity;
+    }
+
+    public function setRarity(?int $rarity): self
+    {
+        $this->rarity = $rarity;
 
         return $this;
     }
