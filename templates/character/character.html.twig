@@ -4,7 +4,42 @@
 
 {% block body %}
     <div class="character-profile">
-        
+        <div class="banner"></div>
+
+        <div class="character-menu">
+            <a href="#overview">
+                <div class="overview">Overview</div>
+            </a>
+            <a href="#skills">
+                <div class="skills">Skills</div>
+            </a>
+            <a href="#passives">
+                <div class="passives">Passives</div>
+            </a>
+            <a href="#build">
+                <div class="build">Build</div>
+            </a>
+            <a href="#community-build">
+                <div class="community-build">Community build</div>
+            </a>
+            <a href="#showcase">
+                <div class="showcase">Showcase</div>
+            </a>
+        </div>
+        <div class="section-recommended-build" id="build">
+            <div class="title-header">
+                <h3>Recommended Build</h3>
+                <div class="blue-bar"></div>
+            </div>
+        </div>
+
+        <div class="section-community-build"  id="community-build">
+            <div class="title-header">
+                <h3>Community Build</h3>
+                <div class="blue-bar"></div>
+            </div>
+        </div>
+
         <h1>{{ character.name }}</h1>
         <ul>
             <li>{{ character.element }}</li>

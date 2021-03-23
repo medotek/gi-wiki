@@ -25,6 +25,7 @@
     }
   }
 }
+
 @media screen and (max-width: 767px) {
   .character-controller {
 
@@ -43,6 +44,152 @@
 
 @media screen and (min-width: 1200px) {
   .character-controller {
+
+  }
+}
+
+
+/********************************************[Character profile css]********************************************/
+
+
+.character-profile {
+  margin: 50px 0;
+
+  .banner {
+    width: 100%;
+    height: 300px;
+    background-color: $giwiki-light-blue;
+    border-radius: 20px;
+  }
+
+  .character-menu {
+    width: 100%;
+    margin-top: 2em;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    a {
+      text-decoration: none;
+    }
+
+    .overview, .skills, .passives,
+    .build, .community-build,
+    .showcase {
+      padding: 10px 15px;
+      width: 100%;
+      background-color: $giwiki-dark-blue;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .overview:hover, .skills:hover, .passives:hover,
+    .build:hover, .community-build:hover,
+    .showcase:hover {
+      border: 5px solid $giwiki-orange;
+      padding: 5px 10px;
+    }
+  }
+
+  .section-community-build, .section-recommended-build {
+    .title-header {
+      margin-bottom: 2em;
+      position: relative;
+
+      h3 {
+        padding: 0 20px;
+        color: $giwiki-dark-blue;
+        font-family: 'Poppins', sans-serif;
+      }
+
+      .blue-bar {
+        position: absolute;
+        z-index: -1;
+        bottom: 0;
+        width: 100%;
+        height: 20px;
+        border-radius: 50px;
+        background-color: $giwiki-light-blue;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .character-profile {
+    .section-community-build, .section-recommended-build {
+      .title-header {
+        h3 {
+          font-size: 30px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .character-profile {
+    .section-community-build, .section-recommended-build {
+
+      .title-header {
+
+        h3 {
+          font-size: 38px;
+        }
+
+        .blue-bar {
+          height: 25px;
+        }
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 1199px) {
+  .character-profile {
+    .character-menu {
+      display: list-item;
+      list-style: none;
+
+      .overview, .skills, .passives,
+      .build, .community-build,
+      .showcase {
+        background-color: $giwiki-light-blue;
+        border-radius: inherit;
+        color: $giwiki-dark-blue;
+      }
+
+      .overview:hover, .skills:hover, .passives:hover,
+      .build:hover, .community-build:hover,
+      .showcase:hover {
+        border: none;
+        border-left: 5px solid $giwiki-orange;
+        padding: 10px 20px 10px 15px;
+        background-color: $giwiki-dark-blue;
+        color: $giwiki-white;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .character-profile {
+    .character-menu {
+      width: 737px;
+      margin: 2em auto;
+    }
+
+    .section-community-build, .section-recommended-build {
+      .title-header {
+        h3 {
+          font-size: 48px;
+        }
+      }
+    }
 
   }
 }
