@@ -95,6 +95,15 @@
   }
 
   .section-community-build, .section-recommended-build {
+
+    .community-build-box {
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      height: 300px;
+    }
+
     .title-header {
       margin-bottom: 2em;
       position: relative;
