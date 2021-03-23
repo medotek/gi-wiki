@@ -25,16 +25,17 @@
         </div>
         <div class="nav">
             <ul>
-                <li>
-                    <a href="{{ path('home') }}">
+                <a href="{{ path('home') }}">
+                    <li>
                         <div class="menu-button">
                             Accueil
                         </div>
-                    </a>
-                    <div class="menu-logo">
 
-                    </div>
-                </li>
+                        <div class="menu-logo">
+
+                        </div>
+                    </li>
+                </a>
                 <li>
                     <div class="menu-button">
                         News
@@ -43,16 +44,20 @@
                         a
                     </div>
                 </li>
-                <li>
-                    <a href="{{ path('characters') }}">
+
+                {# Characters button #}
+                <a href="{{ path('characters') }}">
+                    <li>
                         <div class="menu-button">
                             Personnages
                         </div>
-                    </a>
-                    <div class="menu-logo">
-                        P
-                    </div>
-                </li>
+                        <div class="menu-logo">
+                            P
+                        </div>
+                    </li>
+                </a>
+
+
                 <li>
                     <div class="menu-button">
                         Armes
@@ -60,7 +65,7 @@
                     <div class="menu-logo">Ar
                     </div>
                 </li>
-                <li>
+                <li class="active">
                     <div class="menu-button">
                         Connexion
                     </div>
@@ -77,12 +82,12 @@
 </div>
 <div class="page">
     <div class="gi-container">
-    {% block body %}{% endblock %}
-    <footer>
-        <div class="copyright">
-            © gudako.club
-        </div>
-    </footer>
+        {% block body %}{% endblock %}
+        <footer>
+            <div class="copyright">
+                © gudako.club
+            </div>
+        </footer>
     </div>
 </div>
 

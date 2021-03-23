@@ -49,7 +49,7 @@ body {
       padding: 10px 25px
     }
 
-    li:last-of-type {
+    .active {
       background-color: $giwiki-orange;
     }
   }
