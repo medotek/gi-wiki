@@ -14,7 +14,8 @@
     flex-wrap: wrap;
     align-items: flex-start;
 
-    .character-card {
+    a {
+      text-decoration: none;
       position: relative;
       display: flex;
       flex-direction: column;
@@ -23,18 +24,50 @@
       width: 12.5%;
       padding: 10px;
     }
+    .character-card {
+      width: 71px;
+      height: 71px;
+      img {
+        position: relative;
+        left:50%;
+        transform: translateX(-50%);
+        width: auto;
+        height: 100%;
+      }
+
+      .character-name {
+        position:absolute;
+        bottom: 0;
+        left:50%;
+        transform: translateX(-50%);
+        color: $giwiki-dark-blue;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+      }
+
+    }
+
+
   }
 }
 
 @media screen and (max-width: 767px) {
   .character-controller {
-
+    .character-container {
+      a {
+        width: 33.333%;
+      }
+    }
   }
 }
 
 @media screen and (min-width: 768px) {
   .character-controller {
-
+    .character-container {
+      a {
+        width: 20%;
+      }
+    }
   }
 }
 
@@ -44,7 +77,11 @@
 
 @media screen and (min-width: 1200px) {
   .character-controller {
-
+    .character-container {
+      a {
+        width: 12.5%;
+      }
+    }
   }
 }
 
