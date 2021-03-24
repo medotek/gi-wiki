@@ -67,16 +67,27 @@
                         </div>
                     </li>
                 </a>
-                <a href="{{ path('app_login') }}">
-                    <li class="active">
-                        <div class="menu-button">
-                            Connexion
-                        </div>
-                        <div class="menu-logo">
-                            C
-                        </div>
-                    </li>
-                </a>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a href="{{ path('user') }}">
+                        <li class="active">
+                            Mon compte
+                        </li>
+                        <li class="logout">
+                            <a href="/logout">Se déconnecter</a>
+                        </li>
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_login') }}">
+                        <li class="active">
+                            <div class="menu-button">
+                                Connexion
+                            </div>
+                            <div class="menu-logo">
+                                C
+                            </div>
+                        </li>
+                    </a>
+                {% endif %}
             </ul>
         </div>
         <div class="copyright-header">

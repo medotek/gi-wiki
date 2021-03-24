@@ -49,6 +49,23 @@ body {
       padding: 10px 25px
     }
 
+    .logout {
+      background-color: transparent;
+      padding:0;
+
+      a {
+        color: $giwiki-dark-blue;
+      }
+    }
+
+    .logout:hover {
+      border: none;
+      padding: 0;
+      a {
+        color: $giwiki-orange;
+      }
+    }
+
     .active {
       background-color: $giwiki-orange;
     }
