@@ -6,7 +6,9 @@ use App\Entity\Build;
 use App\Entity\Character;
 use App\Entity\CommunityBuild;
 use App\Entity\User;
+use App\Entity\Weapon;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -140,6 +142,8 @@ class CharacterController extends AbstractController
 
         $form = $this->createFormBuilder($build, ['allow_extra_fields' => true,'method' => 'put']);
 
+        $weapons = $this->entityManager->getRepository(Weapon::class)->findBy(['type' => $character->getWeaponType()]);
+
         $formReal = $form
             ->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, ['label' => 'Titre', 'attr' => ['placeholder' => 'Titre']])
             ->add('description', TextareaType::class, ['label' => 'Description', 'attr' => ['placeholder' => 'description']])
@@ -153,6 +157,7 @@ class CharacterController extends AbstractController
                             return explode(',', $submittedDescription);
                         }
                     )))
+            ->add('weapons', EntityType::class, ['class' => Weapon::class, 'multiple'=> true, 'choices' => $weapons, 'choice_label' => 'name'])
             ->add('submit', SubmitType::class);
 
         $formRealSubmit =$formReal->getForm();

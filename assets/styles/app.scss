@@ -19,7 +19,7 @@ body {
 
     a {
       text-decoration: none;
-      color:$giwiki-white;
+      color: $giwiki-white;
     }
 
     li {
@@ -46,13 +46,13 @@ body {
     }
 
     li:hover {
-      border:5px solid $giwiki-orange;
+      border: 5px solid $giwiki-orange;
       padding: 10px 25px
     }
 
     .logout {
       background-color: transparent;
-      padding:0;
+      padding: 0;
 
       a {
         color: $giwiki-dark-blue;
@@ -62,6 +62,7 @@ body {
     .logout:hover {
       border: none;
       padding: 0;
+
       a {
         color: $giwiki-orange;
       }
@@ -71,13 +72,15 @@ body {
       background-color: $giwiki-orange;
     }
   }
+
   .copyright-header {
-    position:absolute;
-    bottom:0;
+    position: absolute;
+    bottom: 0;
     margin-bottom: 50px;
-    left:30px;
+    left: 30px;
   }
 }
+
 @media screen and (max-width: 767px) {
   body {
     .gi-container {
@@ -86,6 +89,10 @@ body {
 
     .copyright-header {
       display: none;
+    }
+
+    .copyright {
+      display: block;
     }
 
     .logo {
@@ -97,17 +104,20 @@ body {
     }
 
     .page {
-      margin: 0;
+      z-index: 0;
+      margin: 0 0 50px;
       width: 100%;
     }
 
     .menu {
+      z-index: 1;
       top: inherit;
       bottom: 0;
       width: 100%;
       position: fixed;
       height: 50px;
       background-color: $giwiki-white;
+      box-shadow: 0 -15px 20px rgba(255, 255, 255, 1);
     }
 
     .nav ul {
@@ -121,7 +131,7 @@ body {
         float: left;
         text-align: center;
         width: 20%;
-        padding:0;
+        padding: 0;
         height: 50px;
 
         .menu-button {
@@ -131,7 +141,9 @@ body {
         .menu-logo {
           display: block;
         }
+
       }
+
     }
 
     .nav ul::after {
@@ -150,6 +162,10 @@ body {
 
     .copyright-header {
       display: block;
+    }
+
+    .copyright {
+      display: none;
     }
 
     .menu {

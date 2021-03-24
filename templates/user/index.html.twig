@@ -8,13 +8,12 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/gi-wiki/src/Controller/UserController.php'|file_link(0) }}">src/Controller/UserController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/gi-wiki/templates/user/index.html.twig'|file_link(0) }}">templates/user/index.html.twig</a></code></li>
-    </ul>
+<div class="user-profile">
+   <h1>Hello {{ app.user.name }}</h1>
+   <ul>
+      {% for build in userBuild %}
+         <li>{{ build[0].name }}</li>
+      {% endfor %}
+   </ul>
 </div>
 {% endblock %}

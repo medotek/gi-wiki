@@ -53,6 +53,10 @@
 
 @media screen and (max-width: 767px) {
   .character-controller {
+    .banner {
+      margin:20px auto;
+    }
+
     .character-container {
       a {
         width: 33.333%;
