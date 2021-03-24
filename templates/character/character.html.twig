@@ -46,6 +46,11 @@
                 <div class="blue-bar"></div>
             </div>
             <div class="community-build-box">
+                {% for communityBuild in communityBuilds %}
+                    <ul>
+                        <li>{{ communityBuild.name }}</li>
+                    </ul>
+                {% endfor %}
                 <a href="{{ path('community-build-new',  {'id': character.id }) }}">Create a build</a>
                 <a href="{{ path('community-build',  {'id': character.id }) }}">See more</a>
             </div>

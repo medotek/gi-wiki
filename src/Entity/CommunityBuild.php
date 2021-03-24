@@ -49,6 +49,11 @@ class CommunityBuild
         return $this->id;
     }
 
+    /**
+     * To unserialize ->  use this method: unserialize($tags)
+     *
+     * @return array|null
+     */
     public function getTags(): ?array
     {
         return $this->tags;

@@ -50,10 +50,25 @@ class Build
      */
     private $buildCategory;
 
+    private array $tags;
+
     public function __construct()
     {
         $this->weapons = new ArrayCollection();
         $this->sets = new ArrayCollection();
+    }
+
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+
+
+    public function setTags(array $tags): self
+    {
+        $this->tags = $tags;
+
+        return $this;
     }
 
     public function getId(): ?int
