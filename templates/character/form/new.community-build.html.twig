@@ -1,10 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ character.name }}{% endblock %}
+{% block title %}{{ character.name }} - Nouveau build{% endblock %}
 
 {% block body %}
     <div class="character-profile">
-        {{ form(new) }}
+        <div class="button-prev">
+            <a href="{{ path('character',  {'id': character.id })  }}"><div class="button-">RETOUR</div></a>
+        </div>
+        <div class="new-form">
+            {{ form_start(new) }}
+            {{ form_row(new.name) }}
+            {{ form_row(new.description) }}
+            <div>Veuillez lister les tags avec des virgules comme tel : tag, tag, ...</div>
+            {{ form_row(new.tags) }}
+            {{ form_row(new.submit) }}
+        </div>
     </div>
 
 {% endblock %}
