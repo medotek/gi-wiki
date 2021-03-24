@@ -7,6 +7,7 @@ use App\Entity\Character;
 use App\Entity\CommunityBuild;
 use App\Entity\User;
 use App\Entity\Weapon;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -91,13 +92,11 @@ class CharacterController extends AbstractController
         /* @var Build $allCommunityBuild */
         $communityBuildEntities = $this->entityManager->getRepository(CommunityBuild::class)->findBy(['build' => $allCommunityBuild], ['build' => 'ASC'] );
 
-        function sorts($a, $b) {
-            return $a - $b;
-        }
         /* @var CommunityBuild $communityBuildEntities */
 
         $builds = array_map(null, (array)$communityBuildEntities, $allCommunityBuild);
 
+        dump($builds);
 
         return $this->render('character/form/index.community-build.html.twig', [
             'charactersBuild' => $builds,

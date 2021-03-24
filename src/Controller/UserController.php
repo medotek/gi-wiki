@@ -69,25 +69,21 @@ class UserController extends AbstractController
      */
     public function removeBuild(int $id): Response
     {
-        /* @var Build $build */
-        $build = $this->entityManager->getRepository(Build::class)->find($id);
-
         /* @var CommunityBuild $buildEntity */
-        $buildEntity = $this->entityManager->getRepository(CommunityBuild::class)->find($build->getId());
+        $buildEntity = $this->entityManager->getRepository(CommunityBuild::class)->findOneBy(['build' => $id]);
 
-//        /* @var User $user*/
-//        $user = $this->security->getUser();
-//        if ($buildEntity->getAuthor() === $user) {
-//            $remove = $this->getDoctrine()->getManager();
-//
-//
-//            $remove->remove($buildEntity);
-//            $remove->flush();
+        /* @var User $user*/
+        $user = $this->security->getUser();
+        if ($buildEntity->getAuthor() === $user) {
+            $remove = $this->getDoctrine()->getManager();
+
+            $remove->remove($buildEntity);
+            $remove->flush();
 
             return $this->redirectToRoute('profile-builds');
-//        } else {
-//            return $this->redirectToRoute('user');
-//        }
+        } else {
+            return $this->redirectToRoute('user');
+        }
     }
 
     /**

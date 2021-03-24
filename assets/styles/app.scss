@@ -16,7 +16,6 @@
     margin: 50px auto;
 
 
-
     form {
       width: 500px;
       margin: 0 auto 50px;
@@ -43,6 +42,7 @@
       .checkbox-label {
         width: auto;
       }
+
       input:focus {
         outline: none;
         background-color: $giwiki-grey;
@@ -75,12 +75,13 @@
       padding: 30px 20px;
 
 
-
       form {
         width: 100%;
+
         h1 {
           width: 80vw;
         }
+
         input {
           font-size: 14px;
         }
@@ -93,9 +94,11 @@
   .login-page {
     .form-container {
       padding: 50px 0;
+
       h1 {
         max-width: 350px;
       }
+
       form {
         max-width: 350px;
 
@@ -106,14 +109,17 @@
     }
   }
 }
+
 @media screen and (min-width: 950px) {
   .login-page {
     .form-container {
       h1 {
         max-width: 500px;
       }
+
       form {
         max-width: 500px;
+
         input {
           max-width: 500px;
         }
@@ -129,6 +135,7 @@
     }
   }
 }
+
 /*********************[REGISTER CSS]***************************/
 
 .register-page {
@@ -200,6 +207,7 @@
         input {
           font-size: 14px;
         }
+
         button {
           width: 80vw;
         }
@@ -212,9 +220,11 @@
   .register-page {
     .form-container {
       padding: 50px 0;
+
       h1 {
         max-width: 350px;
       }
+
       form {
         max-width: 350px;
 
@@ -225,14 +235,17 @@
     }
   }
 }
+
 @media screen and (min-width: 950px) {
   .register-page {
     .form-container {
       h1 {
         max-width: 500px;
       }
+
       form {
         max-width: 500px;
+
         input {
           max-width: 500px;
         }
@@ -248,6 +261,7 @@
     }
   }
 }
+
 /*********************[APP CSS]***************************/
 body {
   margin: 0;
