@@ -33,7 +33,7 @@ security:
     access_control:
         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/character/\d+/community-build/new, roles: ROLE_USER }
     encoders:
         App\Entity\User:
             algorithm: auto
