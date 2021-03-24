@@ -19,6 +19,12 @@ security:
                     - App\Security\LoginFormAuthenticator
             logout:
                 path: app_logout
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800
+                path:     /
+                domain:   ~
+
                 # where to redirect after logout
                 # target: app_any_route
 
@@ -31,9 +37,12 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/account/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/character/\d+/community-build/new, roles: ROLE_USER }
+        - { path: ^/account/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/account/profile, roles: IS_AUTHENTICATED_FULLY }
+
     encoders:
         App\Entity\User:
             algorithm: auto
