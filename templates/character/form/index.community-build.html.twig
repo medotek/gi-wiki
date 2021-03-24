@@ -4,11 +4,18 @@
 
 {% block body %}
     <div class="character-profile">
-        {% for characterBuild in charactersBuild %}
         <ul>
-            <li>{{ characterBuild.name }}</li>
+            {% for characterBuild in charactersBuild %}
+
+                <li>
+                    {{ characterBuild[0].creationdate|date("m/d/Y") }}
+                    {{ characterBuild[1].name }}
+                </li>
+            {% endfor %}
+{#            {% for communityBuildDetail in communityBuildDetails %}#}
+{#                <li>   {{ communityBuildDetail.creationdate|date("m/d/Y") }}</li>#}
+{#            {% endfor %}#}
         </ul>
-        {% endfor %}
     </div>
 
 {% endblock %}
