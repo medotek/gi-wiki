@@ -3,7 +3,19 @@
 {% block title %}Créer un compte{% endblock %}
 
 {% block body %}
-    <div class="gi-container">
-        {{ form(form) }}
+
+    <div class="register-page">
+        <div class="form-container">
+            <h1>Créer un compte</h1>
+            <div class="register-page">
+                {{ form_start(form) }}
+                {{ form_widget(form._token) }}
+                {{ form_widget(form.name) }}
+                {{ form_widget(form.email) }}
+                {{ form_widget(form.password) }}
+                {{ form_widget(form.submit) }}
+            </div>
+        </div>
     </div>
+
 {% endblock %}
