@@ -18,6 +18,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Serializer;
 
+
 class CharacterController extends AbstractController
 {
     /**
@@ -86,11 +87,21 @@ class CharacterController extends AbstractController
         $character = $this->entityManager->getRepository(Character::class)->find($id);
 
         /* @var Character $character */
-        $allCommunityBuild = $this->entityManager->getRepository(Build::class)->findBy(['gameCharacter' => $character->getId(), 'buildCategory' => 'COMMUNITY']);
+        $allCommunityBuild = $this->entityManager->getRepository(Build::class)->findBy(['gameCharacter' => $character->getId(), 'buildCategory' => 'COMMUNITY'], ['id' => 'ASC']);
 
-        $communityBuildEntity = $this->entityManager->getRepository(CommunityBuild::class)->find($allCommunityBuild->getId());
+        /* @var Build $allCommunityBuild */
+        $communityBuildEntities = $this->entityManager->getRepository(CommunityBuild::class)->findBy(['build' => $allCommunityBuild], ['build' => 'ASC'] );
+
+        function sorts($a, $b) {
+            return $a - $b;
+        }
+        /* @var CommunityBuild $communityBuildEntities */
+
+        $builds = array_map(null, (array)$communityBuildEntities, $allCommunityBuild);
+
+
         return $this->render('character/form/index.community-build.html.twig', [
-            'charactersBuild' => $allCommunityBuild,
+            'charactersBuild' => $builds,
             'character' => $character
         ]);
     }
@@ -130,10 +141,10 @@ class CharacterController extends AbstractController
         $form = $this->createFormBuilder($build, ['allow_extra_fields' => true,'method' => 'put']);
 
         $formReal = $form
-            ->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class)
-            ->add('description', TextareaType::class)
+            ->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, ['label' => 'Titre', 'attr' => ['placeholder' => 'Titre']])
+            ->add('description', TextareaType::class, ['label' => 'Description', 'attr' => ['placeholder' => 'description']])
             ->add(
-                $form->create('tags', \Symfony\Component\Form\Extension\Core\Type\TextType::class)
+                $form->create('tags', \Symfony\Component\Form\Extension\Core\Type\TextType::class, ['label' => 'tags', 'attr' => ['placeholder' => 'Ex : Supports dps, new meta, ...']])
                     ->addModelTransformer(new CallbackTransformer(
                         function ($originalDescription) {
                             return $originalDescription;
