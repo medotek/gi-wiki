@@ -10,11 +10,21 @@
 {% block body %}
     <div class="weapon-controller">
         <div class="banner"></div>
-        <div class="weapons-container">
+        <div class="weapon-container">
+                <div class="weapon-card table-header">
+                    <div class="weapon-img"></div>
+                    <div class="weapon-name">Nom</div>
+                    <div class="weapon-type">Type</div>
+                    <div class="weapon-rarity">Rareté</div>
+                    <div class="weapon-attack">Attaque de Base</div>
+                </div>
             {% for weapon in weapons %}
                 <div class="weapon-card">
-                    <img src="{{ weapon.image }}" alt="{{ weapon.name }}">
+                    <img class="weapon-img" src="{{ weapon.image }}" alt="{{ weapon.name }}">
                     <div class="weapon-name">{{ weapon.name }}</div>
+                    <div class="weapon-type">{{ weapon.type }}</div>
+                    <div class="weapon-rarity">{{ weapon.rarity }}*</div>
+                    <div class="weapon-attack">{{ weapon.baseAttack }} ATK</div>
                 </div>
             {% endfor %}
         </div>

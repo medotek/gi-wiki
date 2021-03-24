@@ -1,11 +1,73 @@
 @import '../global';
 
 .weapon-controller {
+
   .banner {
     width: 100%;
     height: 200px;
     background-color: $giwiki-light-blue;
     border-radius: 20px;
     margin: 50px auto;
+  }
+
+  .weapon-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-direction: column;
+
+    .weapon-card {
+      display: grid;
+      width: 100%;
+      height: 71px;
+      grid-template-columns: 90px 25% 20% 20% 20%;
+      grid-template-rows: 71px;
+
+      * {
+        align-self: center;
+      }
+
+      .weapon-img {
+        height: 71px;
+      }
+    }
+
+    .table-header {
+      font-weight: bold;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .weapon-controller {
+    .weapon-container {
+      a {
+        width: 33.333%;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .weapon-controller {
+    .weapon-container {
+      a {
+        width: 20%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1199px) {
+
+}
+
+@media screen and (min-width: 1200px) {
+  .weapon-controller {
+    .weapon-container {
+      a {
+        width: 12.5%;
+      }
+    }
   }
 }
