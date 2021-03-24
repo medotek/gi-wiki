@@ -168,11 +168,12 @@ class CharacterController extends AbstractController
 
         $formRealSubmit->handleRequest($request);
 //        $formCommunityBuildReal->handleRequest($request);
+        dump($formRealSubmit->isValid());
         if ($formRealSubmit->isSubmitted() && $formRealSubmit->isValid()) {
             // $form->getData() holds the submitted values
             $build = $formRealSubmit->getData();
 
-            // ... perform some action, such as saving the task to the database
+            //enregistre le build
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($build);
             $entityManager->flush();
