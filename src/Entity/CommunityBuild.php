@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CommunityBuildRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -43,6 +44,11 @@ class CommunityBuild
      * @ORM\JoinColumn(nullable=false)
      */
     private $build;
+
+    public function __construct(int $votes, DateTime $date) {
+        $this->votes = $votes>0 ? $votes : 0;
+        $this->creation_date = new DateTime();
+    }
 
     public function getId(): ?int
     {
