@@ -9,7 +9,6 @@ use App\Entity\User;
 use App\Entity\Weapon;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\CallbackTransformer;
@@ -163,6 +162,8 @@ class CharacterController extends AbstractController
                             return explode(',', $submittedDescription);
                         }
                     )))
+            ->add('weapons',EntityType::class, ['label' => 'Armes', 'class' => Weapon::class, 'choices' => $weapons, 'multiple' => true, 'expanded' => 'true'])
+
             ->add('submit', SubmitType::class);
 
         $formRealSubmit =$formReal->getForm();
