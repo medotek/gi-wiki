@@ -16,10 +16,16 @@
     margin: 50px auto;
 
 
+
     form {
       width: 500px;
       margin: 0 auto 50px;
       font-family: 'Poppins', sans-serif;
+
+      h1 {
+        margin: 0 auto;
+        width: 500px
+      }
 
       input {
         font-size: 18px;
@@ -36,6 +42,12 @@
 
       .checkbox-label {
         width: auto;
+      }
+      input:focus {
+        outline: none;
+        background-color: $giwiki-grey;
+        color: $giwiki-orange;
+        border-bottom: 4px solid $giwiki-orange;
       }
 
       input[type=text]:focus {
@@ -55,6 +67,68 @@
   }
 }
 
+@media screen and (max-width: 767px) {
+  .login-page {
+    .form-container {
+      border-radius: 10px;
+      margin-top: 20px;
+      padding: 30px 20px;
+
+
+
+      form {
+        width: 100%;
+        h1 {
+          width: 80vw;
+        }
+        input {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .login-page {
+    .form-container {
+      padding: 50px 0;
+      h1 {
+        max-width: 350px;
+      }
+      form {
+        max-width: 350px;
+
+        input {
+          max-width: 350px;
+        }
+      }
+    }
+  }
+}
+@media screen and (min-width: 950px) {
+  .login-page {
+    .form-container {
+      h1 {
+        max-width: 500px;
+      }
+      form {
+        max-width: 500px;
+        input {
+          max-width: 500px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1199px) {
+  .login-page {
+    .form-container {
+      padding: 50px;
+    }
+  }
+}
 /*********************[REGISTER CSS]***************************/
 
 .register-page {
@@ -74,6 +148,7 @@
       width: 500px;
       margin: 0 auto 50px;
       font-family: 'Poppins', sans-serif;
+      text-align: center;
 
       input {
         font-size: 18px;
@@ -85,7 +160,10 @@
       }
 
       input:focus {
-        background-color: $giwiki-dark-blue;
+        outline: none;
+        background-color: $giwiki-grey;
+        color: $giwiki-orange;
+        border-bottom: 4px solid $giwiki-orange;
       }
 
       label {
@@ -122,6 +200,9 @@
         input {
           font-size: 14px;
         }
+        button {
+          width: 80vw;
+        }
       }
     }
   }
@@ -130,13 +211,43 @@
 @media screen and (min-width: 768px) {
   .register-page {
     .form-container {
+      padding: 50px 0;
+      h1 {
+        max-width: 350px;
+      }
       form {
-        width: 500px;
+        max-width: 350px;
+
+        input {
+          max-width: 350px;
+        }
+      }
+    }
+  }
+}
+@media screen and (min-width: 950px) {
+  .register-page {
+    .form-container {
+      h1 {
+        max-width: 500px;
+      }
+      form {
+        max-width: 500px;
+        input {
+          max-width: 500px;
+        }
       }
     }
   }
 }
 
+@media screen and (min-width: 1199px) {
+  .register-page {
+    .form-container {
+      padding: 50px;
+    }
+  }
+}
 /*********************[APP CSS]***************************/
 body {
   margin: 0;
