@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ build.name }} - BUILD {{ build.gameCharacter.name }}{% endblock %}
+
+{% block body %}
+    <div class="user-builds-edit">
+        <a href="{{ path('profile-builds') }}"></a>
+        <h1>Editer : {{ build.name }} - Build sur {{ build.gameCharacter.name }}</h1>
+        {{ form_start(edit) }}
+        {{ form_row(edit._token) }}
+        {{ form_row(edit.name) }}
+        {{ form_row(edit.description) }}
+        {# <div>Veuillez lister les tags avec des virgules comme tel : tag, tag, ...</div> #}
+        {# {{ form_row(edit.tags) }} #}
+        {# {{ form_row(edit.weapons) }} #}
+        {{ form_widget(edit.weapons, { 'attr': {'checked': 'checked'} }) }}
+        {{ form_row(edit.submit) }}
+    </div>
+{% endblock %}

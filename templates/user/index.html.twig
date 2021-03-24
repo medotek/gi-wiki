@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('user') }}
+{% endblock %}
+
+{% block title %} Profil de {{app.user.name }}{% endblock %}
 
 {% block body %}
 <style>
@@ -9,11 +14,23 @@
 </style>
 
 <div class="user-profile">
-   <h1>Hello {{ app.user.name }}</h1>
-   <ul>
-      {% for build in userBuild %}
-         <li>{{ build[0].name }}</li>
-      {% endfor %}
-   </ul>
+
+    <div class="section-user-builds">
+        <div class="title-header">
+            <h3>Mes Builds</h3>
+            <div class="blue-bar"></div>
+        </div>
+        <div class="builds">
+            <ul>
+                {% for build in userBuild %}
+                    <li>{{ build[1][0].name }}</li>
+                {% endfor %}
+            </ul>
+            <a href="{{ path('profile-builds') }}">Voir tous mes builds</a>
+        </div>
+    </div>
+
+
+
 </div>
 {% endblock %}

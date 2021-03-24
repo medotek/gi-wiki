@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ app.user.name }} - Vos builds{% endblock %}
+
+{% block body %}
+
+    <div class="user-builds-overall">
+        <h1>Hello {{ app.user.name }}</h1>
+        <ul>
+            {% for build in userBuild %}
+                <li>
+                    {{ build[1][0].name }} - {{ build[0].build.gameCharacter.name }} <a
+                            href="{{ path('profile-builds-edit', {'id': build[1][0].id }) }}">Editer</a>
+                    <a href="{{ path('delete-build-profile', {'id': build[1][0].id }) }}">Supprimer</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+{% endblock %}
