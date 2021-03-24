@@ -6,17 +6,17 @@ use App\Entity\Build;
 use App\Entity\Character;
 use App\Entity\CommunityBuild;
 use App\Entity\User;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Routing\Annotation\Route;
 
 
 class CharacterController extends AbstractController
@@ -30,8 +30,6 @@ class CharacterController extends AbstractController
      * @var Security
      */
     private Security $security;
-
-    private Serializer $serializer;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -115,24 +113,28 @@ class CharacterController extends AbstractController
      */
     public function newCommunityBuild(Request $request, int $id): Response
     {
+        //TODO: Remember to not hang yourself while working on this function
 
-        //TODO: Is user logged condition before view the form
 
+        //// Recuperation des informations de base ////
+
+        // Personnage
         $character = $this->entityManager->getRepository(Character::class)->find($id);
         /* @var Character $character */
 
+
+        //// Creation de l'objet build ////
         $build = new Build();
+        //Attribution du personnage associé et de la catégorie correspondante
         $build->setGameCharacter($character)
             ->setBuildCategory('COMMUNITY');
 
-        $communityBuild = new CommunityBuild();
-        $communityBuild->setVotes(0);
 
-        $time = new \DateTime();
-        $communityBuild->setCreationDate($time);
+        //// Création de l'objet CommunityBuild ////
+        $communityBuild = new CommunityBuild(0,new DateTime());
 
+        //Récupération des informations de l'auteur
         $user = $this->security->getUser();
-
         $currentUser = $this->entityManager->getRepository(User::class)->find($user);
 
         /* @var User $currentUser*/
@@ -141,10 +143,10 @@ class CharacterController extends AbstractController
         $form = $this->createFormBuilder($build, ['allow_extra_fields' => true,'method' => 'put']);
 
         $formReal = $form
-            ->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, ['label' => 'Titre', 'attr' => ['placeholder' => 'Titre']])
+            ->add('name', TextType::class, ['label' => 'Titre', 'attr' => ['placeholder' => 'Titre']])
             ->add('description', TextareaType::class, ['label' => 'Description', 'attr' => ['placeholder' => 'description']])
             ->add(
-                $form->create('tags', \Symfony\Component\Form\Extension\Core\Type\TextType::class, ['label' => 'tags', 'attr' => ['placeholder' => 'Ex : Supports dps, new meta, ...']])
+                $form->create('tags', TextType::class, ['label' => 'tags', 'attr' => ['placeholder' => 'Ex : Supports dps, new meta, ...']])
                     ->addModelTransformer(new CallbackTransformer(
                         function ($originalDescription) {
                             return $originalDescription;
