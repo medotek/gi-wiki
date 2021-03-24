@@ -7,7 +7,6 @@ use App\Entity\Character;
 use App\Entity\CommunityBuild;
 use App\Entity\User;
 use App\Entity\Weapon;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -148,6 +147,8 @@ class CharacterController extends AbstractController
 
         $form = $this->createFormBuilder($build, ['allow_extra_fields' => true,'method' => 'put']);
 
+        $weapons = $this->entityManager->getRepository(Weapon::class)->findBy(['type' => $character->getWeaponType()]);
+
         $formReal = $form
             ->add('name', TextType::class, ['label' => 'Titre', 'attr' => ['placeholder' => 'Titre']])
             ->add('description', TextareaType::class, ['label' => 'Description', 'attr' => ['placeholder' => 'description']])
@@ -161,7 +162,6 @@ class CharacterController extends AbstractController
                             return explode(',', $submittedDescription);
                         }
                     )))
-            ->add('weapons',EntityType::class, ['label' => 'Armes', 'class' => Weapon::class, 'choices' => $weapons, 'multiple' => true, 'expanded' => 'true'])
             ->add('submit', SubmitType::class);
 
         $formRealSubmit =$formReal->getForm();
