@@ -1,20 +1,42 @@
 {% extends 'base.html.twig' %}
 
+
 {% block title %}{{ character.name }} - Nouveau build{% endblock %}
 
 {% block body %}
     <div class="character-profile">
         <div class="button-prev">
-            <a href="{{ path('character',  {'id': character.id })  }}"><div class="button-">RETOUR</div></a>
+            <a href="{{ path('character',  {'id': character.id }) }}">
+                <div class="button-return">RETOUR</div>
+            </a>
         </div>
         <div class="new-form">
+            <h1>Créer un build pour {{ character.name }}</h1>
             {{ form_start(new) }}
             {{ form_row(new._token) }}
-            {{ form_row(new.name) }}
-            {{ form_row(new.description) }}
-            <div>Veuillez lister les tags avec des virgules comme tel : tag, tag, ...</div>
-            {{ form_row(new.tags) }}
-            {{ form_row(new.weapons) }}
+            {{ form_widget(new.name) }}
+            {{ form_widget(new.description) }}
+            <div class="tags-label">Veuillez lister les tags avec des virgules</div>
+            {{ form_widget(new.tags) }}
+
+            <ul>
+                {% for fieldImage in new.weapons %}
+                    <li>
+                        {# {{ dump(fieldImage) }} #}
+                        {{ form_widget(fieldImage) }}
+                        <label for="{{ fieldImage.vars.id }}">
+                            {% if fieldImage.vars.attr.image is null %}
+                                {{ fieldImage.vars.label }}
+                            {% else %}
+                                <img style="width: 120px;"
+                                     src="{{ asset(fieldImage.vars.attr.image) }}"
+                                     alt="{{ fieldImage.vars.label }}"/>
+                            {% endif %}
+                        </label>
+
+                    </li>
+                {% endfor %}
+            </ul>
             {{ form_row(new.submit) }}
         </div>
     </div>
