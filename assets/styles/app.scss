@@ -63,6 +63,12 @@
         color: $giwiki-white;
         font-size: 18px;
       }
+
+
+      .register-link {
+        margin-top:15px;
+        text-align: center;
+      }
     }
   }
 }
@@ -83,6 +89,10 @@
         }
 
         input {
+          font-size: 14px;
+        }
+
+        .register-link {
           font-size: 14px;
         }
       }
@@ -157,6 +167,10 @@
       font-family: 'Poppins', sans-serif;
       text-align: center;
 
+      .login-link {
+        margin: 15px 0 0;
+      }
+
       input {
         font-size: 18px;
         margin: 20px 0;
@@ -186,6 +200,7 @@
         color: $giwiki-white;
         font-size: 18px;
       }
+
     }
   }
 }
@@ -199,6 +214,7 @@
 
       h1 {
         width: 80vw;
+        font-size: 25px;
       }
 
       form {
