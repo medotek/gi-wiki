@@ -100,9 +100,54 @@
 
   .banner {
     width: 100%;
-    height: 300px;
+    height: 170px;
     background-color: $giwiki-light-blue;
     border-radius: 20px;
+
+    .character-info-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 1em;
+
+      .character-title-container {
+        width: 100%;
+
+        h1 {
+          position: relative;
+          z-index: 2;
+          margin: 0;
+        }
+
+        .blue-bar {
+          position: relative;
+          z-index: 0;
+          top: 41px;
+          right: 5px;
+          width: 100%;
+          height: 10px;
+          border-radius: 50px;
+          background-color: $giwiki-orange;
+          opacity: 70%;
+        }
+
+        .character-name-container {
+
+        }
+      }
+
+      .character-rarity-container {
+        i {
+          //étoiles jaunes ne marche pas -> écrasé par un autre style
+          color: yellow;
+        }
+      }
+
+      .banner-item {
+        margin: 0.5em 0 0 0;
+      }
+
+    }
   }
 
   .character-menu {

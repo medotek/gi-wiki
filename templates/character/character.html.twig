@@ -4,7 +4,22 @@
 
 {% block body %}
     <div class="character-profile">
-        <div class="banner"></div>
+        <div class="banner">
+            <div class="character-info-container">
+                <div class="character-title-container banner-item">
+                    <div class="blue-bar"></div>
+                    <div class="character-name-container">
+                        <h1>{{ character.name }}</h1>
+                        <!--<img src="{//% if character.element == pyro  %}">-->
+                    </div>
+                </div>
+                <div class="character-rarity-container banner-item">
+                    <!-- number of stars for the rarity -->
+                    {% for i in 1..character.rarity %} <i class="fas fa-star"></i> {% endfor %}
+                </div>
+                <h3 class="banner-item">{{ character.weaponType }}</h3>
+            </div>
+        </div>
 
         <div class="character-menu">
             <a href="#overview">

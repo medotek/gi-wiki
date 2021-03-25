@@ -45,8 +45,7 @@ class CommunityBuild
      */
     private $build;
 
-    public function __construct(int $votes, DateTime $date) {
-        $this->votes = $votes>0 ? $votes : 0;
+    public function __construct(DateTime $date) {
         $this->creation_date = new DateTime();
     }
 

@@ -142,7 +142,7 @@ class CharacterController extends AbstractController
             ->setBuildCategory('COMMUNITY');
 
         //// Création de l'objet CommunityBuild ////
-        $communityBuild = new CommunityBuild(0,new DateTime());
+        $communityBuild = new CommunityBuild(new DateTime());
 
         //Récupération des informations de l'auteur
         $user = $this->security->getUser();
@@ -173,12 +173,10 @@ class CharacterController extends AbstractController
             ->add('weapons',EntityType::class, ['label' => 'Armes', 'class' => Weapon::class, 'choices' => $weapons, 'multiple' => true, 'expanded' => 'true', 'choice_attr' => function($choice, $key, $value) {
                 return ['image' => $choice->getImage()];
             }])
-
-            ->add('submit', SubmitType::class, ['label' => 'Créer le build'])
             ->add('artifacts', EntityType::class, ['label' => 'Artéfacts', 'class' => Artifact::class, 'multiple' => true, 'expanded' => true, 'choice_attr' => function($choice, $key, $value) {
                 return ['image' => $choice->getImage()];
-             }])
-            ->add('submit_build', SubmitType::class, ['label' => 'Terminer le build']);
+            }])
+            ->add('submit', SubmitType::class, ['label' => 'Créer le build']);
 
         $formRealSubmit = $formReal->getForm();
 
@@ -186,7 +184,7 @@ class CharacterController extends AbstractController
         $formRealSubmit->handleRequest($request);
 //        $formCommunityBuildReal->handleRequest($request);
         if ($formRealSubmit->isSubmitted() && $formRealSubmit->isValid()) {
-            if ($formRealSubmit->get('submit_build')->isClicked()) {
+            if ($formRealSubmit->get('submit')->isClicked()) {
                 // $form->getData() holds the submitted values
 
                 $build = $formRealSubmit->getData();
