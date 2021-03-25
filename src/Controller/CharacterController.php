@@ -97,13 +97,11 @@ class CharacterController extends AbstractController
         /* @var Build $allCommunityBuild */
         $communityBuildEntities = $this->entityManager->getRepository(CommunityBuild::class)->findBy(['build' => $allCommunityBuild], ['build' => 'ASC'] );
 
-        function sorts($a, $b) {
-            return $a - $b;
-        }
         /* @var CommunityBuild $communityBuildEntities */
 
         $builds = array_map(null, (array)$communityBuildEntities, $allCommunityBuild);
 
+        dump($builds);
 
         return $this->render('character/form/index.community-build.html.twig', [
             'charactersBuild' => $builds,

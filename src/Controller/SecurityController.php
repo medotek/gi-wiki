@@ -70,8 +70,8 @@ class SecurityController extends AbstractController
                 ->add('password', RepeatedType::class, array(
                     'type' => PasswordType::class,
                     'mapped' => false,
-                    'first_options' => array('label' => 'Nouveau mot de passe'),
-                    'second_options' => array('label' => 'Confirmation du mot de passe'),
+                    'first_options' => ['label' => 'Nouveau mot de passe', 'attr' => ['placeholder'=>'Nouveau mot de passe']],
+                    'second_options' => ['label' => 'Confirmer le mot de passe' , 'attr' => ['placeholder'=> 'Confirmation du mot de passe']],
                     'invalid_message' => 'Les mots de passe ne sont pas identiques',
                 ))
                 ->add('submit', SubmitType::class, ['label' => 'Créer le compte'])

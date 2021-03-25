@@ -41,7 +41,7 @@ class CommunityBuild
 
     /**
      * @ORM\OneToOne(targetEntity=Build::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, name="build_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $build;
 
