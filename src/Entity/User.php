@@ -58,9 +58,21 @@ class User implements UserInterface
      */
     private $roles = [];
 
+    /**
+     * @ORM\OneToMany(targetEntity=CommunityBuild::class, mappedBy="votes")
+     */
+    private $votes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=CommunityBuild::class, mappedBy="votesBuild")
+     */
+    private $buildsVotes;
+
     public function __construct()
     {
         $this->builds = new ArrayCollection();
+        $this->votes = new ArrayCollection();
+        $this->buildsVotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -172,5 +184,65 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * @return Collection|CommunityBuild[]
+     */
+    public function getVotes(): Collection
+    {
+        return $this->votes;
+    }
+
+    public function addVote(CommunityBuild $vote): self
+    {
+        if (!$this->votes->contains($vote)) {
+            $this->votes[] = $vote;
+            $vote->setVotes($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVote(CommunityBuild $vote): self
+    {
+        if ($this->votes->removeElement($vote)) {
+            // set the owning side to null (unless already changed)
+            if ($vote->getVotes() === $this) {
+                $vote->setVotes(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CommunityBuild[]
+     */
+    public function getBuildsVotes(): Collection
+    {
+        return $this->buildsVotes;
+    }
+
+    public function addBuildsVote(CommunityBuild $buildsVote): self
+    {
+        if (!$this->buildsVotes->contains($buildsVote)) {
+            $this->buildsVotes[] = $buildsVote;
+            $buildsVote->setVotesBuild($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBuildsVote(CommunityBuild $buildsVote): self
+    {
+        if ($this->buildsVotes->removeElement($buildsVote)) {
+            // set the owning side to null (unless already changed)
+            if ($buildsVote->getVotesBuild() === $this) {
+                $buildsVote->setVotesBuild(null);
+            }
+        }
+
+        return $this;
     }
 }

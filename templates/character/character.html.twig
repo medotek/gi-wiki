@@ -20,6 +20,7 @@
                 <h3 class="banner-item">{{ character.weaponType }}</h3>
             </div>
         </div>
+        <a class="community-build-create" href="{{ path('community-build-new',  {'id': character.id }) }}">Create your build</a>
 
         <div class="character-menu">
             <a href="#overview">
@@ -60,6 +61,7 @@
                 <h3>Community Build</h3>
                 <div class="blue-bar"></div>
             </div>
+            <a class="community-build-create-mobile" href="{{ path('community-build-new',  {'id': character.id }) }}">Create your build</a>
             <div class="community-build-box">
                 {% for communityBuild in communityBuilds %}
                     <ul>
@@ -69,12 +71,6 @@
                <a class="community-build-details" href="{{ path('community-build',  {'id': character.id }) }}">See more</a>
             </div>
         </div>
-
-        <h1>{{ character.name }}</h1>
-        <ul>
-            <li>{{ character.element }}</li>
-            <li>{{ character.rarity }}</li>
-        </ul>
     </div>
 
 {% endblock %}

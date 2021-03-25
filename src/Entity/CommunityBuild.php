@@ -23,7 +23,6 @@ class CommunityBuild
      */
     private $tags = [];
 
-
     /**
      * @ORM\Column(type="datetime")
      */
@@ -42,9 +41,9 @@ class CommunityBuild
     private $build;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="buildsVotes")
      */
-    private $votes;
+    private $votesBuild;
 
     public function __construct(DateTime $date) {
         $this->creation_date = new DateTime();
@@ -72,17 +71,6 @@ class CommunityBuild
         return $this;
     }
 
-    public function getVotes(): ?int
-    {
-        return $this->votes;
-    }
-
-    public function setVotes(int $votes): self
-    {
-        $this->votes = $votes;
-
-        return $this;
-    }
 
     public function getCreationDate(): ?\DateTimeInterface
     {
@@ -119,4 +107,17 @@ class CommunityBuild
 
         return $this;
     }
+
+    public function getVotesBuild(): ?User
+    {
+        return $this->votesBuild;
+    }
+
+    public function setVotesBuild(?User $votesBuild): self
+    {
+        $this->votesBuild = $votesBuild;
+
+        return $this;
+    }
+
 }
