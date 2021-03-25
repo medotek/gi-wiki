@@ -20,33 +20,52 @@
             </a>
         </div>
         <div class="new-form">
-        <a href="{{ path('profile-builds') }}"></a>
-        <h1>Editer : {{ build.name }} - Build sur {{ build.gameCharacter.name }}</h1>
-        {{ form_start(edit) }}
-        {{ form_row(edit._token) }}
-        {{ form_widget(edit.name) }}
-        {{ form_widget(edit.description) }}
-        <div class="tags-label">Veuillez lister les tags avec des virgules</div>
-        {{ form_widget(edit.tags) }}
-        <ul>
-            {% for fieldImage in edit.weapons %}
-                <li>
-                    {# {{ dump(fieldImage) }} #}
-                    {{ form_widget(fieldImage) }}
-                    <label for="{{ fieldImage.vars.id }}">
-                        {% if fieldImage.vars.attr.image is null %}
-                            {{ fieldImage.vars.label }}
-                        {% else %}
-                            <img style="width: 120px;"
-                                 src="{{ asset(fieldImage.vars.attr.image) }}"
-                                 alt="{{ fieldImage.vars.label }}"/>
-                        {% endif %}
-                    </label>
+            <a href="{{ path('profile-builds') }}"></a>
+            <h1>Editer : {{ build.name }} - Build sur {{ build.gameCharacter.name }}</h1>
+            {{ form_start(edit) }}
+            {{ form_row(edit._token) }}
+            {{ form_widget(edit.name) }}
+            {{ form_widget(edit.description) }}
+            <div class="tags-label">Veuillez lister les tags avec des virgules</div>
+            {{ form_widget(edit.tags) }}
+            <ul>
+                {% for fieldImage in edit.weapons %}
+                    <li>
+                        {# {{ dump(fieldImage) }} #}
+                        {{ form_widget(fieldImage) }}
+                        <label for="{{ fieldImage.vars.id }}">
+                            {% if fieldImage.vars.attr.image is null %}
+                                {{ fieldImage.vars.label }}
+                            {% else %}
+                                <img style="width: 120px;"
+                                     src="{{ asset(fieldImage.vars.attr.image) }}"
+                                     alt="{{ fieldImage.vars.label }}"/>
+                            {% endif %}
+                        </label>
 
-                </li>
-            {% endfor %}
-        </ul>
-        {{ form_row(edit.submit) }}
-    </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <h2>Artéfacts</h2>
+            <ul>
+                {% for fieldImage in edit.artifacts %}
+                    <li>
+                        {# {{ dump(fieldImage) }} #}
+                        {{ form_widget(fieldImage) }}
+                        <label for="{{ fieldImage.vars.id }}">
+                            {% if fieldImage.vars.attr.image is null %}
+                                {{ fieldImage.vars.label }}
+                            {% else %}
+                                <img style="width: 120px;"
+                                     src="{{ asset(fieldImage.vars.attr.image) }}"
+                                     alt="{{ fieldImage.vars.label }}"/>
+                            {% endif %}
+                        </label>
+
+                    </li>
+                {% endfor %}
+            </ul>
+            {{ form_row(edit.submit) }}
+        </div>
     </div>
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Artifact;
 use App\Entity\Build;
 use App\Entity\CommunityBuild;
 use App\Entity\User;
@@ -161,6 +162,9 @@ class UserController extends AbstractController
                         }
                     )))
             ->add('weapons', EntityType::class, ['label' => 'Armes', 'class' => Weapon::class, 'choices' => $weapons, 'multiple' => true, 'expanded' => 'true', 'choice_attr' => function ($choice, $key, $value) {
+                return ['image' => $choice->getImage()];
+            }])
+            ->add('artifacts', EntityType::class, ['label' => 'Artéfacts', 'class' => Artifact::class, 'multiple' => true, 'expanded' => true, 'choice_attr' => function($choice, $key, $value) {
                 return ['image' => $choice->getImage()];
             }])
             ->add('submit', SubmitType::class, ['label' => 'Modifier le build']);
