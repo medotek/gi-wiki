@@ -4,16 +4,49 @@
 
 {% block body %}
     <div class="user-builds-edit">
+        {% for message in app.flashes('build-edit-success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('build-edit-error') %}
+            <div class="alert alert-error">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <div class="button-prev">
+            <a href="{{ path('profile-builds') }}">
+                <div class="button-return">RETOUR</div>
+            </a>
+        </div>
+        <div class="new-form">
         <a href="{{ path('profile-builds') }}"></a>
         <h1>Editer : {{ build.name }} - Build sur {{ build.gameCharacter.name }}</h1>
         {{ form_start(edit) }}
         {{ form_row(edit._token) }}
-        {{ form_row(edit.name) }}
-        {{ form_row(edit.description) }}
-        {# <div>Veuillez lister les tags avec des virgules comme tel : tag, tag, ...</div> #}
-        {# {{ form_row(edit.tags) }} #}
-        {# {{ form_row(edit.weapons) }} #}
-        {{ form_widget(edit.weapons, { 'attr': {'checked': 'checked'} }) }}
+        {{ form_widget(edit.name) }}
+        {{ form_widget(edit.description) }}
+        <div class="tags-label">Veuillez lister les tags avec des virgules</div>
+        {{ form_widget(edit.tags) }}
+        <ul>
+            {% for fieldImage in edit.weapons %}
+                <li>
+                    {# {{ dump(fieldImage) }} #}
+                    {{ form_widget(fieldImage) }}
+                    <label for="{{ fieldImage.vars.id }}">
+                        {% if fieldImage.vars.attr.image is null %}
+                            {{ fieldImage.vars.label }}
+                        {% else %}
+                            <img style="width: 120px;"
+                                 src="{{ asset(fieldImage.vars.attr.image) }}"
+                                 alt="{{ fieldImage.vars.label }}"/>
+                        {% endif %}
+                    </label>
+
+                </li>
+            {% endfor %}
+        </ul>
         {{ form_row(edit.submit) }}
+    </div>
     </div>
 {% endblock %}

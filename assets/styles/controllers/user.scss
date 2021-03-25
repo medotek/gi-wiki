@@ -99,3 +99,281 @@
 
   }
 }
+
+/******************************************[BUILD EDIT]*****************************************************/
+
+
+
+.user-builds-edit {
+
+  .button-prev {
+    text-decoration: none;
+    color: $giwiki-orange;
+
+    .button-return {
+      text-decoration: none;
+      color: $giwiki-orange;
+      font-size: 30px;
+      font-weight: 600;
+    }
+  }
+
+  .new-form {
+    background-color: white;
+    border-radius: 30px;
+    padding: 50px;
+    margin: 50px auto;
+
+    h1 {
+      margin: 0 auto;
+    }
+
+    form {
+      margin: 0 auto 50px;
+      font-family: 'Poppins', sans-serif;
+
+
+      textarea {
+        font-family: 'Montserrat', sans-serif;
+        outline: none;
+        resize: vertical;
+        overflow: auto;
+        width: 100%;
+        border-style: none;
+        border-bottom: 4px solid $giwiki-light-blue;
+        padding: 10px;
+        font-size: 18px;
+      }
+
+      input {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 18px;
+        margin: 20px 0;
+        width: 100%;
+        padding: 10px 10px;
+        border-style: none;
+        border-bottom: 4px solid $giwiki-light-blue;
+      }
+
+      input[type="text"] {
+        font-size: 18px;
+      }
+
+
+      .tags-label {
+        margin-top: 20px;
+      }
+
+      #form_tags {
+        margin-top: 0;
+      }
+
+      #form_weapons {
+        input[type=checkbox] {
+          width: auto;
+          margin: 20px;
+        }
+
+        label {
+          position: relative;
+          width: 450px;
+        }
+      }
+
+      input[type=text]:focus {
+        outline: none;
+        background-color: $giwiki-grey;
+        color: $giwiki-orange;
+        border-bottom: 4px solid $giwiki-orange;
+      }
+
+      button {
+        background-color: $giwiki-orange;
+        border-radius: 10px;
+        border: none;
+        width: 100%;
+        padding: 10px 15px;
+        color: $giwiki-white;
+        font-size: 18px;
+      }
+
+
+      ul {
+        list-style-type: none;
+        padding:0;
+        input[type="checkbox"] {
+          display:none;
+        }
+      }
+
+      li {
+        display: inline-block;
+      }
+
+      //input[type="checkbox"][id^="cb"] {
+      //  display: none;
+      //}
+
+      label {
+        border: 1px solid #fff;
+        padding: 10px;
+        display: block;
+        position: relative;
+        margin: 10px;
+        cursor: pointer;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      label::before {
+        background-color: white;
+        color: white;
+        content: " ";
+        display: block;
+        border-radius: 50%;
+        border: 1px solid grey;
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        width: 25px;
+        height: 25px;
+        text-align: center;
+        line-height: 28px;
+        transition-duration: 0.4s;
+        transform: scale(0);
+      }
+
+      label img {
+        height: auto;
+        width: 100px;
+        transition-duration: 0.2s;
+        transform-origin: 50% 50%;
+      }
+
+      :checked + label {
+        border-color: #ddd;
+      }
+
+      :checked + label::before {
+        content: "✓";
+        background-color: grey;
+        transform: scale(1);
+      }
+
+      :checked + label img {
+        transform: scale(0.9);
+        box-shadow: 0 0 5px #333;
+        z-index: -1;
+      }
+
+
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+
+  .user-builds-edit {
+    margin-top: 20px;
+
+    .button-prev {
+      .button-return {
+        font-size: 20px;
+      }
+    }
+
+    .new-form {
+      background-color: white;
+      border-radius: 15px;
+      padding: 15px;
+      margin: 20px auto;
+      width: 100%;
+
+      .tags-label {
+        font-size: 14px;
+      }
+
+      ul {
+        label {
+          margin:0;
+        }
+      }
+      h1 {
+        margin: 0 auto;
+        max-width: 350px;
+        font-size: 20px;
+      }
+
+      form {
+        max-width: 350px;
+        margin: 0 auto 50px;
+        font-family: 'Poppins', sans-serif;
+
+
+        h1 {
+          max-width: 80vw;
+        }
+
+        input {
+          font-size: 14px;
+        }
+
+        .register-link {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .user-builds-edit {
+    .new-form {
+      padding: 50px 0;
+
+      h1 {
+        max-width: 350px;
+      }
+
+      form {
+        max-width: 350px;
+
+        input {
+          max-width: 350px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 950px) {
+  .user-builds-edit {
+    .new-form {
+      h1 {
+        min-width: 500px;
+      }
+
+      form {
+        max-width: 500px;
+
+        input {
+          max-width: 500px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1199px) {
+  .user-builds-edit {
+    .new-form {
+      padding: 50px;
+    }
+
+  }
+}
+
