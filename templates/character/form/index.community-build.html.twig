@@ -4,22 +4,46 @@
 
 {% block body %}
     <div class="character-profile">
-        <div class="section-community-build"  id="community-build">
+        <div class="button-prev">
+            <a href="{{ path('character',  {'id': character.id }) }}">
+                <div class="button-return">RETOUR</div>
+            </a>
+        </div>
+        <div class="section-community-build" id="community-build">
             <div class="title-header">
                 <h3>Community Build</h3>
                 <div class="blue-bar"></div>
             </div>
-            <ul>
+            <div class="community-builds">
                 {% for characterBuild in charactersBuild %}
+                    <div class="community-build">
 
-                    <li>
-                        {{ characterBuild[0].creationdate|date("m/d/Y") }}
-                        {{ characterBuild[1].name }}
-                    </li>
+                        <div class="build-title">{{ characterBuild[1].name }}</div>
+                        <div class="build-author">par {{ characterBuild[2].name }}</div>
+                        <div></div>
+                        <ul class="tag-list">
+                            {% for tags in characterBuild[3]|slice(0, 5) %}
+                                {% if tags is null %}{% elseif tags is empty %}{% else %}
+                                    <li class="build-tag">{{ tags }}</li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        <div class="build-date">{{ characterBuild[0].creationdate|date("d/m/Y H:i") }}</div>
+                        <div class="label-vote">Votes</div>
+                        <a href="{{ path('add-vote-to-build',  {'id': characterBuild[1].gamecharacter.id, 'buildId':characterBuild[1].id }) }}">
+                            <div class="vote-number">
+                                {% if characterBuild[0].votesbuild is null %}
+                                    0
+                                {% else %}
+                                    {{ characterBuild[0].votesbuild }}
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
                 {% endfor %}
-            </ul>
+            </div>
         </div>
-
     </div>
+
 
 {% endblock %}

@@ -126,13 +126,29 @@ class CharacterController extends AbstractController
         $allCommunityBuild = $this->entityManager->getRepository(Build::class)->findBy(['gameCharacter' => $character->getId(), 'buildCategory' => 'COMMUNITY'], ['id' => 'DESC']);
 
         /* @var Build $allCommunityBuild */
-        $communityBuildEntities = $this->entityManager->getRepository(CommunityBuild::class)->findBy(['build' => $allCommunityBuild], ['build' => 'DESC'] );
+        $communityBuildEntities = $this->entityManager->getRepository(CommunityBuild::class)->findBy(['build' => $allCommunityBuild], ['build' => 'DESC']);
 
-        /* @var CommunityBuild $communityBuildEntities */
+        /* @var CommunityBuild $communityBuildEntity */
 
-        $builds = array_map(null, (array)$communityBuildEntities, $allCommunityBuild);
+        /* Récupération des noms d'utilisateurs */
+        $users = [];
+        $buildTags = [];
+        foreach ($communityBuildEntities as $communityBuildEntity) {
+            $authorId = $communityBuildEntity->getAuthor()->getId();
+            /* @var User $user */
+            $user = $this->entityManager->getRepository(User::class)->find($authorId);
+            $users[] = $user;
 
-        $form = $this->createFormBuilder($communityBuildEntities);
+            $tag = $communityBuildEntity->getTags();
+            $buildTags[] = array_filter($tag, fn($value) => !is_null($value) && $value !== ' ');
+        }
+
+
+
+
+        $builds = array_map(null, (array)$communityBuildEntities, $allCommunityBuild, $users, $buildTags);
+        dump($buildTags);
+
 
         return $this->render('character/form/index.community-build.html.twig', [
             'charactersBuild' => $builds,
