@@ -269,6 +269,7 @@ body {
   background-color: $giwiki-grey;
   font-family: 'Poppins', sans-serif;
 
+
   .nav ul {
     list-style-type: none;
     padding: 0;
@@ -351,6 +352,7 @@ body {
 
     .copyright {
       display: block;
+      margin-bottom: 100px;
     }
 
     .logo {
@@ -368,6 +370,13 @@ body {
     }
 
     .menu {
+
+      .logo {
+        img {
+          display: none;
+        }
+      }
+
       z-index: 1;
       top: inherit;
       bottom: 0;
@@ -398,6 +407,11 @@ body {
 
         .menu-logo {
           display: block;
+          position: absolute;
+          top:50%;
+          left:50%;
+          transform: translate(-50%, -50%);
+          font-size: 25px;
         }
 
       }
@@ -427,6 +441,14 @@ body {
     }
 
     .menu {
+
+      .logo {
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+
       top: 0;
       width: 225px;
       position: fixed;
