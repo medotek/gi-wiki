@@ -51,8 +51,7 @@
                         <li>{{ communityBuild.name }}</li>
                     </ul>
                 {% endfor %}
-                <a href="{{ path('community-build-new',  {'id': character.id }) }}">Create a build</a>
-                <a href="{{ path('community-build',  {'id': character.id }) }}">See more</a>
+               <a class="community-build-details" href="{{ path('community-build',  {'id': character.id }) }}">See more</a>
             </div>
         </div>
 
