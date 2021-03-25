@@ -244,7 +244,6 @@
 
       textarea {
         font-family: 'Montserrat', sans-serif;
-        outline: none;
         resize: vertical;
         overflow: auto;
         width: 100%;
@@ -252,6 +251,13 @@
         border-bottom: 4px solid $giwiki-light-blue;
         padding: 10px;
         font-size: 18px;
+      }
+
+      textarea:focus {
+        outline: none;
+        background-color: $giwiki-grey;
+        color: $giwiki-orange;
+        border-bottom: 4px solid $giwiki-orange;
       }
 
       input {

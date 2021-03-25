@@ -294,6 +294,13 @@
         font-size: 18px;
       }
 
+      textarea:focus {
+        outline: none;
+        background-color: $giwiki-grey;
+        color: $giwiki-orange;
+        border-bottom: 4px solid $giwiki-orange;
+      }
+
       input {
         font-family: 'Montserrat', sans-serif;
         font-size: 18px;
@@ -498,7 +505,7 @@
   .character-profile {
     .new-form {
       h1 {
-        width: 500px;
+        min-width: 500px;
       }
 
       form {
