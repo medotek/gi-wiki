@@ -30,12 +30,6 @@ class Set
      */
     private $artifacts;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Build::class, inversedBy="sets")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $build;
-
     public function __construct()
     {
         $this->artifacts = new ArrayCollection();
@@ -100,11 +94,10 @@ class Set
 
         try {
             foreach ($this->artifacts->getIterator() as $artifact) {
-                $str += (string)$artifact . ", ";
+                $str .= (string)$artifact . ", ";
             }
         } catch (\Exception $e) {
             return null;
-            throw($e);
         }
 
         return $str;

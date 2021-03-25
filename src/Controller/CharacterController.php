@@ -2,16 +2,26 @@
 
 namespace App\Controller;
 
+use App\Entity\Artifact;
 use App\Entity\Build;
 use App\Entity\Character;
 use App\Entity\CommunityBuild;
+use App\Entity\Set;
 use App\Entity\User;
 use App\Entity\Weapon;
+use App\Form\SetType;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\HiddenField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Form\Type\TextEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -121,7 +131,6 @@ class CharacterController extends AbstractController
         // Personnage
         $character = $this->entityManager->getRepository(Character::class)->find($id);
         /* @var Character $character */
-
         // Armes
         $weapons = $this->entityManager->getRepository(Weapon::class)->findBy(['type' => $character->getWeaponType()]);
 
@@ -131,7 +140,6 @@ class CharacterController extends AbstractController
         //Attribution du personnage associé et de la catégorie correspondante
         $build->setGameCharacter($character)
             ->setBuildCategory('COMMUNITY');
-
 
         //// Création de l'objet CommunityBuild ////
         $communityBuild = new CommunityBuild(0,new DateTime());
@@ -148,6 +156,7 @@ class CharacterController extends AbstractController
         $weapons = $this->entityManager->getRepository(Weapon::class)->findBy(['type' => $character->getWeaponType()]);
         /* @var Weapon $weapons */
 
+        //Formulaire du build
         $formReal = $form
             ->add('name', TextType::class, ['label' => 'Titre', 'attr' => ['placeholder' => 'Titre']])
             ->add('description', TextareaType::class, ['label' => 'Description', 'attr' => ['placeholder' => 'description']])
@@ -165,44 +174,48 @@ class CharacterController extends AbstractController
                 return ['image' => $choice->getImage()];
             }])
 
-            ->add('submit', SubmitType::class, ['label' => 'Créer le build']);
+            ->add('submit', SubmitType::class, ['label' => 'Créer le build'])
+            ->add('artifacts', EntityType::class, ['label' => 'Artéfacts', 'class' => Artifact::class, 'multiple' => true, 'expanded' => true])
+            ->add('submit_build', SubmitType::class, ['label' => 'Terminer le build']);
 
-        $formRealSubmit =$formReal->getForm();
+        $formRealSubmit = $formReal->getForm();
 
+        //Tratement du formulaire de build
         $formRealSubmit->handleRequest($request);
 //        $formCommunityBuildReal->handleRequest($request);
         if ($formRealSubmit->isSubmitted() && $formRealSubmit->isValid()) {
-            // $form->getData() holds the submitted values
-            $build = $formRealSubmit->getData();
+            if ($formRealSubmit->get('submit_build')->isClicked()) {
+                // $form->getData() holds the submitted values
 
-            /* Added a success message after creating a build*/
-            $this->addFlash('build-success', 'Build créé avec succès!');
+                $build = $formRealSubmit->getData();
 
-            // ... perform some action, such as saving the task to the database
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($build);
-            $entityManager->flush();
+                /* Added a success message after creating a build*/
+                $this->addFlash('build-success', 'Build créé avec succès!');
 
+                // ... perform some action, such as saving the task to the database
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($build);
+                $entityManager->flush();
 
+                /* Connaitre l'id du build avant de l'insérer dans la db*/
+                $communityBuild->setBuild($build);
 
-            /* Connaitre l'id du build avant de l'insérer dans la db*/
-            $communityBuild->setBuild($build);
+                /* On set le tag après que le formulaire soit soumis*/
+                $tags = $formRealSubmit->get('tags')->getData();
 
-            /* On set le tag après que le formulaire soit soumis*/
-            $tags = $formRealSubmit->get('tags')->getData();
+                $communityBuild->setTags($tags);
 
-            $communityBuild->setTags($tags);
+                $entityManager->persist($communityBuild);
+                $entityManager->flush();
 
-            $entityManager->persist($communityBuild);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('character', ['id' => $character->getId()]);
+                return $this->redirectToRoute('character', ['id' => $character->getId()]);
+            }
         }
 
         return $this->render('character/form/new.community-build.html.twig', [
-            'character' => $character,
-            'new' => $formRealSubmit->createView()
-        ]);
+                'character' => $character,
+                'new' => $formRealSubmit->createView(),
+            ]);
     }
 
 
