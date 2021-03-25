@@ -77,12 +77,37 @@ class CharacterController extends AbstractController
         // Get All official builds for the current character
         $officialBuilds = $this->entityManager->getRepository(Build::class)->findBy(['gameCharacter' => $character->getId(), 'buildCategory' => 'OFFICIAL']);
 
-        $allCommunityBuild = $this->entityManager->getRepository(Build::class)->findBy(['gameCharacter' => $character->getId(), 'buildCategory' => 'COMMUNITY'], ['id' => 'DESC'], 4);
+             /* @var Character $character */
+        $allCommunityBuild = $this->entityManager->getRepository(Build::class)->findBy(['gameCharacter' => $character->getId(), 'buildCategory' => 'COMMUNITY'], ['id' => 'DESC']);
+
+        /* @var Build $allCommunityBuild */
+        $communityBuildEntities = $this->entityManager->getRepository(CommunityBuild::class)->findBy(['build' => $allCommunityBuild], ['build' => 'DESC']);
+
+        /* @var CommunityBuild $communityBuildEntity */
+
+        /* Récupération des noms d'utilisateurs */
+        $users = [];
+        $buildTags = [];
+        foreach ($communityBuildEntities as $communityBuildEntity) {
+            $authorId = $communityBuildEntity->getAuthor()->getId();
+            /* @var User $user */
+            $user = $this->entityManager->getRepository(User::class)->find($authorId);
+            $users[] = $user;
+
+            $tag = $communityBuildEntity->getTags();
+            $buildTags[] = array_filter($tag, fn($value) => !is_null($value) && $value !== ' ');
+        }
+
+
+
+
+        $builds = array_map(null, (array)$communityBuildEntities, $allCommunityBuild, $users, $buildTags);
+        dump($buildTags);
 
         return $this->render('character/character.html.twig', [
             'character' => $character,
             'officialBuilds' => $officialBuilds,
-            'communityBuilds' => $allCommunityBuild
+            'communityBuilds' => $builds
         ]);
     }
 

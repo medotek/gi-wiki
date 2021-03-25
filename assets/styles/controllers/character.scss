@@ -100,7 +100,7 @@
   padding-bottom: 100px;
 
   .community-build-create-mobile {
-    display:none;
+    display: none;
   }
 
   .community-build-create {
@@ -126,17 +126,31 @@
     height: 170px;
     background-color: $giwiki-light-blue;
     border-radius: 20px;
+    position:relative;
+    img {
+      padding:20px 0 0 20px;
+      position:relative;
+      left:20px;
+      width:  30%;
+      height: 170px;
+      object-fit: cover;
+      object-position: top;
+    }
 
     .character-info-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      //display: flex;
+      //flex-direction: column;
+      //align-items: center;
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform: translate(-50%, -50%);
       margin: 0 1em;
-
+      width: 50%;
       .character-title-container {
-        width: 100%;
 
         h1 {
+          color:$giwiki-orange;
           position: relative;
           z-index: 2;
           margin: 0;
@@ -150,8 +164,7 @@
           width: 100%;
           height: 10px;
           border-radius: 50px;
-          background-color: dodgerblue;
-          opacity: 70%;
+          background-color: $giwiki-dark-blue;
         }
 
         .character-name-container {
@@ -205,6 +218,11 @@
     }
   }
 
+  .section-recommended-build {
+    .community-build-box {
+      height: 300px;
+    }
+  }
   .section-community-build, .section-recommended-build {
 
     .community-build-box {
@@ -212,13 +230,17 @@
       border-radius: 20px;
       box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
       width: 100%;
-      height: 300px;
       padding: 20px;
       position: relative;
 
-      ul {
-        list-style-type: none;
-        padding: 0;
+      .community-builds {
+        background: transparent;
+        padding: 10px;
+
+        .community-build {
+          box-shadow: none;
+          border: 0.5px solid $giwiki-light-blue;
+        }
       }
 
       .community-build-details {
@@ -258,20 +280,25 @@
 @media screen and (max-width: 767px) {
   .character-profile {
     .community-build-create {
-      display:none;
+      display: none;
     }
+
     .community-build-create-mobile {
-      margin:20px 0;
+      margin: 20px 0;
       text-decoration: none;
       color: $giwiki-white;
       font-weight: 600;
       font-size: 20px;
-      background-color:  $giwiki-orange;
+      background-color: $giwiki-orange;
       padding: 10px 20px;
       display: block;
     }
 
     .section-community-build, .section-recommended-build {
+      .community-build-box {
+        padding: 0;
+      }
+
       .title-header {
         h3 {
           font-size: 22px;
@@ -569,6 +596,9 @@
         margin: 0 auto 50px;
         font-family: 'Poppins', sans-serif;
 
+        textarea {
+          font-size: 14px;
+        }
 
         h1 {
           max-width: 80vw;
@@ -633,3 +663,153 @@
   }
 }
 
+
+/** [Character community builds view]  **/
+
+.character-profile {
+  .section-community-build {
+    .community-builds {
+      background-color: $giwiki-white;
+      border-radius: 20px;
+      padding: 30px;
+
+      .community-build {
+        border-radius: 10px;
+        margin-bottom: 30px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+
+        .build-title {
+          font-weight: bold;
+          font-size: 20px;
+        }
+
+        .tag-list {
+          list-style: none;
+          padding: 0;
+
+          li {
+            display: inline-block;
+            margin-right: 20px;
+            background-color: $giwiki-light-blue;
+            border-radius: 5px;
+            padding: 2px 15px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+
+  .character-profile {
+    .section-community-build {
+      .community-builds {
+        background-color: $giwiki-white;
+        border-radius: 20px;
+        padding: 10px;
+
+        .community-build {
+          position: relative;
+          border-radius: 10px;
+          margin-bottom: 30px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          padding: 15px;
+
+          .build-date {
+          }
+
+          .tag-list {
+            list-style: none;
+            padding: 0;
+
+            li {
+              font-size: 10px;
+              font-weight: 500;
+              display: inline-block;
+              margin-right: 5px;
+              background-color: $giwiki-light-blue;
+              border-radius: 5px;
+              padding: 2px 5px;
+            }
+          }
+        }
+
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .character-profile {
+    .section-community-build {
+      .community-builds {
+
+        .community-build {
+          border-radius: 10px;
+          margin-bottom: 30px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+
+          .tag-list {
+            list-style: none;
+            padding: 0;
+
+            li {
+              font-size: 14px;
+              font-weight: 500;
+              display: inline-block;
+              margin-right: 10px;
+              background-color: $giwiki-light-blue;
+              border-radius: 5px;
+              padding: 2px 10px;
+            }
+          }
+        }
+
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 950px) {
+  .character-profile {
+    .section-community-build {
+      .community-builds {
+
+        .community-build {
+          .tag-list {
+            list-style: none;
+            padding: 0;
+
+            li {
+              font-size: 18px;
+              font-weight: 500;
+              display: inline-block;
+              margin-right: 20px;
+              background-color: $giwiki-light-blue;
+              border-radius: 5px;
+              padding: 5px 15px;
+            }
+          }
+        }
+
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1199px) {
+  .character-profile {
+    .section-community-build {
+      .community-builds {
+
+        .community-build {
+
+        }
+
+      }
+    }
+  }
+}
