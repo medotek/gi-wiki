@@ -172,6 +172,9 @@ class CharacterController extends AbstractController
             // $form->getData() holds the submitted values
             $build = $formRealSubmit->getData();
 
+            /* Added a success message after creating a build*/
+            $this->addFlash('build-success', 'Build créé avec succès!');
+
             // ... perform some action, such as saving the task to the database
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($build);
