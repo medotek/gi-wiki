@@ -41,21 +41,22 @@ class Build
     private $weapons;
 
     /**
-     * @ORM\OneToMany(targetEntity=Set::class, mappedBy="build", orphanRemoval=true)
-     */
-    private $sets;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $buildCategory;
 
     private array $tags;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Artifact::class)
+     */
+    private $artifacts;
+
     public function __construct()
     {
         $this->weapons = new ArrayCollection();
         $this->sets = new ArrayCollection();
+        $this->artifacts = new ArrayCollection();
     }
 
     public function getTags(): array
@@ -174,6 +175,30 @@ class Build
     public function setBuildCategory(string $buildCategory): self
     {
         $this->buildCategory = $buildCategory;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Artifact[]
+     */
+    public function getArtifacts(): Collection
+    {
+        return $this->artifacts;
+    }
+
+    public function addArtifact(Artifact $artifact): self
+    {
+        if (!$this->artifacts->contains($artifact)) {
+            $this->artifacts[] = $artifact;
+        }
+
+        return $this;
+    }
+
+    public function removeArtifact(Artifact $artifact): self
+    {
+        $this->artifacts->removeElement($artifact);
 
         return $this;
     }
