@@ -23,10 +23,6 @@ class CommunityBuild
      */
     private $tags = [];
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $votes;
 
     /**
      * @ORM\Column(type="datetime")
@@ -44,6 +40,11 @@ class CommunityBuild
      * @ORM\JoinColumn(nullable=false, name="build_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $build;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     */
+    private $votes;
 
     public function __construct(int $votes, DateTime $date) {
         $this->votes = $votes>0 ? $votes : 0;
