@@ -19,8 +19,28 @@
             <div class="tags-label">Veuillez lister les tags avec des virgules</div>
             {{ form_widget(new.tags) }}
 
+            <h2>Armes</h2>
             <ul>
                 {% for fieldImage in new.weapons %}
+                    <li>
+                        {# {{ dump(fieldImage) }} #}
+                        {{ form_widget(fieldImage) }}
+                        <label for="{{ fieldImage.vars.id }}">
+                            {% if fieldImage.vars.attr.image is null %}
+                                {{ fieldImage.vars.label }}
+                            {% else %}
+                                <img style="width: 120px;"
+                                     src="{{ asset(fieldImage.vars.attr.image) }}"
+                                     alt="{{ fieldImage.vars.label }}"/>
+                            {% endif %}
+                        </label>
+
+                    </li>
+                {% endfor %}
+            </ul>
+            <h2>Artéfacts</h2>
+            <ul>
+                {% for fieldImage in new.artifacts %}
                     <li>
                         {# {{ dump(fieldImage) }} #}
                         {{ form_widget(fieldImage) }}
