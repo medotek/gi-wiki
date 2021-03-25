@@ -9,9 +9,9 @@
         <ul>
             {% for build in userBuild %}
                 <li>
-                    {{ build[1][0].name }} - {{ build[0].build.gameCharacter.name }} <a
-                            href="{{ path('profile-builds-edit', {'id': build[1][0].id }) }}">Editer</a>
-                    <a href="{{ path('delete-build-profile', {'id': build[1][0].id }) }}">Supprimer</a>
+                    {{ build[1][0].name }} - {{ build[0].build.gameCharacter.name }}
+                    <a class="user-build-edit" href="{{ path('profile-builds-edit', {'id': build[1][0].id }) }}">Editer</a>
+                    <a class="user-build-remove" href="{{ path('delete-build-profile', {'id': build[1][0].id }) }}">Supprimer</a>
                 </li>
             {% endfor %}
         </ul>
