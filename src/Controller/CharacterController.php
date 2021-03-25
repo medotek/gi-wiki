@@ -25,6 +25,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
@@ -106,7 +107,7 @@ class CharacterController extends AbstractController
 
         $builds = array_map(null, (array)$communityBuildEntities, $allCommunityBuild);
 
-        dump($builds);
+        $form = $this->createFormBuilder($communityBuildEntities);
 
         return $this->render('character/form/index.community-build.html.twig', [
             'charactersBuild' => $builds,
@@ -114,7 +115,28 @@ class CharacterController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/character/{id}/community-build/add-vote-for-build-{buildId}", name="add-vote-to-build")
+     * @param int $id
+     * @param int $buildId
+     * @return RedirectResponse
+     */
+    public function addVoteForCommunityBuild(int $id, int $buildId): RedirectResponse
+    {
+        /* @var User $currentUser */
+//        $currentUser = ;
 
+        $communityBuild =  $this->entityManager->getRepository(CommunityBuild::class)->find($buildId);
+
+        /* @var CommunityBuild $communityBuild */
+//        $communityBuild->setVotes($currentUser);
+//
+//        $entityManager = $this->getDoctrine()->getManager();
+//        $entityManager->persist($communityBuild);
+//        $entityManager->flush();
+
+        return $this->redirectToRoute('community-build', ['id' => $id]);
+    }
     /**
      * @Route("/character/{id}/community-build/new", name="community-build-new")
      * @param Request $request
