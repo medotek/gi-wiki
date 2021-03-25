@@ -52,7 +52,7 @@ class UserController extends AbstractController
             $allCommunityBuild[] = $this->entityManager->getRepository(Build::class)->findBy(['id' => $userCommunityBuild->getBuild()]);
         }
 
-        $array = array_map(null ,(array) $this->getCommunityBuildForTheCurrentUser(), (array) $allCommunityBuild);
+        $array = array_map(null, (array)$this->getCommunityBuildForTheCurrentUser(), (array)$allCommunityBuild);
 
         dump($array);
         return $this->render('user/index.html.twig', [
@@ -72,16 +72,20 @@ class UserController extends AbstractController
         /* @var CommunityBuild $buildEntity */
         $buildEntity = $this->entityManager->getRepository(CommunityBuild::class)->findOneBy(['build' => $id]);
 
-        /* @var User $user*/
+        /* @var User $user */
         $user = $this->security->getUser();
+
         if ($buildEntity->getAuthor() === $user) {
             $remove = $this->getDoctrine()->getManager();
 
             $remove->remove($buildEntity);
             $remove->flush();
+            $this->addFlash('build-removed-success', 'Le build a bien été supprimé');
 
             return $this->redirectToRoute('profile-builds');
         } else {
+            $this->addFlash('build-removed-error', 'Le build n\'a pas pu être supprimé!');
+
             return $this->redirectToRoute('user');
         }
     }
@@ -97,7 +101,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @param Request  $request
+     * @param Request $request
      * @return RedirectResponse|Response
      *
      * @Route("/account/profile/builds", name="profile-builds")
@@ -114,7 +118,7 @@ class UserController extends AbstractController
             $allCommunityBuild[] = $this->entityManager->getRepository(Build::class)->findBy(['id' => $userCommunityBuild->getBuild()], ['id' => 'DESC']);
         }
 
-        $array = array_map(null ,(array) $this->getCommunityBuildForTheCurrentUser() ,(array) $allCommunityBuild);
+        $array = array_map(null, (array)$this->getCommunityBuildForTheCurrentUser(), (array)$allCommunityBuild);
 
         dump($array);
 
@@ -134,20 +138,20 @@ class UserController extends AbstractController
     {
         $build = $this->entityManager->getRepository(Build::class)->find($id);
 
-        $form = $this->createFormBuilder($build, ['allow_extra_fields' => true,'method' => 'put']);
+        $form = $this->createFormBuilder($build, ['allow_extra_fields' => true, 'method' => 'put']);
 
 
         /* @var Build $build */
-        $communityBuild = $this->entityManager->getRepository(CommunityBuild::class)->find($build->getId());
+        /* @var CommunityBuild $communityBuild */
+        $communityBuild = $this->entityManager->getRepository(CommunityBuild::class)->findOneBy(['build' => $build]);
 
         $weapons = $this->entityManager->getRepository(Weapon::class)->findBy(['type' => $build->getGameCharacter()->getWeaponType()]);
 
-        dump($build->getWeapons());
         $formReal = $form
             ->add('name', TextType::class, ['label' => 'Titre', 'attr' => ['placeholder' => 'Titre']])
             ->add('description', TextareaType::class, ['label' => 'Description', 'attr' => ['placeholder' => 'description']])
             ->add(
-                $form->create('tags', TextType::class, ['label' => 'tags', 'attr' => ['placeholder' => 'Ex : Supports dps, new meta, ...']])
+                $form->create('tags', TextType::class, ['label' => 'tags', 'attr' => ['placeholder' => 'Ex : Supports dps, new meta, ...', 'value' => implode(',', $communityBuild->getTags())]])
                     ->addModelTransformer(new CallbackTransformer(
                         function ($originalDescription) {
                             return $originalDescription;
@@ -156,23 +160,38 @@ class UserController extends AbstractController
                             return explode(',', $submittedDescription);
                         }
                     )))
-            ->add('weapons',EntityType::class, ['label' => 'Armes', 'class' => Weapon::class, 'choices' => $weapons, 'multiple' => true, 'expanded' => 'true', 'attr' => ['checked' => 'checked']])
-            ->add('submit', SubmitType::class);
+            ->add('weapons', EntityType::class, ['label' => 'Armes', 'class' => Weapon::class, 'choices' => $weapons, 'multiple' => true, 'expanded' => 'true', 'choice_attr' => function ($choice, $key, $value) {
+                return ['image' => $choice->getImage()];
+            }])
+            ->add('submit', SubmitType::class, ['label' => 'Modifier le build']);
 
-        $formRealSubmit =$formReal->getForm();
+        $formRealSubmit = $formReal->getForm();
         $formRealSubmit->handleRequest($request);
 
         if ($formRealSubmit->isSubmitted() && $formRealSubmit->isValid()) {
 
             $build = $formRealSubmit->getData();
 
-            /* @var CommunityBuild $communityBuild*/
-            $communityBuild->setTags($formRealSubmit->get('tags')->getData());
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($build);
             $entityManager->flush();
-            return $this->redirectToRoute('profile-builds', ['id' => $id]);
+
+            $tagsField = $formRealSubmit->get('tags')->getData();
+
+            dump($tagsField);
+            $communityBuild->setTags($tagsField);
+
+            $entityManager->persist($communityBuild);
+            $entityManager->flush();
+
+            $this->addFlash('build-edit-success', 'Le Build a été édité avec succès!');
+
+            return $this->redirectToRoute('profile-builds');
+        } else {
+            if ($formRealSubmit->isSubmitted()) {
+                $this->addFlash('build-edit-error', 'Le Build n\'a pas pu être édité');
+            }
         }
 
         return $this->render('user/builds/edit.html.twig', [

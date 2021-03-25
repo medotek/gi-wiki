@@ -1,27 +1,67 @@
 @import '../global';
 
 /********************************************[User profile css]********************************************/
-
 .user-builds-overall {
   .user-build-edit {
     text-decoration: none;
-    background-color: $giwiki-light-blue;
-    padding:5px 10px;
+    background-color: $giwiki-dark-blue;
+    padding: 5px 10px;
     border-radius: 5px;
-    color: black;
+    color: $giwiki-white;
     font-weight: 600;
+  }
+
+  .user-build-remove {
+    background-color: #e81010;
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
   }
 }
 
-
 .user-profile {
   margin: 50px 0;
+
+  .logout {
+    display: none;
+  }
 
   .banner {
     width: 100%;
     height: 300px;
     background-color: $giwiki-light-blue;
     border-radius: 20px;
+  }
+
+  .builds {
+    background-color: $giwiki-white;
+    border-radius: 20px;
+    padding: 20px 20px 40px 20px;
+    width: 100%;
+    position: relative;
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        margin: 10px 0;
+        font-weight: 500;
+      }
+    }
+
+    .all-builds-detail {
+      position: absolute;
+      text-decoration: none;
+      color: black;
+      font-weight: 600;
+      font-size: 14px;
+      text-align: right;
+      right: 20px;
+    }
   }
 
   .section-user-builds {
@@ -50,17 +90,65 @@
 
 @media screen and (max-width: 767px) {
   .user-profile {
+
+    .logout {
+      text-align: right;
+      display: block;
+    }
+
+    .logout a {
+      text-decoration: none;
+      margin-right: 0;
+      color: $giwiki-orange;
+      font-weight: 600;
+      border: 2px solid $giwiki-orange;
+      padding: 5px 10px;
+    }
+
     .section-user-builds {
       .title-header {
         h3 {
           font-size: 22px;
         }
+
         .blue-bar {
           height: 15px;
         }
       }
     }
   }
+
+  .user-builds-overall {
+    .build-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      flex-direction: column;
+
+      .builds-grid {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        grid-template-columns: 40% 25% 35%;
+        grid-template-rows: 70px;
+        border-bottom: 0.2px solid $giwiki-light-blue;
+        font-size: 14px;
+
+        * {
+          align-self: center;
+        }
+
+        div {
+          width: auto;
+        }
+      }
+
+      .builds-grid:last-of-type {
+        border-bottom: none;
+      }
+    }
+  }
+
 }
 
 @media screen and (min-width: 768px) {
@@ -79,8 +167,30 @@
       }
     }
   }
-}
+  .user-builds-overall {
+    .builds-grid {
+      display: grid;
+      width: 100%;
+      height: 100%;
+      grid-template-columns: 70% 15% 15%;
+      grid-template-rows: 100px;
+      border-bottom: 0.2px solid $giwiki-light-blue;
+      text-align: right;
 
+      * {
+        align-self: center;
+      }
+
+      div:first-of-type {
+        text-align: left;
+      }
+
+      div {
+        width: auto;
+      }
+    }
+  }
+}
 
 @media screen and (max-width: 1199px) {
 
@@ -101,7 +211,6 @@
 }
 
 /******************************************[BUILD EDIT]*****************************************************/
-
 
 
 .user-builds-edit {
@@ -200,9 +309,10 @@
 
       ul {
         list-style-type: none;
-        padding:0;
+        padding: 0;
+
         input[type="checkbox"] {
-          display:none;
+          display: none;
         }
       }
 
@@ -299,9 +409,10 @@
 
       ul {
         label {
-          margin:0;
+          margin: 0;
         }
       }
+
       h1 {
         margin: 0 auto;
         max-width: 350px;
