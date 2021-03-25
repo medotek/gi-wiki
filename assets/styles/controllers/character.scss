@@ -190,6 +190,23 @@
       box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
       width: 100%;
       height: 300px;
+      padding: 20px;
+      position: relative;
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .community-build-details {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        text-decoration: none;
+        color: $giwiki-orange;
+        font-weight: 600;
+        font-size: 20px;
+      }
     }
 
     .title-header {
@@ -343,6 +360,13 @@
         font-size: 18px;
       }
 
+      textarea:focus {
+        outline: none;
+        background-color: $giwiki-grey;
+        color: $giwiki-orange;
+        border-bottom: 4px solid $giwiki-orange;
+      }
+
       input {
         font-family: 'Montserrat', sans-serif;
         font-size: 18px;
@@ -393,9 +417,10 @@
 
       ul {
         list-style-type: none;
-        padding:0;
+        padding: 0;
+
         input[type="checkbox"] {
-          display:none;
+          display: none;
         }
       }
 
@@ -492,9 +517,10 @@
 
       ul {
         label {
-          margin:0;
+          margin: 0;
         }
       }
+
       h1 {
         margin: 0 auto;
         max-width: 350px;
@@ -547,7 +573,7 @@
   .character-profile {
     .new-form {
       h1 {
-        width: 500px;
+        min-width: 500px;
       }
 
       form {
