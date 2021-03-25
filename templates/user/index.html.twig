@@ -10,7 +10,12 @@
 {% block body %}
 
 <div class="user-profile">
-
+    {% for message in app.flashes('build-removed-error') %}
+        <div class="alert alert-error">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <div class="logout"><a href="{{ path('app_logout') }}">Se déconnecter</a></div>
     <div class="section-user-builds">
         <div class="title-header">
             <h3>Mes Builds</h3>
@@ -22,7 +27,7 @@
                     <li>{{ build[1][0].name }}</li>
                 {% endfor %}
             </ul>
-            <a href="{{ path('profile-builds') }}">Voir tous mes builds</a>
+            <a href="{{ path('profile-builds') }}" class="all-builds-detail">Voir tous mes builds</a>
         </div>
     </div>
 

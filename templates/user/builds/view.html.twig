@@ -5,16 +5,28 @@
 {% block body %}
 
     <div class="user-builds-overall">
-        <h1>Hello {{ app.user.name }}</h1>
-        <ul>
+        {% for message in app.flashes('build-removed-success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('build-edit-success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <h1>Tous vos builds</h1>
+        <div class="build-container">
             {% for build in userBuild %}
-                <li>
-                    {{ build[1][0].name }} - {{ build[0].build.gameCharacter.name }}
-                    <a class="user-build-edit" href="{{ path('profile-builds-edit', {'id': build[1][0].id }) }}">Editer</a>
-                    <a class="user-build-remove" href="{{ path('delete-build-profile', {'id': build[1][0].id }) }}">Supprimer</a>
-                </li>
-            {% endfor %}
-        </ul>
+                <div class="builds-grid">
 
+                    <div>{{ build[1][0].name }} - <b>{{ build[0].build.gameCharacter.name }}</b></div>
+                    <div>
+                        <a class="user-build-edit" href="{{ path('profile-builds-edit', {'id': build[1][0].id }) }}">Editer</a>
+                    </div>
+                    <div><a id="user-build-remove" class="user-build-remove" data-delete-build-link="{{ path('delete-build-profile', {'id': build[1][0].id }) }}">Supprimer</a></div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
