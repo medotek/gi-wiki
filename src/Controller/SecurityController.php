@@ -84,6 +84,9 @@ class SecurityController extends AbstractController
 
                 $userData = $registrationForm->getData();
 
+                /* Added a success message*/
+                $this->addFlash('success', 'Compte créé avec succès!');
+
                 /* @var User $userData */
                 $userData->setPassword(
                     $passwordEncoder->encodePassword(
