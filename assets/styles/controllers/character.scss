@@ -97,6 +97,29 @@
 
 .character-profile {
   margin: 50px 0;
+  padding-bottom: 100px;
+
+  .community-build-create-mobile {
+    display:none;
+  }
+
+  .community-build-create {
+    z-index: 5;
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    text-decoration: none;
+    color: $giwiki-orange;
+    font-weight: 600;
+    font-size: 25px;
+    border: 3px solid $giwiki-orange;
+    padding: 10px 20px;
+  }
+
+  .community-build-create:hover {
+    color: $giwiki-white;
+    background-color: $giwiki-orange;
+  }
 
   .banner {
     width: 100%;
@@ -189,6 +212,20 @@
 
 @media screen and (max-width: 767px) {
   .character-profile {
+    .community-build-create {
+      display:none;
+    }
+    .community-build-create-mobile {
+      margin:20px 0;
+      text-decoration: none;
+      color: $giwiki-white;
+      font-weight: 600;
+      font-size: 20px;
+      background-color:  $giwiki-orange;
+      padding: 10px 20px;
+      display: block;
+    }
+
     .section-community-build, .section-recommended-build {
       .title-header {
         h3 {
