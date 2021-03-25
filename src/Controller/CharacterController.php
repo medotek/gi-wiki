@@ -87,10 +87,10 @@ class CharacterController extends AbstractController
         $character = $this->entityManager->getRepository(Character::class)->find($id);
 
         /* @var Character $character */
-        $allCommunityBuild = $this->entityManager->getRepository(Build::class)->findBy(['gameCharacter' => $character->getId(), 'buildCategory' => 'COMMUNITY'], ['id' => 'ASC']);
+        $allCommunityBuild = $this->entityManager->getRepository(Build::class)->findBy(['gameCharacter' => $character->getId(), 'buildCategory' => 'COMMUNITY'], ['id' => 'DESC']);
 
         /* @var Build $allCommunityBuild */
-        $communityBuildEntities = $this->entityManager->getRepository(CommunityBuild::class)->findBy(['build' => $allCommunityBuild], ['build' => 'ASC'] );
+        $communityBuildEntities = $this->entityManager->getRepository(CommunityBuild::class)->findBy(['build' => $allCommunityBuild], ['build' => 'DESC'] );
 
         /* @var CommunityBuild $communityBuildEntities */
 
@@ -146,6 +146,7 @@ class CharacterController extends AbstractController
         $form = $this->createFormBuilder($build, ['allow_extra_fields' => true,'method' => 'put']);
 
         $weapons = $this->entityManager->getRepository(Weapon::class)->findBy(['type' => $character->getWeaponType()]);
+        /* @var Weapon $weapons */
 
         $formReal = $form
             ->add('name', TextType::class, ['label' => 'Titre', 'attr' => ['placeholder' => 'Titre']])
@@ -160,9 +161,11 @@ class CharacterController extends AbstractController
                             return explode(',', $submittedDescription);
                         }
                     )))
-            ->add('weapons',EntityType::class, ['label' => 'Armes', 'class' => Weapon::class, 'choices' => $weapons, 'multiple' => true, 'expanded' => 'true'])
+            ->add('weapons',EntityType::class, ['label' => 'Armes', 'class' => Weapon::class, 'choices' => $weapons, 'multiple' => true, 'expanded' => 'true', 'choice_attr' => function($choice, $key, $value) {
+                return ['image' => $choice->getImage()];
+            }])
 
-            ->add('submit', SubmitType::class);
+            ->add('submit', SubmitType::class, ['label' => 'Créer le build']);
 
         $formRealSubmit =$formReal->getForm();
 
