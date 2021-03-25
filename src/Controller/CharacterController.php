@@ -175,7 +175,9 @@ class CharacterController extends AbstractController
             }])
 
             ->add('submit', SubmitType::class, ['label' => 'Créer le build'])
-            ->add('artifacts', EntityType::class, ['label' => 'Artéfacts', 'class' => Artifact::class, 'multiple' => true, 'expanded' => true])
+            ->add('artifacts', EntityType::class, ['label' => 'Artéfacts', 'class' => Artifact::class, 'multiple' => true, 'expanded' => true, 'choice_attr' => function($choice, $key, $value) {
+                return ['image' => $choice->getImage()];
+             }])
             ->add('submit_build', SubmitType::class, ['label' => 'Terminer le build']);
 
         $formRealSubmit = $formReal->getForm();
