@@ -63,6 +63,12 @@
         color: $giwiki-white;
         font-size: 18px;
       }
+
+
+      .register-link {
+        margin-top:15px;
+        text-align: center;
+      }
     }
   }
 }
@@ -83,6 +89,10 @@
         }
 
         input {
+          font-size: 14px;
+        }
+
+        .register-link {
           font-size: 14px;
         }
       }
@@ -157,6 +167,10 @@
       font-family: 'Poppins', sans-serif;
       text-align: center;
 
+      .login-link {
+        margin: 15px 0 0;
+      }
+
       input {
         font-size: 18px;
         margin: 20px 0;
@@ -186,6 +200,7 @@
         color: $giwiki-white;
         font-size: 18px;
       }
+
     }
   }
 }
@@ -199,6 +214,7 @@
 
       h1 {
         width: 80vw;
+        font-size: 25px;
       }
 
       form {
@@ -268,6 +284,7 @@ body {
   padding: 0;
   background-color: $giwiki-grey;
   font-family: 'Poppins', sans-serif;
+
 
   .nav ul {
     list-style-type: none;
@@ -351,6 +368,7 @@ body {
 
     .copyright {
       display: block;
+      margin-bottom: 100px;
     }
 
     .logo {
@@ -368,6 +386,13 @@ body {
     }
 
     .menu {
+
+      .logo {
+        img {
+          display: none;
+        }
+      }
+
       z-index: 1;
       top: inherit;
       bottom: 0;
@@ -398,6 +423,11 @@ body {
 
         .menu-logo {
           display: block;
+          position: absolute;
+          top:50%;
+          left:50%;
+          transform: translate(-50%, -50%);
+          font-size: 25px;
         }
 
       }
@@ -427,6 +457,14 @@ body {
     }
 
     .menu {
+
+      .logo {
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+
       top: 0;
       width: 225px;
       position: fixed;

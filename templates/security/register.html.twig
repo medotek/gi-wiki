@@ -14,6 +14,9 @@
                 {{ form_widget(form.email) }}
                 {{ form_widget(form.password) }}
                 {{ form_widget(form.submit) }}
+                <div class="login-link">
+                    Déjà inscrit ?   <a href="{{ path('app_login') }}">Connectes-toi ici</a>
+                </div>
             </div>
         </div>
     </div>
