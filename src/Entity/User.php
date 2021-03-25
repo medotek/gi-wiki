@@ -59,11 +59,6 @@ class User implements UserInterface
     private $roles = [];
 
     /**
-     * @ORM\OneToMany(targetEntity=CommunityBuild::class, mappedBy="votes")
-     */
-    private $votes;
-
-    /**
      * @ORM\OneToMany(targetEntity=CommunityBuild::class, mappedBy="votesBuild")
      */
     private $buildsVotes;
@@ -184,36 +179,6 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
-    }
-
-    /**
-     * @return Collection|CommunityBuild[]
-     */
-    public function getVotes(): Collection
-    {
-        return $this->votes;
-    }
-
-    public function addVote(CommunityBuild $vote): self
-    {
-        if (!$this->votes->contains($vote)) {
-            $this->votes[] = $vote;
-            $vote->setVotes($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVote(CommunityBuild $vote): self
-    {
-        if ($this->votes->removeElement($vote)) {
-            // set the owning side to null (unless already changed)
-            if ($vote->getVotes() === $this) {
-                $vote->setVotes(null);
-            }
-        }
-
-        return $this;
     }
 
     /**
