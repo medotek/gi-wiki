@@ -4,14 +4,15 @@
 
 {% block body %}
     <div class="character-profile">
-        <div class="banner">
+        <div class="banner" style="background-color: {{ characterColor }}">
             <img src="{{ asset(character.image) }}" alt="{{ character.name }}">
             <div class="character-info-container">
                 <div class="character-title-container banner-item">
                     <div class="blue-bar"></div>
                     <div class="character-name-container">
-                        <h1>{{ character.name }}</h1>
-                        <!--<img src="{//% if character.element == pyro  %}">-->
+                        <h1>{{ character.name }}
+                        </h1>
+                        {# <img src="{% if character.element == pyro  %}"> #}
                     </div>
                 </div>
                 <div class="character-rarity-container banner-item">
@@ -21,7 +22,8 @@
                 <h3 class="banner-item">{{ character.weaponType }}</h3>
             </div>
         </div>
-        <a class="community-build-create" href="{{ path('community-build-new',  {'id': character.id }) }}">Create your build</a>
+        <a class="community-build-create" href="{{ path('community-build-new',  {'id': character.id }) }}">Create your
+            build</a>
 
         <div class="character-menu">
             <a href="#overview">
@@ -50,49 +52,52 @@
             </div>
             <div class="community-build-box">
                 {% for officialBuild in officialBuilds %}
-                <ul>
-                    <li>{{ officialBuild.name }}</li>
-                </ul>
+                    <ul>
+                        <li>{{ officialBuild.name }}</li>
+                    </ul>
                 {% endfor %}
             </div>
         </div>
 
-        <div class="section-community-build"  id="community-build">
+        <div class="section-community-build" id="community-build">
             <div class="title-header">
                 <h3>Community Build</h3>
                 <div class="blue-bar"></div>
             </div>
-            <a class="community-build-create-mobile" href="{{ path('community-build-new',  {'id': character.id }) }}">Create your build</a>
+            <a class="community-build-create-mobile" href="{{ path('community-build-new',  {'id': character.id }) }}">Create
+                your build</a>
             <div class="community-build-box">
                 <div class="community-builds">
-                   {% for characterBuild in communityBuilds %}
-                    <div class="community-build">
+                    {% for characterBuild in communityBuilds %}
+                        <div class="community-build">
 
-                        <div class="build-title">{{ characterBuild[1].name }}</div>
-                        <div class="build-author">par {{ characterBuild[2].name }}</div>
-                        <div></div>
-                        <ul class="tag-list">
-                            {% for tags in characterBuild[3]|slice(0, 5) %}
-                                {% if tags is null %}{% elseif tags is empty %}{% else %}
-                                    <li class="build-tag">{{ tags }}</li>
-                                {% endif %}
-                            {% endfor %}
-                        </ul>
-                        <div class="build-date">{{ characterBuild[0].creationdate|date("d/m/Y H:i") }}</div>
-                        <div class="label-vote">Votes</div>
-                        <a href="{{ path('add-vote-to-build',  {'id': characterBuild[1].gamecharacter.id, 'buildId':characterBuild[1].id }) }}">
-                            <div class="vote-number">
-                                {% if characterBuild[0].votesbuild is null %}
-                                    0
-                                {% else %}
-                                    {{ characterBuild[0].votesbuild }}
-                                {% endif %}
-                            </div>
-                        </a>
-                    </div>
-                {% endfor %}
-               <a class="community-build-details" href="{{ path('community-build',  {'id': character.id }) }}">See more</a>
-            </div>
+                            <div class="build-title">{{ characterBuild[1].name }}</div>
+                            <div class="build-author">par {{ characterBuild[2].name }}</div>
+                            <div></div>
+                            <ul class="tag-list">
+                                {% for tags in characterBuild[3]|slice(0, 5) %}
+                                    {% if tags is null %}{% elseif tags is empty %}{% else %}
+                                        <li class="build-tag">{{ tags }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                            <div class="build-date">{{ characterBuild[0].creationdate|date("d/m/Y H:i") }}</div>
+                            <div class="label-vote">Votes</div>
+                            {{ dump(characterBuild) }}
+                            <a href="{{ path('add-vote-to-build',  {'id': characterBuild[1].gamecharacter.id, 'build':characterBuild[1].id }) }}">
+                                <div class="vote-number">
+                                    {% if characterBuild[0].votesbuild is null %}
+                                        0
+                                    {% else %}
+                                        {{ characterBuild[0].votesbuild }}
+                                    {% endif %}
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                    <a class="community-build-details" href="{{ path('community-build',  {'id': character.id }) }}">See
+                        more</a>
+                </div>
             </div>
         </div>
     </div>
