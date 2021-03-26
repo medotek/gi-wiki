@@ -15,7 +15,7 @@
                 <div class="blue-bar"></div>
             </div>
             <div class="community-builds">
-                {% for characterBuild in charactersBuild %}
+                {% for characterBuild in communityBuilds %}
                     <div class="community-build">
 
                         <div class="build-title">{{ characterBuild[1].name }}</div>
@@ -30,7 +30,7 @@
                         </ul>
                         <div class="build-date">{{ characterBuild[0].creationdate|date("d/m/Y H:i") }}</div>
                         <div class="label-vote">Votes</div>
-                        <a href="{{ path('add-vote-to-build',  {'id': characterBuild[1].gamecharacter.id, 'buildId':characterBuild[1].id }) }}">
+                        <a href="{{ path('add-vote-to-build',  {'id': characterBuild[1].gamecharacter.id, 'build':characterBuild[1].id }) }}">
                             <div class="vote-number">
                                 {% if characterBuild[0].votesbuild is null %}
                                     0
