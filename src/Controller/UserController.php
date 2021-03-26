@@ -55,7 +55,6 @@ class UserController extends AbstractController
 
         $array = array_map(null, (array)$this->getCommunityBuildForTheCurrentUser(), (array)$allCommunityBuild);
 
-        dump($array);
         return $this->render('user/index.html.twig', [
             'userBuild' => $array
         ]);
@@ -121,8 +120,6 @@ class UserController extends AbstractController
 
         $array = array_map(null, (array)$this->getCommunityBuildForTheCurrentUser(), (array)$allCommunityBuild);
 
-        dump($array);
-
         return $this->render('user/builds/view.html.twig', [
             'userBuild' => $array
         ]);
@@ -183,7 +180,6 @@ class UserController extends AbstractController
 
             $tagsField = $formRealSubmit->get('tags')->getData();
 
-            dump($tagsField);
             $communityBuild->setTags($tagsField);
 
             $entityManager->persist($communityBuild);
