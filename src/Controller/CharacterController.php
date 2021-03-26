@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+ini_set("memory_limit", "-1");
 
 use App\Entity\Artifact;
 use App\Entity\Build;
