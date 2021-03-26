@@ -32,6 +32,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Import the ColorThief class
+ */
+
+use ColorThief\ColorThief;
 
 class CharacterController extends AbstractController
 {
@@ -78,7 +83,7 @@ class CharacterController extends AbstractController
         // Get All official builds for the current character
         $officialBuilds = $this->entityManager->getRepository(Build::class)->findBy(['gameCharacter' => $character->getId(), 'buildCategory' => 'OFFICIAL']);
 
-             /* @var Character $character */
+        /* @var Character $character */
         $allCommunityBuild = $this->entityManager->getRepository(Build::class)->findBy(['gameCharacter' => $character->getId(), 'buildCategory' => 'COMMUNITY'], ['id' => 'DESC']);
 
         /* @var Build $allCommunityBuild */
@@ -86,9 +91,15 @@ class CharacterController extends AbstractController
 
         /* @var CommunityBuild $communityBuildEntity */
 
-        /* Récupération des noms d'utilisateurs */
+        /* Récupération des noms d'utilisateurs et des tags */
         $users = [];
         $buildTags = [];
+
+        /* Stock les couleurs de chaque personnage */
+
+        $characterImage = $character->getImage();
+
+
         foreach ($communityBuildEntities as $communityBuildEntity) {
             $authorId = $communityBuildEntity->getAuthor()->getId();
             /* @var User $user */
@@ -97,17 +108,54 @@ class CharacterController extends AbstractController
 
             $tag = $communityBuildEntity->getTags();
             $buildTags[] = array_filter($tag, fn($value) => !is_null($value) && $value !== ' ');
+
         }
 
+        if ($character->getColor() != null) {
+            $characterColor = $character->getColor();
+        } else {
+            $dominantColor = ColorThief::getColor($characterImage);
 
+            $r = $dominantColor[0];
+            $g = $dominantColor[1];
+            $b = $dominantColor[2];
 
+            function fromRGB($R, $G, $B): string
+            {
+
+                $R = dechex($R);
+                if (strlen($R) < 2)
+                    $R = '0' . $R;
+
+                $G = dechex($G);
+                if (strlen($G) < 2)
+                    $G = '0' . $G;
+
+                $B = dechex($B);
+                if (strlen($B) < 2)
+                    $B = '0' . $B;
+
+                return '#' . $R . $G . $B;
+            }
+
+            $hexColor = fromRGB($r, $g, $b);
+
+            $character->setColor($hexColor);
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $entityManager->persist($character);
+            $entityManager->flush();
+
+            $characterColor = $hexColor;
+        }
 
         $builds = array_map(null, (array)$communityBuildEntities, $allCommunityBuild, $users, $buildTags);
 
         return $this->render('character/character.html.twig', [
             'character' => $character,
             'officialBuilds' => $officialBuilds,
-            'communityBuilds' => $builds
+            'communityBuilds' => $builds,
+            'characterColor' => $characterColor
         ]);
     }
 
@@ -130,9 +178,11 @@ class CharacterController extends AbstractController
 
         /* @var CommunityBuild $communityBuildEntity */
 
+
         /* Récupération des noms d'utilisateurs */
         $users = [];
         $buildTags = [];
+
         foreach ($communityBuildEntities as $communityBuildEntity) {
             $authorId = $communityBuildEntity->getAuthor()->getId();
             /* @var User $user */
@@ -142,8 +192,6 @@ class CharacterController extends AbstractController
             $tag = $communityBuildEntity->getTags();
             $buildTags[] = array_filter($tag, fn($value) => !is_null($value) && $value !== ' ');
         }
-
-
 
 
         $builds = array_map(null, (array)$communityBuildEntities, $allCommunityBuild, $users, $buildTags);
@@ -162,20 +210,22 @@ class CharacterController extends AbstractController
      */
     public function addVoteForCommunityBuild(int $id, int $build): RedirectResponse
     {
+
+        $user = $this->security->getUser();
+        /* @var User $user */
+
+        $combuild = $this->entityManager->getRepository(CommunityBuild::class)->find($build);
+
         /* @var User $currentUser */
-//        $currentUser = ;
+        $combuild->setVotesBuild($user);
 
-        $communityBuild =  $this->entityManager->getRepository(CommunityBuild::class)->find($buildId);
-
-        /* @var CommunityBuild $communityBuild */
-//        $communityBuild->setVotes($currentUser);
-//
-//        $entityManager = $this->getDoctrine()->getManager();
-//        $entityManager->persist($communityBuild);
-//        $entityManager->flush();
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($combuild);
+        $entityManager->flush();
 
         return $this->redirectToRoute('community-build', ['id' => $id]);
     }
+
     /**
      * @Route("/character/{id}/community-build/new", name="community-build-new")
      * @param Request $request
@@ -209,10 +259,10 @@ class CharacterController extends AbstractController
         $user = $this->security->getUser();
         $currentUser = $this->entityManager->getRepository(User::class)->find($user);
 
-        /* @var User $currentUser*/
+        /* @var User $currentUser */
         $communityBuild->setAuthor($currentUser);
 
-        $form = $this->createFormBuilder($build, ['allow_extra_fields' => true,'method' => 'put']);
+        $form = $this->createFormBuilder($build, ['allow_extra_fields' => true, 'method' => 'put']);
 
         $weapons = $this->entityManager->getRepository(Weapon::class)->findBy(['type' => $character->getWeaponType()]);
         /* @var Weapon $weapons */
@@ -231,10 +281,10 @@ class CharacterController extends AbstractController
                             return explode(',', $submittedDescription);
                         }
                     )))
-            ->add('weapons',EntityType::class, ['label' => 'Armes', 'class' => Weapon::class, 'choices' => $weapons, 'multiple' => true, 'expanded' => 'true', 'choice_attr' => function($choice, $key, $value) {
+            ->add('weapons', EntityType::class, ['label' => 'Armes', 'class' => Weapon::class, 'choices' => $weapons, 'multiple' => true, 'expanded' => 'true', 'choice_attr' => function ($choice, $key, $value) {
                 return ['image' => $choice->getImage()];
             }])
-            ->add('artifacts', EntityType::class, ['label' => 'Artéfacts', 'class' => Artifact::class, 'multiple' => true, 'expanded' => true, 'choice_attr' => function($choice, $key, $value) {
+            ->add('artifacts', EntityType::class, ['label' => 'Artéfacts', 'class' => Artifact::class, 'multiple' => true, 'expanded' => true, 'choice_attr' => function ($choice, $key, $value) {
                 return ['image' => $choice->getImage()];
             }])
             ->add('submit', SubmitType::class, ['label' => 'Créer le build']);
@@ -274,9 +324,9 @@ class CharacterController extends AbstractController
         }
 
         return $this->render('character/form/new.community-build.html.twig', [
-                'character' => $character,
-                'new' => $formRealSubmit->createView(),
-            ]);
+            'character' => $character,
+            'new' => $formRealSubmit->createView(),
+        ]);
     }
 
 
