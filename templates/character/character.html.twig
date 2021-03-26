@@ -2,6 +2,16 @@
 
 {% block title %}{{ character.name }}{% endblock %}
 
+{% set elements = {
+    "Pyro": "https://static.wikia.nocookie.net/gensin-impact/images/e/e8/Element_Pyro.png",
+    "Anemo": "https://static.wikia.nocookie.net/gensin-impact/images/a/a4/Element_Anemo.png",
+    "Geo": "https://static.wikia.nocookie.net/gensin-impact/images/4/4a/Element_Geo.png",
+    "Cryo": "https://static.wikia.nocookie.net/gensin-impact/images/8/88/Element_Cryo.png",
+    "Hydro": "https://static.wikia.nocookie.net/gensin-impact/images/3/35/Element_Hydro.png",
+    "Electro": "https://static.wikia.nocookie.net/gensin-impact/images/7/73/Element_Electro.png",
+    "Dendro": "https://static.wikia.nocookie.net/gensin-impact/images/f/f4/Element_Dendro.png",
+} %}
+
 {% block body %}
     <div class="character-profile">
         <div class="banner" style="background-color: {{ characterColor }}">
@@ -12,7 +22,23 @@
                     <div class="character-name-container">
                         <h1>{{ character.name }}
                         </h1>
-                        {# <img src="{% if character.element == pyro  %}"> #}
+                        <img class="character-element" src="
+                        {% if character.element == "Pyro" %}
+                            {{ elements.Pyro }}
+                        {%elseif character.element == "Anemo" %}
+                            {{ elements.Anemo }}
+                        {%elseif character.element == "Geo" %}
+                            {{ elements.Geo }}
+                        {%elseif character.element == "Cryo" %}
+                            {{ elements.Cryo }}
+                        {%elseif character.element == "Hydro" %}
+                            {{ elements.Hydro }}
+                        {%elseif character.element == "Electro" %}
+                            {{ elements.Electro }}
+                        {%elseif character.element == "Dendro" %}
+                            {{ elements.Dendro }}
+                        {% endif %}
+                        ">
                     </div>
                 </div>
                 <div class="character-rarity-container banner-item">

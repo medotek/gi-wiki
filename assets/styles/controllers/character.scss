@@ -155,7 +155,14 @@
           z-index: 2;
           margin: 0;
         }
-
+        .character-element {
+          position: absolute;
+          left: 90%;
+          transform: translate(-50%,-50%);
+          top: 30px;
+          height: 50px;
+          width: auto;
+        }
         .blue-bar {
           position: relative;
           z-index: 0;
