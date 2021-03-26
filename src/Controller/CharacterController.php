@@ -102,7 +102,6 @@ class CharacterController extends AbstractController
 
 
         $builds = array_map(null, (array)$communityBuildEntities, $allCommunityBuild, $users, $buildTags);
-        dump($buildTags);
 
         return $this->render('character/character.html.twig', [
             'character' => $character,
@@ -147,8 +146,6 @@ class CharacterController extends AbstractController
 
 
         $builds = array_map(null, (array)$communityBuildEntities, $allCommunityBuild, $users, $buildTags);
-        dump($buildTags);
-
 
         return $this->render('character/form/index.community-build.html.twig', [
             'charactersBuild' => $builds,
@@ -157,12 +154,12 @@ class CharacterController extends AbstractController
     }
 
     /**
-     * @Route("/character/{id}/community-build/add-vote-for-build-{buildId}", name="add-vote-to-build")
+     * @Route("/character/{id}/community-build/add-vote-for-build-{build}", name="add-vote-to-build")
      * @param int $id
-     * @param int $buildId
+     * @param int $build
      * @return RedirectResponse
      */
-    public function addVoteForCommunityBuild(int $id, int $buildId): RedirectResponse
+    public function addVoteForCommunityBuild(int $id, int $build): RedirectResponse
     {
         /* @var User $currentUser */
 //        $currentUser = ;

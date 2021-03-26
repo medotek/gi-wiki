@@ -50,6 +50,11 @@ class Character
      */
     private $image;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $Color;
+
     public function __construct()
     {
         $this->builds = new ArrayCollection();
@@ -153,5 +158,17 @@ class Character
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->Color;
+    }
+
+    public function setColor(?string $Color): self
+    {
+        $this->Color = $Color;
+
+        return $this;
     }
 }
