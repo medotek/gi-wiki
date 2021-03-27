@@ -31,8 +31,7 @@ class BuildCrudController extends AbstractCrudController
                 'Community' => 'COMMUNITY',
                 'Official' => 'OFFICIAL'
             ]),
-            AssociationField::new('weapons'),
-            AssociationField::new('sets'),
+            AssociationField::new('weapons')
         ];
     }
 
