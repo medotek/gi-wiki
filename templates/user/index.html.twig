@@ -5,33 +5,39 @@
     {{ encore_entry_link_tags('user') }}
 {% endblock %}
 
-{% block title %} Profil de {{app.user.name }}{% endblock %}
+{% block title %} Profil de {{ app.user.name }}{% endblock %}
 
 {% block body %}
 
-<div class="user-profile">
-    {% for message in app.flashes('build-removed-error') %}
-        <div class="alert alert-error">
-            {{ message }}
-        </div>
-    {% endfor %}
-    <div class="logout"><a href="{{ path('app_logout') }}">Se déconnecter</a></div>
-    <div class="section-user-builds">
-        <div class="title-header">
-            <h3>Mes Builds</h3>
-            <div class="blue-bar"></div>
-        </div>
-        <div class="builds">
+    <div class="user-profile">
+        {% for message in app.flashes('build-removed-error') %}
+            <div class="alert alert-error">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <div class="logout"><a href="{{ path('app_logout') }}">Se déconnecter</a></div>
+        <div class="section-user-builds">
             <ul>
-                {% for build in userBuild %}
-                    <li>{{ build[1][0].name }}</li>
-                {% endfor %}
+                {% if uidProfile[0] == 1 %}
+                    {% for key,value in uidProfile[1]['stats'] %}
+                        <li>{{ key }} : {{ value }}</li>
+                    {% endfor %}
+                {% else %} <li>UID non enregistrés</li> {% endif %}
             </ul>
-            <a href="{{ path('profile-builds') }}" class="all-builds-detail">Voir tous mes builds</a>
+            <div class="title-header">
+                <h3>Mes Builds</h3>
+                <div class="blue-bar"></div>
+            </div>
+            <div class="builds">
+                <ul>
+                    {% for build in userBuild %}s
+                        <li>{{ build[1][0].name }}</li>
+                    {% endfor %}
+                </ul>
+                <a href="{{ path('profile-builds') }}" class="all-builds-detail">Voir tous mes builds</a>
+            </div>
         </div>
+
+
     </div>
-
-
-
-</div>
 {% endblock %}
