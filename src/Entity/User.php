@@ -63,6 +63,16 @@ class User implements UserInterface
      */
     private $buildsVotes;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $uid;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isPublic = false;
+
     public function __construct()
     {
         $this->builds = new ArrayCollection();
@@ -207,6 +217,30 @@ class User implements UserInterface
                 $buildsVote->setVotesBuild(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUid(): ?int
+    {
+        return $this->uid;
+    }
+
+    public function setUid(?int $uid): self
+    {
+        $this->uid = $uid;
+
+        return $this;
+    }
+
+    public function getIsPublic(): ?bool
+    {
+        return $this->isPublic;
+    }
+
+    public function setIsPublic(bool $isPublic): self
+    {
+        $this->isPublic = $isPublic;
 
         return $this;
     }
