@@ -23,6 +23,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class UserController extends AbstractController
 {
@@ -31,15 +37,48 @@ class UserController extends AbstractController
     /** @var Security */
     private Security $security;
 
+    private $client;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        Security $security
+        Security $security,
+        HttpClientInterface $client
     )
     {
         $this->entityManager = $entityManager;
         $this->security = $security;
+        $this->client = $client;
     }
+
+    public function getProfileByUID(int $uid): array
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'http://localhost:3000/getuserinfo?uid=' . $uid
+            );
+
+            $statusCode = $response->getStatusCode();
+
+            $contentType = $response->getHeaders()['content-type'][0];
+
+            $content = $response->getContent();
+
+            $content = $response->toArray();
+
+            return $content;
+
+        } catch (TransportExceptionInterface |
+        RedirectionExceptionInterface |
+        ServerExceptionInterface |
+        ClientExceptionInterface |
+        DecodingExceptionInterface $e) {
+
+        }
+
+
+    }
+
 
     /**
      * @Route("/account/profile", name="user")
@@ -55,10 +94,31 @@ class UserController extends AbstractController
 
         $array = array_map(null, (array)$this->getCommunityBuildForTheCurrentUser(), (array)$allCommunityBuild);
 
-        return $this->render('user/index.html.twig', [
-            'userBuild' => $array
-        ]);
+        $user = $this->security->getUser();
 
+        /* @var User $currentUser */
+        $currentUser = $this->entityManager->getRepository(User::class)->find($user->getId());
+
+        $uidMap=[];
+        if ($currentUser->getUid() != (null || 0)) {
+            $isUidAvailable = ['status' => '1'];
+            $uidProfile = $this->getProfileByUID($currentUser->getUid());
+            $uidMap = array_map(null, $isUidAvailable, $uidProfile);
+        } else {
+            $uidProfile = [
+                'Erreur' => 'Veuillez renseigner votre UID Genshin'
+            ];
+            $isUidAvailable = ['status' => '0'];
+            $uidMap = array_map(null, $isUidAvailable, $uidProfile);
+        }
+
+
+
+
+        return $this->render('user/index.html.twig', [
+            'userBuild' => $array,
+            'uidProfile' => $uidMap
+        ]);
     }
 
 
