@@ -4,6 +4,7 @@
 namespace App\Extra;
 
 
+use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -30,7 +31,7 @@ class ApiService
         $errors = $this->validator->validate($result);
 
         if(count($errors) > 0){
-            throw new Exception(Response::HTTP_BAD_REQUEST, (string) $errors);
+            $result = 'error';
         }
 
         return $result;
