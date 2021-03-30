@@ -18,7 +18,7 @@ use function Couchbase\defaultEncoder;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields="name", message="Ce nom d'utilsiateur a déjà été pris.")
- * @UniqueEntity(fields="uid", message="Cet uid a déjà été mis, si vous n'avez jamais mis votre uid sur le site. Veuilez contacter un administrateur.")
+ * @UniqueEntity(fields="uid", message="Cet uid est déjà utilisé. Si vous n'avez jamais mis votre uid sur le site, veuilez contacter un administrateur.")
  */
 class User implements UserInterface
 {
