@@ -7,6 +7,7 @@ use App\Entity\Build;
 use App\Entity\CommunityBuild;
 use App\Entity\User;
 use App\Entity\Weapon;
+use App\Extra\ApiService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -16,6 +17,7 @@ use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +39,7 @@ class UserController extends AbstractController
     /** @var Security */
     private Security $security;
 
-    private $client;
+    private HttpClientInterface $client;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -66,17 +68,75 @@ class UserController extends AbstractController
 
             $content = $response->toArray();
 
-            return $content;
 
         } catch (TransportExceptionInterface |
         RedirectionExceptionInterface |
         ServerExceptionInterface |
         ClientExceptionInterface |
         DecodingExceptionInterface $e) {
+            $content = ['errors' => 'error'];
+        }
+        return $content;
+
+    }
+
+    /**
+     * Returns the current user
+     *
+     * @return User
+     */
+    public function getCurrentUser(): User
+    {
+        $user = $this->security->getUser();
+        /* @var User $user */
+
+        $currentUser = $this->entityManager->getRepository(User::class)->find($user->getId());
+        /* @var User $currentUser */
+
+        return $currentUser;
+    }
+
+
+    /**
+     * @Route("/account/profile/set/uid", name="profile-set-uid")
+     * @param Request $request
+     * @param ApiService $apiService
+     * @return JsonResponse
+     */
+    public function newUid(Request $request, ApiService $apiService)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        if ($request->isXmlHttpRequest()) {
+            $data = $request->getContent();
+
+            /* @var User $uidData */
+
+            $uidData = $apiService->validateAndCreate($data, User::class);
+
+            $uid = $this->getCurrentUser();
+            if ($uidData->getUid() == ( 0 || null)) {
+                $uidAjax = null;
+
+                return new JsonResponse('uid incorrect', Response::HTTP_NOT_FOUND);
+            } else {
+                $uidAjax = $uidData->getUid();
+                $uid->setUid($uidAjax);
+
+                $em->persist($uid);
+                $em->flush();
+                $uidProfile = $this->getProfileByUID($this->getCurrentUser()->getUid());
+
+                return new JsonResponse($uidProfile);
+            }
+
+
+
+
+
 
         }
-
-
+        return new JsonResponse('no result', Response::HTTP_NOT_FOUND);
     }
 
 
@@ -94,30 +154,29 @@ class UserController extends AbstractController
 
         $array = array_map(null, (array)$this->getCommunityBuildForTheCurrentUser(), (array)$allCommunityBuild);
 
-        $user = $this->security->getUser();
 
-        /* @var User $currentUser */
-        $currentUser = $this->entityManager->getRepository(User::class)->find($user->getId());
+        $uidMap = [];
+        if ($this->getCurrentUser()->getUid() != (null || 0)) {
+            $isUidAvailable[] = 1;
+            $uidProfile = $this->getProfileByUID($this->getCurrentUser()->getUid());
 
-        $uidMap=[];
-        if ($currentUser->getUid() != (null || 0)) {
-            $isUidAvailable = ['status' => '1'];
-            $uidProfile = $this->getProfileByUID($currentUser->getUid());
-            $uidMap = array_map(null, $isUidAvailable, $uidProfile);
+            $uidMap[] = array_map(null, $isUidAvailable, $uidProfile);
+
         } else {
             $uidProfile = [
                 'Erreur' => 'Veuillez renseigner votre UID Genshin'
             ];
-            $isUidAvailable = ['status' => '0'];
-            $uidMap = array_map(null, $isUidAvailable, $uidProfile);
+            $isUidAvailable[] = 0;
+
+            $uidMap[] = array_map(null, $isUidAvailable, $uidProfile);
+            dump($uidMap);
         }
-
-
 
 
         return $this->render('user/index.html.twig', [
             'userBuild' => $array,
-            'uidProfile' => $uidMap
+            'uidProfile' => $uidMap,
+            'uidNumber' => $this->getCurrentUser()->getUid()
         ]);
     }
 
@@ -221,7 +280,7 @@ class UserController extends AbstractController
             ->add('weapons', EntityType::class, ['label' => 'Armes', 'class' => Weapon::class, 'choices' => $weapons, 'multiple' => true, 'expanded' => 'true', 'choice_attr' => function ($choice, $key, $value) {
                 return ['image' => $choice->getImage()];
             }])
-            ->add('artifacts', EntityType::class, ['label' => 'Artéfacts', 'class' => Artifact::class, 'multiple' => true, 'expanded' => true, 'choice_attr' => function($choice, $key, $value) {
+            ->add('artifacts', EntityType::class, ['label' => 'Artéfacts', 'class' => Artifact::class, 'multiple' => true, 'expanded' => true, 'choice_attr' => function ($choice, $key, $value) {
                 return ['image' => $choice->getImage()];
             }])
             ->add('submit', SubmitType::class, ['label' => 'Modifier le build']);

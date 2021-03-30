@@ -10,4 +10,33 @@ $(document).ready(function () {
             return false;
         }
     });
+
+    /* AJAX */
+
+    $("#uid-form").on("submit", function(e){
+        e.preventDefault();
+        let data = {};
+        $(this).serializeArray().forEach((object)=>{
+            if (object.value === '') {
+                object = null;
+            } else {
+            data[object.name] = object.value;
+            }
+        });
+
+        // data = JSON.stringify(data);
+
+        $.ajax({
+            type: 'post',
+            url: '/account/profile/set/uid',
+            dataType: 'json',
+            data : JSON.stringify(data),
+            success: function (data) {
+                console.log(data)
+            }
+        });
+
+        console.log(data);
+
+    })
 });

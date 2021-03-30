@@ -16,13 +16,28 @@
             </div>
         {% endfor %}
         <div class="logout"><a href="{{ path('app_logout') }}">Se déconnecter</a></div>
-        <div class="section-user-builds">
-            <ul>
-                {% if uidProfile[0] == 1 %}
-                    {% for key,value in uidProfile[1]['stats'] %}
-                        <li>{{ key }} : {{ value }}</li>
-                    {% endfor %}
-                {% else %} <li>UID non enregistrés</li> {% endif %}
+        <div class="section-user-builds" id="test">
+            <form id="uid-form">
+                <input type="number" maxlength="9" placeholder="Ton UID Genshin" name="uid" id="uid"
+                       value="{{ uidNumber }}" }}>
+                <input type="submit" value="valider">
+            </form>
+
+            <ul id="uidProfile">
+                {% if uidProfile[0][0][0] == 1 %}
+                    {{ dump(uidProfile) }}
+
+                    {% if uidProfile[0][1][1] == "Data is not public for the user" %}
+                        <li>Si vous souhaitez voir les informations liées à votre aventure, veuillez cocher "Public"
+                            dans le site hoyolab/genshin
+                        </li>
+                    {% else %}
+                        {% for key, value in uidProfile[0][2][1] %}
+                            <li>{{ key }}: {{ value }}</li>
+                        {% endfor %}
+                    {% endif %}
+                {% else %}
+                    <li>UID non enregistrés</li> {% endif %}
             </ul>
             <div class="title-header">
                 <h3>Mes Builds</h3>
