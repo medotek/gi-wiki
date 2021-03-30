@@ -52,12 +52,18 @@ class UserController extends AbstractController
         $this->client = $client;
     }
 
-    public function getProfileByUID(int $uid): array
+    /**
+     * Request = 'getuserinfo' or 'getusercharacters' or 'getabyssinfo'
+     * @param string $request
+     * @param int $uid
+     * @return string[]
+     */
+    public function getProfileByUID(string $request, int $uid): array
     {
         try {
             $response = $this->client->request(
                 'GET',
-                'http://localhost:3000/getuserinfo?uid=' . $uid
+                'http://localhost:3000/' . $request . '?uid=' . $uid
             );
 
             $statusCode = $response->getStatusCode();
@@ -99,6 +105,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/account/profile/set/uid", name="profile-set-uid")
+     *
      * @param Request $request
      * @param ApiService $apiService
      * @return JsonResponse
@@ -110,22 +117,27 @@ class UserController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $data = $request->getContent();
 
-            /* @var User $uidData */
+
 
             $uidData = $apiService->validateAndCreate($data, User::class);
 
+            dump($uidData);
             $uid = $this->getCurrentUser();
-            if ($uidData->getUid() == ( 0 || null)) {
+            if ($uidData == 'error') {
+                return new JsonResponse('invalid uid or uid already used (please, contact an administrator if your issue persists)', Response::HTTP_NOT_FOUND);
+            } elseif (   /* @var User $uidData */
+                $uidData->getUid() == ( 0 || null )) {
                 $uidAjax = null;
 
-                return new JsonResponse('uid incorrect', Response::HTTP_NOT_FOUND);
+                return new JsonResponse('invalid uid or uid already used (please, contact an administrator if your issue persists)', Response::HTTP_NOT_FOUND);
             } else {
+                /* @var User $uidData */
                 $uidAjax = $uidData->getUid();
                 $uid->setUid($uidAjax);
 
                 $em->persist($uid);
                 $em->flush();
-                $uidProfile = $this->getProfileByUID($this->getCurrentUser()->getUid());
+                $uidProfile = $this->getProfileByUID('getuserinfo',$this->getCurrentUser()->getUid());
 
                 return new JsonResponse($uidProfile);
             }
@@ -136,7 +148,7 @@ class UserController extends AbstractController
 
 
         }
-        return new JsonResponse('no result', Response::HTTP_NOT_FOUND);
+        return new JsonResponse('form error', Response::HTTP_NOT_FOUND);
     }
 
 
@@ -158,8 +170,8 @@ class UserController extends AbstractController
         $uidMap = [];
         if ($this->getCurrentUser()->getUid() != (null || 0)) {
             $isUidAvailable[] = 1;
-            $uidProfile = $this->getProfileByUID($this->getCurrentUser()->getUid());
-
+            $uidProfile = $this->getProfileByUID('getuserinfo',$this->getCurrentUser()->getUid());
+            $uidCharacters = $this->getProfileByUID('getusercharacters',$this->getCurrentUser()->getUid());
             $uidMap[] = array_map(null, $isUidAvailable, $uidProfile);
 
         } else {
@@ -176,7 +188,8 @@ class UserController extends AbstractController
         return $this->render('user/index.html.twig', [
             'userBuild' => $array,
             'uidProfile' => $uidMap,
-            'uidNumber' => $this->getCurrentUser()->getUid()
+            'uidNumber' => $this->getCurrentUser()->getUid(),
+            'uidCharacters' => $uidCharacters
         ]);
     }
 
