@@ -33,6 +33,9 @@ $(document).ready(function () {
             data : JSON.stringify(data),
             success: function (data) {
                 console.log(data)
+            },
+            error: function(data) {
+                console.log(data.responseJSON)
             }
         });
 
