@@ -7,6 +7,7 @@ use ContainerOcq7WVR\getSecurity_EncoderFactory_GenericService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
@@ -16,6 +17,8 @@ use function Couchbase\defaultEncoder;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields="name", message="Ce nom d'utilsiateur a déjà été pris.")
+ * @UniqueEntity(fields="uid", message="Cet uid a déjà été mis, si vous n'avez jamais mis votre uid sur le site. Veuilez contacter un administrateur.")
  */
 class User implements UserInterface
 {
