@@ -7,6 +7,42 @@
 
 {% block title %} Profil de {{ app.user.name }}{% endblock %}
 
+
+{# TODO: Add klee and qiqi, soon rosaria #}
+
+ {% set characterImage = {
+     "27":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Ningguang.png",
+     "30":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Zhongli.png",
+     "23":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Xiangling.png",
+     "32":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Bennett.png",
+     "14":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Barbara.png",
+     "31":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Fischl.png",
+     "37":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Ganyu.png",
+     "43":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Sucrose.png",
+     "33":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Tartaglia.png",
+     "36":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Chongyun.png",
+     "38":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Albedo.png",
+     "15":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Kaeya.png",
+     "16":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Diluc.png",
+     "41":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Mona.png",
+     "44":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Xinyan.png",
+     "21":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Ambor.png",
+     "22":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Venti.png",
+     "24":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Beidou.png",
+     "6":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Lisa.png",
+     "39":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Diona.png",
+     "26":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Xiao.png",
+     "25":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Xingqiu.png",
+     "3":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Qin.png",
+     "20":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Razor.png",
+     "34":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Noel.png",
+     "42":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_Keqing.png",
+     "7":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_PlayerGirl.png",
+     "5":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_icon/UI_AvatarIcon_PlayerBoy.png",
+     "46":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_image/UI_AvatarIcon_Hutao.png",
+     "":""
+ } %}
+
 {% block body %}
 
     <div class="user-profile">
@@ -17,28 +53,65 @@
         {% endfor %}
         <div class="logout"><a href="{{ path('app_logout') }}">Se déconnecter</a></div>
         <div class="section-user-builds" id="test">
-            <form id="uid-form">
-                <input type="number" maxlength="9" placeholder="Ton UID Genshin" name="uid" id="uid"
-                       value="{{ uidNumber }}" }}>
-                <input type="submit" value="valider">
-            </form>
-
-            <ul id="uidProfile">
+            <div class="banner">
                 {% if uidProfile[0][0][0] == 1 %}
-                    {{ dump(uidProfile) }}
-
                     {% if uidProfile[0][1][1] == "Data is not public for the user" %}
-                        <li>Si vous souhaitez voir les informations liées à votre aventure, veuillez cocher "Public"
-                            dans le site hoyolab/genshin
-                        </li>
+                        {# display nothing #}
                     {% else %}
-                        {% for key, value in uidProfile[0][2][1] %}
-                            <li>{{ key }}: {{ value }}</li>
+                        {% for key,image in characterImage %}
+                            {% if uidProfile[0][2][1]['avatar_number'] == key %}
+                                <img src="{{ image }}" alt="Genshin avatar profile" width="70px" height="auto">
+                            {% endif %}
                         {% endfor %}
                     {% endif %}
-                {% else %}
-                    <li>UID non enregistrés</li> {% endif %}
-            </ul>
+                {% endif %}
+                <h1 class="username">{{ app.user.name }}</h1>
+                <div class="uid-display">
+                    <div class="uid-number">UID : {{ uidNumber }}</div>
+                    <div class="uid-modify">M</div>
+                    <form id="uid-form">
+                        <input type="number" maxlength="9" placeholder="Ton UID Genshin" name="uid" id="uid"
+                               value="{{ uidNumber }}">
+                        <input type="submit" value="valider">
+                    </form>
+                </div>
+            </div>
+            <div class="title-header">
+                <h3>Mon profil Genshin</h3>
+                <div class="blue-bar"></div>
+            </div>
+            <div id="uidProfile">
+
+
+                <ul>
+                    {% if uidProfile[0][0][0] == 1 %}
+                        {{ dump(uidProfile) }}
+                        {{ dump(uidCharacters) }}
+                        {% if uidProfile[0][1][1] == "Data is not public for the user" %}
+                            <li>Si vous souhaitez voir les informations liées à votre aventure, veuillez cocher "Public"
+                                dans le site hoyolab/genshin
+                            </li>
+                        {% else %}
+                            {% for key, value in uidProfile[0][2][1] %}
+                                <li>{{ key }}: {{ value }}</li>
+                            {% endfor %}
+                        {% endif %}
+                    {% else %}
+                        <li>UID non enregistrés</li> {% endif %}
+                </ul>
+                <div class="iudCharacters">
+                    {% if uidProfile[0][0][0] == 1 %}
+                        {% if uidProfile[0][1][1] == "Data is not public for the user" %}
+                            {# display nothing #}
+                        {% else %}
+                            {% for characters in uidCharacters %}
+                                <img src="{{ characters.icon }}" alt="" width="50px" height="auto">
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
             <div class="title-header">
                 <h3>Mes Builds</h3>
                 <div class="blue-bar"></div>
