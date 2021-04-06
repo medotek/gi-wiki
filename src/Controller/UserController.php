@@ -171,81 +171,86 @@ class UserController extends AbstractController
             $characterKey = 0;
             $newUidCharacters = [];
 
-            foreach ($uidCharacters as $characters) {
-                $characterKey++;
-                $characterReliquaries[] = $characters['reliquaries'];
-                /*access to the current key of the characterReliquaries array*/
+            dump($uidCharacters);
+            if (array_key_exists("code", $uidCharacters) & $uidCharacters['code'] === -1) {
+                $charactersSet['code'] = -1;
+            } else {
+                foreach ($uidCharacters as $characters) {
 
-                $reliquariesId = [];
-                $reliquariesSet = [];
-                foreach ($characterReliquaries[$characterKey - 1] as $reliquary) {
-                    $reliquariesId[] = $reliquary['set']['id'];
-                    $reliquariesSet[] = $reliquary['set'];
-                }
+                    $characterKey++;
+                    $characterReliquaries[] = $characters['reliquaries'];
+                    /*access to the current key of the characterReliquaries array*/
 
-                $counts = array_count_values($reliquariesId);
+                    $reliquariesId = [];
+                    $reliquariesSet = [];
+                    foreach ($characterReliquaries[$characterKey - 1] as $reliquary) {
+                        $reliquariesId[] = $reliquary['set']['id'];
+                        $reliquariesSet[] = $reliquary['set'];
+                    }
 
-                $setEffectId = [];
-                $setsEffectId = [];
-                /*Verify if there is any duplicate values on an array given*/
-                foreach ($counts as $id => $count) {
-                    /*if there is more than 1 duplicate values execute : */
-                    if ($count > 1 & $count < 4) {
-                        $setEffectId[] = $id;
-                    } else {
-                        if ($count >= 4) /*if there is 4 or more than 4 duplicate values execute : */ {
-                            $setsEffectId[] = $id;
+                    $counts = array_count_values($reliquariesId);
+
+                    $setEffectId = [];
+                    $setsEffectId = [];
+                    /*Verify if there is any duplicate values on an array given*/
+                    foreach ($counts as $id => $count) {
+                        /*if there is more than 1 duplicate values execute : */
+                        if ($count > 1 & $count < 4) {
+                            $setEffectId[] = $id;
+                        } else {
+                            if ($count >= 4) /*if there is 4 or more than 4 duplicate values execute : */ {
+                                $setsEffectId[] = $id;
+                            }
                         }
+
                     }
 
-                }
-
-                if (!empty($setEffectId)) {
-                    $keys = [];
-
-                    /*Get keys for a value given in an array*/
-                    $characterSets = [];
-                    foreach ($setEffectId as $id) {
-                        $keys[] = array_search($id, array_column($reliquariesSet, 'id'));
-                    }
-
-                    /* push sets of $reliquariesSet by an extracted key in a new array*/
-                    foreach ($keys as $key) {
-                        $characterSets[] = $reliquariesSet[$key]['affixes'][0];
-                    }
-
-                    /*Add the new column to the character array*/
-                    $characters['extra'] = ['sets' => $characterSets];
-                } else {
-                    if (!empty($setsEffectId)) {
+                    if (!empty($setEffectId)) {
                         $keys = [];
-                        $characterSets = [];
 
-                        foreach ($setsEffectId as $id) {
+                        /*Get keys for a value given in an array*/
+                        $characterSets = [];
+                        foreach ($setEffectId as $id) {
                             $keys[] = array_search($id, array_column($reliquariesSet, 'id'));
                         }
 
+                        /* push sets of $reliquariesSet by an extracted key in a new array*/
                         foreach ($keys as $key) {
-                            $characterSets[] = $reliquariesSet[$key]['affixes'][1];
-
+                            $characterSets[] = $reliquariesSet[$key]['affixes'][0];
                         }
 
                         /*Add the new column to the character array*/
                         $characters['extra'] = ['sets' => $characterSets];
+                    } else {
+                        if (!empty($setsEffectId)) {
+                            $keys = [];
+                            $characterSets = [];
+
+                            foreach ($setsEffectId as $id) {
+                                $keys[] = array_search($id, array_column($reliquariesSet, 'id'));
+                            }
+
+                            foreach ($keys as $key) {
+                                $characterSets[] = $reliquariesSet[$key]['affixes'][1];
+
+                            }
+
+                            /*Add the new column to the character array*/
+                            $characters['extra'] = ['sets' => $characterSets];
 
 
+                        }
                     }
-                }
 
-                /*if the array hasn't got the extra column, push one in it which is empty */
-                if (!array_key_exists("extra", (array)$characters)) {
-                    $characters['extra'] = [];
-                }
-                /*Push characters (with a new column) on a new array*/
-                $newUidCharacters[] = $characters;
+                    /*if the array hasn't got the extra column, push one in it which is empty */
+                    if (!array_key_exists("extra", (array)$characters)) {
+                        $characters['extra'] = [];
+                    }
+                    /*Push characters (with a new column) on a new array*/
+                    $newUidCharacters[] = $characters;
 
+                }
             }
-
 
             $uidMap[] = array_map(null, $isUidAvailable, $uidProfile, $charactersSet);
 
