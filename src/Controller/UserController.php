@@ -119,7 +119,7 @@ class UserController extends AbstractController
 
             $uidData = $apiService->validateAndCreate($data, User::class);
 
-            dump($uidData);
+//            dump($uidData);
             $uid = $this->getCurrentUser();
             if ($uidData == 'error') {
                 return new JsonResponse('invalid uid or uid already used (please, contact an administrator if your issue persists)', Response::HTTP_NOT_FOUND);
@@ -171,7 +171,7 @@ class UserController extends AbstractController
             $characterKey = 0;
             $newUidCharacters = [];
 
-            dump($uidCharacters);
+//            dump($uidCharacters);
             if (array_key_exists("code", $uidCharacters) & $uidCharacters['code'] === -1 ||
                 array_key_exists("code", $uidCharacters) & $uidCharacters['code'] === 10102) {
                 $charactersSet['code'] = $uidCharacters['code'];
@@ -262,7 +262,7 @@ class UserController extends AbstractController
             $isUidAvailable[] = 0;
 
             $uidMap[] = array_map(null, $isUidAvailable, $uidProfile);
-            dump($uidMap);
+//            dump($uidMap);
         }
 
 
