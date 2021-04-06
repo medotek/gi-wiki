@@ -172,8 +172,9 @@ class UserController extends AbstractController
             $newUidCharacters = [];
 
             dump($uidCharacters);
-            if (array_key_exists("code", $uidCharacters) & $uidCharacters['code'] === -1) {
-                $charactersSet['code'] = -1;
+            if (array_key_exists("code", $uidCharacters) & $uidCharacters['code'] === -1 ||
+                array_key_exists("code", $uidCharacters) & $uidCharacters['code'] === 10102) {
+                $charactersSet['code'] = $uidCharacters['code'];
             } else {
                 foreach ($uidCharacters as $characters) {
 

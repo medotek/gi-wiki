@@ -87,9 +87,9 @@
                 {% if uidProfile[0][0][0] == 1 %}
                     {{ dump(uidProfile) }}
                     {# {{ dump(uidCharacters) }} #}
-                    {% if uidProfile[0][1][1] == "Data is not public for the user" %}
+                    {% if uidProfile[0][0][2] == 10102 %}
                         <li>Si vous souhaitez voir les informations liées à votre aventure, veuillez cocher "Public"
-                            dans le site hoyolab/genshin
+                            sur le site hoyolab.com/genshin dans la rubrique "profil"
                         </li>
                     {% else %}
                         {% for key, value in uidProfile[0][2][1] %}
@@ -101,7 +101,7 @@
             </ul>
             <div class="iudCharacters">
                 {% if uidProfile[0][0][0] == 1 %}
-                    {% if uidProfile[0][0][2] %}
+                    {% if uidProfile[0][0][2] == -1%}
                     <div class="new-character-error">Un nouveau personnage vient d'arriver... Veuillez patienter afin
                         de retrouver votre profil Genshin Impact.
                     </div>
