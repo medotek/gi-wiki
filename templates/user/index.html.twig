@@ -83,65 +83,72 @@
             <div id="uidProfile">
 
 
-                <ul>
-                    {% if uidProfile[0][0][0] == 1 %}
-{#                        {{ dump(uidProfile) }}#}
-{#                        {{ dump(uidCharacters) }}#}
-                        {% if uidProfile[0][1][1] == "Data is not public for the user" %}
-                            <li>Si vous souhaitez voir les informations liées à votre aventure, veuillez cocher "Public"
-                                dans le site hoyolab/genshin
-                            </li>
-                        {% else %}
-                            {% for key, value in uidProfile[0][2][1] %}
-                                <li>{{ key }}: {{ value }}</li>
-                            {% endfor %}
-                        {% endif %}
+            <ul>
+                {% if uidProfile[0][0][0] == 1 %}
+                    {{ dump(uidProfile) }}
+                    {# {{ dump(uidCharacters) }} #}
+                    {% if uidProfile[0][1][1] == "Data is not public for the user" %}
+                        <li>Si vous souhaitez voir les informations liées à votre aventure, veuillez cocher "Public"
+                            dans le site hoyolab/genshin
+                        </li>
                     {% else %}
-                        <li>UID non enregistrés</li> {% endif %}
-                </ul>
-                <div class="iudCharacters">
-                    {% if uidProfile[0][0][0] == 1 %}
-                        {% if uidProfile[0][1][1] == "Data is not public for the user" %}
-                            {# display nothing #}
-                        {% else %}
-                            {% for characters in uidCharacters %}
-                                <div class="user-character">
-                                    {# Get character icon url #}
-                                    <img src="{{ characters.icon }}" alt="" width="50px" height="auto">
-                                    <div class="character-constellations">
-                                        {% set constNumber = 0 %}
-                                        {# Get character constellations #}
-                                        {% for constellation in characters.constellations %}
-                                            {% if constellation.is_actived %}
-                                                {% set constNumber = constNumber + 1 %}
-                                            {% endif %}
-                                        {% endfor %}
-                                        C{{ constNumber }}
-                                    </div>
-                                    <div class="character-weapon">
-                                        <img src="{{ characters.weapon.icon }}" alt="{{ characters.weapon.name }}">
-                                    </div>
-                                    <div class="character-artifacts">
-                                        {% for artifacts in characters.reliquaries %}
-                                            <img class="artifact-{{ artifacts.pos }}" src="{{ artifacts.icon }}"
-                                                 alt="{{ artifacts.name }}">
-                                        {% endfor %}
-                                    </div>
-                                    <div class="sets-effect">
-                                        {% if characters.extra is not empty %}
-                                            <ul>
-                                            {%  for sets in characters.extra.sets %}
-                                               <li><b>{{ sets.activation_number }} pièces </b>: {{ sets.effect }}</li>
-                                            {% endfor %}
-                                            </ul>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
+                        {% for key, value in uidProfile[0][2][1] %}
+                            <li>{{ key }}: {{ value }}</li>
+                        {% endfor %}
                     {% endif %}
-                </div>
+                {% else %}
+                    <li>UID non enregistrés</li> {% endif %}
+            </ul>
+            <div class="iudCharacters">
+                {% if uidProfile[0][0][0] == 1 %}
+                    {% if uidProfile[0][0][2] %}
+                    <div class="new-character-error">Un nouveau personnage vient d'arriver... Veuillez patienter afin
+                        de retrouver votre profil Genshin Impact.
+                    </div>
+
+                    {% endif %}
+                    {% if uidProfile[0][1][1] == "Data is not public for the user" %}
+                        {# display nothing #}
+                    {% else %}
+                    {% for characters in uidCharacters %}
+                        <div class="user-character">
+                            {# Get character icon url #}
+                            <img src="{{ characters.icon }}" alt="" width="50px" height="auto">
+                            <div class="character-constellations">
+                                {% set constNumber = 0 %}
+                                {# Get character constellations #}
+                                {% for constellation in characters.constellations %}
+                                    {% if constellation.is_actived %}
+                                        {% set constNumber = constNumber + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                                C{{ constNumber }}
+                            </div>
+                            <div class="character-weapon">
+                                <img src="{{ characters.weapon.icon }}" alt="{{ characters.weapon.name }}">
+                            </div>
+                            <div class="character-artifacts">
+                                {% for artifacts in characters.reliquaries %}
+                                    <img class="artifact-{{ artifacts.pos }}" src="{{ artifacts.icon }}"
+                                         alt="{{ artifacts.name }}">
+                                {% endfor %}
+                            </div>
+                            <div class="sets-effect">
+                                {% if characters.extra is not empty %}
+                                    <ul>
+                                        {% for sets in characters.extra.sets %}
+                                            <li><b>{{ sets.activation_number }} pièces </b>: {{ sets.effect }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% endif %}
             </div>
+        </div>
 
             <div class="title-header">
                 <h3>Mes Builds</h3>
