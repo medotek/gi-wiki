@@ -243,7 +243,6 @@ class UserController extends AbstractController
                 }
                 /*Push characters (with a new column) on a new array*/
                 $newUidCharacters[] = $characters;
-                dump($newUidCharacters);
 
             }
 
