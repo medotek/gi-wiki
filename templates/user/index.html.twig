@@ -105,17 +105,37 @@
                             {# display nothing #}
                         {% else %}
                             {% for characters in uidCharacters %}
-                                {#   Get character icon url   #}
-                                <img src="{{ characters.icon }}" alt="" width="50px" height="auto">
-                                <div class="character-constellations">
-                                {% set constNumber = 0 %}
-                                {#   Get character constellations   #}
-                                C{% for constellation in characters.constellations %}
-                                    {% if constellation.is_actived %}
-                                       {% set constNumber = constNumber + 1 %}
-                                    {% endif %}
-                                {% endfor %}
-                                {{ constNumber }}
+                                <div class="user-character">
+                                    {# Get character icon url #}
+                                    <img src="{{ characters.icon }}" alt="" width="50px" height="auto">
+                                    <div class="character-constellations">
+                                        {% set constNumber = 0 %}
+                                        {# Get character constellations #}
+                                        {% for constellation in characters.constellations %}
+                                            {% if constellation.is_actived %}
+                                                {% set constNumber = constNumber + 1 %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        C{{ constNumber }}
+                                    </div>
+                                    <div class="character-weapon">
+                                        <img src="{{ characters.weapon.icon }}" alt="{{ characters.weapon.name }}">
+                                    </div>
+                                    <div class="character-artifacts">
+                                        {% for artifacts in characters.reliquaries %}
+                                            <img class="artifact-{{ artifacts.pos }}" src="{{ artifacts.icon }}"
+                                                 alt="{{ artifacts.name }}">
+                                        {% endfor %}
+                                    </div>
+                                    <div class="sets-effect">
+                                        {% if characters.extra is not empty %}
+                                            <ul>
+                                            {%  for sets in characters.extra.sets %}
+                                               <li><b>{{ sets.activation_number }} pièces </b>: {{ sets.effect }}</li>
+                                            {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             {% endfor %}
                         {% endif %}
