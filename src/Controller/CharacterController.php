@@ -95,10 +95,7 @@ class CharacterController extends AbstractController
         $users = [];
         $buildTags = [];
 
-        /* Stock les couleurs de chaque personnage */
-
         $characterImage = $character->getImage();
-
 
         foreach ($communityBuildEntities as $communityBuildEntity) {
             $authorId = $communityBuildEntity->getAuthor()->getId();
@@ -111,6 +108,7 @@ class CharacterController extends AbstractController
 
         }
 
+        /* Stock les couleurs de chaque personnage */
         if ($character->getColor() != null) {
             $characterColor = $character->getColor();
         } else {
