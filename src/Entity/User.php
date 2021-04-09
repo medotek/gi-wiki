@@ -76,11 +76,22 @@ class User implements UserInterface
      */
     private $isPublic = false;
 
+    /**
+     * @ORM\Column(type="json", nullable=true)
+     */
+    private $userUidInfo = [];
+
+    /**
+     * @ORM\OneToMany(targetEntity=UserUidCharacter::class, mappedBy="user")
+     */
+    private $characters;
+
     public function __construct()
     {
         $this->builds = new ArrayCollection();
         $this->votes = new ArrayCollection();
         $this->buildsVotes = new ArrayCollection();
+        $this->characters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -244,6 +255,48 @@ class User implements UserInterface
     public function setIsPublic(bool $isPublic): self
     {
         $this->isPublic = $isPublic;
+
+        return $this;
+    }
+
+    public function getUserUidInfo(): ?array
+    {
+        return $this->userUidInfo;
+    }
+
+    public function setUserUidInfo(?array $userUidInfo): self
+    {
+        $this->userUidInfo = $userUidInfo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserUidCharacter[]
+     */
+    public function getCharacters(): Collection
+    {
+        return $this->characters;
+    }
+
+    public function addCharacter(UserUidCharacter $character): self
+    {
+        if (!$this->characters->contains($character)) {
+            $this->characters[] = $character;
+            $character->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCharacter(UserUidCharacter $character): self
+    {
+        if ($this->characters->removeElement($character)) {
+            // set the owning side to null (unless already changed)
+            if ($character->getUser() === $this) {
+                $character->setUser(null);
+            }
+        }
 
         return $this;
     }
