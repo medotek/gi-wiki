@@ -55,6 +55,11 @@ class Character
      */
     private $Color;
 
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $character_id;
+
     public function __construct()
     {
         $this->builds = new ArrayCollection();
@@ -168,6 +173,18 @@ class Character
     public function setColor(?string $Color): self
     {
         $this->Color = $Color;
+
+        return $this;
+    }
+
+    public function getCharacterId(): ?string
+    {
+        return $this->character_id;
+    }
+
+    public function setCharacterId(?string $character_id): self
+    {
+        $this->character_id = $character_id;
 
         return $this;
     }
