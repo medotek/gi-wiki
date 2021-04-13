@@ -24,7 +24,7 @@ class UserUidCharacter
 
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="array")
      */
     private $uidCharacterInfo = [];
 
@@ -37,6 +37,11 @@ class UserUidCharacter
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="characters")
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $characterId;
 
     public function getId(): ?int
     {
@@ -87,6 +92,18 @@ class UserUidCharacter
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCharacterId(): ?int
+    {
+        return $this->characterId;
+    }
+
+    public function setCharacterId(int $characterId): self
+    {
+        $this->characterId = $characterId;
 
         return $this;
     }
