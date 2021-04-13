@@ -77,7 +77,7 @@ class User implements UserInterface
     private $isPublic = false;
 
     /**
-     * @ORM\Column(type="json", nullable=true)
+     * @ORM\Column(type="array", nullable=true)
      */
     private $userUidInfo = [];
 
@@ -86,12 +86,18 @@ class User implements UserInterface
      */
     private $characters;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UidReloadDate::class, mappedBy="User", orphanRemoval=true)
+     */
+    private $uidReloadDates;
+
     public function __construct()
     {
         $this->builds = new ArrayCollection();
         $this->votes = new ArrayCollection();
         $this->buildsVotes = new ArrayCollection();
         $this->characters = new ArrayCollection();
+        $this->uidReloadDates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -295,6 +301,36 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($character->getUser() === $this) {
                 $character->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UidReloadDate[]
+     */
+    public function getUidReloadDates(): Collection
+    {
+        return $this->uidReloadDates;
+    }
+
+    public function addUidReloadDate(UidReloadDate $uidReloadDate): self
+    {
+        if (!$this->uidReloadDates->contains($uidReloadDate)) {
+            $this->uidReloadDates[] = $uidReloadDate;
+            $uidReloadDate->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUidReloadDate(UidReloadDate $uidReloadDate): self
+    {
+        if ($this->uidReloadDates->removeElement($uidReloadDate)) {
+            // set the owning side to null (unless already changed)
+            if ($uidReloadDate->getUser() === $this) {
+                $uidReloadDate->setUser(null);
             }
         }
 
