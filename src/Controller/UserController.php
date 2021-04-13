@@ -239,6 +239,15 @@ class UserController extends AbstractController
                         }
                     }
 
+                    $number = 0;
+                    foreach ($characters['constellations'] as $constellation) {
+                        if ($constellation['is_actived']) {
+                            $number++;
+                        }
+                    }
+
+                    $characters['constellations_number'] = $number;
+
                     /*if the array hasn't got the extra column, push one in it which is empty */
                     if (!array_key_exists("extra", (array)$characters)) {
                         $characters['extra'] = [];
