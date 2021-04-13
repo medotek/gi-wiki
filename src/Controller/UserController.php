@@ -5,9 +5,12 @@ namespace App\Controller;
 use App\Entity\Artifact;
 use App\Entity\Build;
 use App\Entity\CommunityBuild;
+use App\Entity\UidReloadDate;
 use App\Entity\User;
+use App\Entity\UserUidCharacter;
 use App\Entity\Weapon;
 use App\Extra\ApiService;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -157,8 +160,32 @@ class UserController extends AbstractController
         $array = array_map(null, (array)$this->getCommunityBuildForTheCurrentUser(), (array)$allCommunityBuild);
 
 
+        $userUidCharacters = $this->entityManager->getRepository(UserUidCharacter::class)->findBy(['user' => $this->getCurrentUser()->getId(), 'uid' => $this->getCurrentUser()->getUid()]);
+
+        dump($this->getCurrentUser());
         $uidMap = [];
-        if ($this->getCurrentUser()->getUid() != (null || 0)) {
+        if ($userUidCharacters !== []) {
+            /*init*/
+            $charactersSet = [];
+            $isUidAvailable[] = 1;
+
+            $uidReloadDate = $this->entityManager->getRepository(UidReloadDate::class)->findOneBy(['uid' => $this->getCurrentUser()->getUid(), 'User' => $this->getCurrentUser()]);
+
+            /* @var UidReloadDate $uidReloadDate */
+            $uidLastReloadDate = $uidReloadDate->getLastDate();
+
+            $databaseUidCharacters = $this->entityManager->getRepository(UserUidCharacter::class)->findBy(['uid' => $this->getCurrentUser()->getUid(), 'user' => $this->getCurrentUser()]);
+            /* @var UserUidCharacter $databaseUidCharacter */
+            foreach ($databaseUidCharacters as $databaseUidCharacter) {
+                $newUidCharacters[] = $databaseUidCharacter->getUidCharacterInfo();
+            }
+
+            $uidProfile = $this->getCurrentUser()->getUserUidInfo();
+
+            $uidMap[] = array_map(null, $isUidAvailable, $uidProfile, $charactersSet);
+
+        } else if ($this->getCurrentUser()->getUid() != (null || 0)) {
+
             $isUidAvailable[] = 1;
             $uidProfile = $this->getProfileByUID('getuserinfo', $this->getCurrentUser()->getUid());
             $uidCharacters = $this->getProfileByUID('getusercharacters', $this->getCurrentUser()->getUid());
@@ -167,9 +194,9 @@ class UserController extends AbstractController
             $characterKey = 0;
             $newUidCharacters = [];
 
+            $uidLastReloadDate = null;
 //            dump($uidCharacters);
-            if (array_key_exists("code", $uidCharacters) & $uidCharacters['code'] === -1 ||
-                array_key_exists("code", $uidCharacters) & $uidCharacters['code'] === 10102) {
+            if (array_key_exists("code", $uidCharacters)) {
                 $charactersSet['code'] = $uidCharacters['code'];
             } else {
                 foreach ($uidCharacters as $characters) {
@@ -234,8 +261,6 @@ class UserController extends AbstractController
 
                             /*Add the new column to the character array*/
                             $characters['extra'] = ['sets' => $characterSets];
-
-
                         }
                     }
 
@@ -252,9 +277,57 @@ class UserController extends AbstractController
                     if (!array_key_exists("extra", (array)$characters)) {
                         $characters['extra'] = [];
                     }
-                    /*Push characters (with a new column) on a new array*/
-                    $newUidCharacters[] = $characters;
 
+
+                    /*if the user has no character with his uid then store them all in the db*/
+                    if ($userUidCharacters === []) {
+
+                        $userUidCharacter = new UserUidCharacter();
+                        $userUidCharacter->setUid($this->getCurrentUser()->getUid());
+                        $userUidCharacter->setUser($this->getCurrentUser());
+                        $userUidCharacter->setCharacterId((int)$characters['id']);
+                        $userUidCharacter->setUidCharacterInfo((array)$characters);
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->persist($userUidCharacter);
+                        $entityManager->flush();
+
+                        $currentUser = $this->getCurrentUser();
+                        $currentUser->setUserUidInfo($uidProfile);
+                        $entityManager->persist($currentUser);
+                        $entityManager->flush();
+
+                        /*Push characters (with a new column) on a new array*/
+                        $newUidCharacters[] = $characters;
+                    }
+                    /*else for each character, removed them from the database if they don't have the same uid with the user, and store the new one character*/
+//                        foreach ($userUidCharacters as $userUidCharacter) {
+//                            /* @var UserUidCharacter $userUidCharacter*/
+//                            if ($userUidCharacter->getUid() != $this->getCurrentUser()->getUid()) {
+//                                $entityManager = $this->getDoctrine()->getManager();
+//                                $entityManager->remove($userUidCharacter);
+//                                $entityManager->flush();
+//
+//                                $newUserUidCharacter = new UserUidCharacter();
+//                                $newUserUidCharacter->setUid($this->getCurrentUser()->getUid());
+//                                $newUserUidCharacter->setUser($this->getCurrentUser());
+//                                $newUserUidCharacter->setUidCharacterInfo((array)json_encode($characters));
+//                                $entityManager = $this->getDoctrine()->getManager();
+//                                $entityManager->persist($newUserUidCharacter);
+//                                $entityManager->flush();
+//                            }
+//                        }
+
+
+                } /* end foreach*/
+
+                if ($userUidCharacters === []) {
+                    $userUidDate = new UidReloadDate();
+                    $userUidDate->setUser($this->getCurrentUser());
+                    $userUidDate->setUid($this->getCurrentUser()->getUid());
+                    $userUidDate->setLastDate(new \DateTime());
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($userUidDate);
+                    $entityManager->flush();
                 }
             }
 
@@ -267,15 +340,15 @@ class UserController extends AbstractController
             $isUidAvailable[] = 0;
 
             $uidMap[] = array_map(null, $isUidAvailable, $uidProfile);
-//            dump($uidMap);
         }
 
-
+        dump($newUidCharacters);
         return $this->render('user/index.html.twig', [
             'userBuild' => $array,
             'uidProfile' => $uidMap,
             'uidNumber' => $this->getCurrentUser()->getUid(),
-            'uidCharacters' => $newUidCharacters
+            'uidCharacters' => $newUidCharacters,
+            'uidReloadDate' => $uidLastReloadDate
         ]);
     }
 
