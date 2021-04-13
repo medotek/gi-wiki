@@ -98,6 +98,7 @@
                     {% endif %}
                 {% else %}
                     <li>UID non enregistrés</li> {% endif %}
+                    <li> {{ uidReloadDate|date("d/m/Y H:i") }}</li>
             </ul>
             <div class="iudCharacters">
                 {% if uidProfile[0][0][0] == 1 %}
@@ -115,14 +116,15 @@
                             {# Get character icon url #}
                             <img src="{{ characters.icon }}" alt="" width="50px" height="auto">
                             <div class="character-constellations">
-                                {% set constNumber = 0 %}
-                                {# Get character constellations #}
-                                {% for constellation in characters.constellations %}
-                                    {% if constellation.is_actived %}
-                                        {% set constNumber = constNumber + 1 %}
-                                    {% endif %}
-                                {% endfor %}
-                                C{{ constNumber }}
+{#                                {% set constNumber = 0 %}#}
+{#                                #}{# Get character constellations #}
+{#                                {% for constellation in characters.constellations %}#}
+{#                                    {% if constellation.is_actived %}#}
+{#                                        {% set constNumber = constNumber + 1 %}#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                                C{{ constNumber }}#}
+                                C{{ characters.constellations_number }}
                             </div>
                             <div class="character-weapon">
                                 <img src="{{ characters.weapon.icon }}" alt="{{ characters.weapon.name }}">
