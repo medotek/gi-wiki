@@ -93,13 +93,9 @@ class UserController extends AbstractController
      */
     public function getCurrentUser(): User
     {
-        $user = $this->security->getUser();
         /* @var User $user */
-
-        $currentUser = $this->entityManager->getRepository(User::class)->find($user->getId());
-        /* @var User $currentUser */
-
-        return $currentUser;
+        $user = $this->security->getUser();
+        return $user;
     }
 
     /**
