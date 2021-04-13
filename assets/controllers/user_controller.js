@@ -17,7 +17,7 @@ $(document).ready(function () {
         e.preventDefault();
         let data = {};
         $(this).serializeArray().forEach((object)=>{
-            if (object.value === '') {
+            if (object.value === (''|| 0)) {
                 object = null;
             } else {
             data[object.name] = object.value;
