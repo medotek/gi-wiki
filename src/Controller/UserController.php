@@ -351,25 +351,31 @@ class UserController extends AbstractController
 
         dump($this->getCurrentUser());
         $uidMap = [];
+        $newUidCharacters = [];
+
         if ($userUidCharacters !== []) {
-            /*init*/
-            $charactersSet = [];
-            $isUidAvailable[] = 1;
 
-            $uidReloadDate = $this->entityManager->getRepository(UidReloadDate::class)->findOneBy(['uid' => $this->getCurrentUser()->getUid(), 'User' => $this->getCurrentUser()]);
+            /* @var UserUidCharacter $firstCharacter */
+            $firstCharacter = $userUidCharacters[0];
 
-            /* @var UidReloadDate $uidReloadDate */
-            $uidLastReloadDate = $uidReloadDate->getLastDate();
+            if ($firstCharacter->getUid() === $this->getCurrentUser()->getUid()) {
 
-            $databaseUidCharacters = $this->entityManager->getRepository(UserUidCharacter::class)->findBy(['uid' => $this->getCurrentUser()->getUid(), 'user' => $this->getCurrentUser()]);
-            /* @var UserUidCharacter $databaseUidCharacter */
-            foreach ($databaseUidCharacters as $databaseUidCharacter) {
-                $newUidCharacters[] = $databaseUidCharacter->getUidCharacterInfo();
+                /*init*/
+                $charactersSet = [];
+                $isUidAvailable[] = 1;
+
+                $uidReloadDate = $this->entityManager->getRepository(UidReloadDate::class)->findOneBy(['uid' => $this->getCurrentUser()->getUid(), 'User' => $this->getCurrentUser()]);
+
+                /* @var UidReloadDate $uidReloadDate */
+                $uidLastReloadDate = $uidReloadDate->getLastDate();
+
+
+                $uidProfile = $this->getCurrentUser()->getUserUidInfo();
+                $uidMap[] = array_map(null, $isUidAvailable, $uidProfile, $charactersSet);
+            } else {
+                $uidMap = $this->addUserGenshinInfo($userUidCharacters, (array)$firstCharacter, $this->getCurrentUser());
+
             }
-
-            $uidProfile = $this->getCurrentUser()->getUserUidInfo();
-
-            $uidMap[] = array_map(null, $isUidAvailable, $uidProfile, $charactersSet);
 
         } else if ($this->getCurrentUser()->getUid() != (null || 0)) {
 
@@ -529,7 +535,14 @@ class UserController extends AbstractController
             $uidMap[] = array_map(null, $isUidAvailable, $uidProfile);
         }
 
-        dump($newUidCharacters);
+        $UidCharacters = $this->entityManager->getRepository(UserUidCharacter::class)->findBy(['user' => $this->getCurrentUser()->getId(), 'uid' => $this->getCurrentUser()->getUid()]);
+
+
+        foreach($UidCharacters as $UidCharacter) {
+            /* @var UserUidCharacter $UidCharacter */
+            $newUidCharacters[] = $UidCharacter->getUidCharacterInfo();
+        }
+
         return $this->render('user/index.html.twig', [
             'userBuild' => $array,
             'uidProfile' => $uidMap,
