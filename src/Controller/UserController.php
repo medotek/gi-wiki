@@ -353,14 +353,11 @@ class UserController extends AbstractController
     public function index(): Response
     {
         /* @var CommunityBuild $userCommunityBuild */
-
         $allCommunityBuild = [];
         foreach ($this->getCommunityBuildForTheCurrentUser() as $userCommunityBuild) {
             $allCommunityBuild[] = $this->entityManager->getRepository(Build::class)->findBy(['id' => $userCommunityBuild->getBuild()]);
         }
-
         $array = array_map(null, (array)$this->getCommunityBuildForTheCurrentUser(), (array)$allCommunityBuild);
-
 
         $userUidCharacters = $this->entityManager->getRepository(UserUidCharacter::class)->findBy(['user' => $this->getCurrentUser()->getId(), 'uid' => $this->getCurrentUser()->getUid()]);
 

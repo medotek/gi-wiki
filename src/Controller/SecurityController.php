@@ -45,9 +45,10 @@ class SecurityController extends AbstractController
      * @Route("/account/register", name="register")
      * @param Request $request
      * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param \Swift_Mailer $mailer
      * @return Response
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder,  \Swift_Mailer $mailer): Response
     {
         $securityContext = $this->container->get('security.authorization_checker');
 
@@ -102,6 +103,25 @@ class SecurityController extends AbstractController
                 $entityManager->persist($userData);
                 $entityManager->flush();
 
+                /* @var User $user */
+
+
+                $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $userData->getEmail()]);
+
+
+                $message = (new \Swift_Message('Inscription - gudako.club'))
+                    ->setFrom('gudako.club@gmail.com')
+                    ->setTo($user->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                        // templates/emails/registration.html.twig
+                            'email/registration.html.twig',
+                            ['name' => $user->getName()]
+                        ),
+                        'text/html'
+                    );
+
+                $mailer->send($message);
                 return $this->redirectToRoute('home');
 
             }
