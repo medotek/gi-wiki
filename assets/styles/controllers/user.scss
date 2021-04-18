@@ -30,10 +30,30 @@
   }
 
   .banner {
+    padding: 20px;
     width: 100%;
     height: 300px;
     background-color: $giwiki-light-blue;
     border-radius: 20px;
+
+    .uid-display {
+      form.is-readonly .btn-save, form.is-readonly  .btn-cancel {
+        display: none;
+      }
+      form.is-readonly input[disabled], form.is-readonly textarea[disabled] {
+        cursor: text;
+        background-color: #fff;
+        border-color: transparent;
+        outline-color: transparent;
+        box-shadow: none;
+      }
+      form.is-editing .btn-edit {
+        display: none;
+      }
+
+      #uid-form {
+      }
+    }
   }
 
   .builds {
@@ -86,10 +106,22 @@
       }
     }
 
+    #uid-modify-leave {
+      display: none;
+    }
+
     #uidProfile {
-      border: 1px solid $giwiki-light-blue;
-      border-radius: 20px;
-      padding: 20px;
+      //border: 1px solid $giwiki-light-blue;
+      //border-radius: 20px;
+      //padding: 20px;
+
+      .uid-no-public {
+        padding: 10px 20px;
+        border: 4px solid $giwiki-orange;
+        color: $giwiki-orange;
+        background-color: $giwiki-white;
+        font-weight: 600;
+      }
 
       .iudCharacters {
         .user-character {

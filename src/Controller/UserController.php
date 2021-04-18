@@ -115,9 +115,7 @@ class UserController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $data = $request->getContent();
 
-
             $uidData = $apiService->validateAndCreate($data, User::class);
-
 //            dump($uidData);
             $uid = $this->getCurrentUser();
             if ($uidData == 'error') {
@@ -128,6 +126,23 @@ class UserController extends AbstractController
 
                 return new JsonResponse('invalid uid or uid already used (please, contact an administrator if your issue persists)', Response::HTTP_NOT_FOUND);
             } else {
+                /*remove previous characters uid*/
+                $userUidCharacters = $this->entityManager->getRepository(UserUidCharacter::class)->findBy(['user' => $this->getCurrentUser()->getId()]);
+
+                if ($userUidCharacters !== []) {
+                    foreach ($userUidCharacters as $userUidCharacter) {
+                        $em->remove($userUidCharacter);
+                        $em->flush();
+                    }
+                    /*previous reload date of the uid load*/
+//                    /* @var UidReloadDate $uidReloadDate */
+//                    $uidReloadDate = $this->entityManager->getRepository(UidReloadDate::class)->findOneBy(['uid' => $this->getCurrentUser()->getUid(), 'User' => $this->getCurrentUser()]);
+//
+//                    $em->remove($uidReloadDate);
+//                    $em->flush();
+                }
+
+                /*AJAX*/
                 /* @var User $uidData */
                 $uidAjax = $uidData->getUid();
                 $uid->setUid($uidAjax);
@@ -379,153 +394,9 @@ class UserController extends AbstractController
 
         } else if ($this->getCurrentUser()->getUid() != (null || 0)) {
 
-            $isUidAvailable[] = 1;
-            $uidProfile = $this->getProfileByUID('getuserinfo', $this->getCurrentUser()->getUid());
-            $uidCharacters = $this->getProfileByUID('getusercharacters', $this->getCurrentUser()->getUid());
+            $uidMap = $this->addUserGenshinInfo($userUidCharacters, null, $this->getCurrentUser());
 
-            $charactersSet = [];
-            $characterKey = 0;
-            $newUidCharacters = [];
-
-            $uidLastReloadDate = null;
-//            dump($uidCharacters);
-            if (array_key_exists("code", $uidCharacters)) {
-                $charactersSet['code'] = $uidCharacters['code'];
-            } else {
-                foreach ($uidCharacters as $characters) {
-
-                    $characterKey++;
-                    $characterReliquaries[] = $characters['reliquaries'];
-                    /*access to the current key of the characterReliquaries array*/
-
-                    $reliquariesId = [];
-                    $reliquariesSet = [];
-                    foreach ($characterReliquaries[$characterKey - 1] as $reliquary) {
-                        $reliquariesId[] = $reliquary['set']['id'];
-                        $reliquariesSet[] = $reliquary['set'];
-                    }
-
-                    $counts = array_count_values($reliquariesId);
-
-                    $setEffectId = [];
-                    $setsEffectId = [];
-                    /*Verify if there is any duplicate values on an array given*/
-                    foreach ($counts as $id => $count) {
-                        /*if there is more than 1 duplicate values execute : */
-                        if ($count > 1 & $count < 4) {
-                            $setEffectId[] = $id;
-                        } else {
-                            if ($count >= 4) /*if there is 4 or more than 4 duplicate values execute : */ {
-                                $setsEffectId[] = $id;
-                            }
-                        }
-
-                    }
-
-                    if (!empty($setEffectId)) {
-                        $keys = [];
-
-                        /*Get keys for a value given in an array*/
-                        $characterSets = [];
-                        foreach ($setEffectId as $id) {
-                            $keys[] = array_search($id, array_column($reliquariesSet, 'id'));
-                        }
-
-                        /* push sets of $reliquariesSet by an extracted key in a new array*/
-                        foreach ($keys as $key) {
-                            $characterSets[] = $reliquariesSet[$key]['affixes'][0];
-                        }
-
-                        /*Add the new column to the character array*/
-                        $characters['extra'] = ['sets' => $characterSets];
-                    } else {
-                        if (!empty($setsEffectId)) {
-                            $keys = [];
-                            $characterSets = [];
-
-                            foreach ($setsEffectId as $id) {
-                                $keys[] = array_search($id, array_column($reliquariesSet, 'id'));
-                            }
-
-                            foreach ($keys as $key) {
-                                $characterSets[] = $reliquariesSet[$key]['affixes'][1];
-
-                            }
-
-                            /*Add the new column to the character array*/
-                            $characters['extra'] = ['sets' => $characterSets];
-                        }
-                    }
-
-                    $number = 0;
-                    foreach ($characters['constellations'] as $constellation) {
-                        if ($constellation['is_actived']) {
-                            $number++;
-                        }
-                    }
-
-                    $characters['constellations_number'] = $number;
-
-                    /*if the array hasn't got the extra column, push one in it which is empty */
-                    if (!array_key_exists("extra", (array)$characters)) {
-                        $characters['extra'] = [];
-                    }
-
-
-                    /*if the user has no character with his uid then store them all in the db*/
-                    if ($userUidCharacters === []) {
-
-                        $userUidCharacter = new UserUidCharacter();
-                        $userUidCharacter->setUid($this->getCurrentUser()->getUid());
-                        $userUidCharacter->setUser($this->getCurrentUser());
-                        $userUidCharacter->setCharacterId((int)$characters['id']);
-                        $userUidCharacter->setUidCharacterInfo((array)$characters);
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->persist($userUidCharacter);
-                        $entityManager->flush();
-
-                        $currentUser = $this->getCurrentUser();
-                        $currentUser->setUserUidInfo($uidProfile);
-                        $entityManager->persist($currentUser);
-                        $entityManager->flush();
-
-                        /*Push characters (with a new column) on a new array*/
-                        $newUidCharacters[] = $characters;
-                    }
-                    /*else for each character, removed them from the database if they don't have the same uid with the user, and store the new one character*/
-//                        foreach ($userUidCharacters as $userUidCharacter) {
-//                            /* @var UserUidCharacter $userUidCharacter*/
-//                            if ($userUidCharacter->getUid() != $this->getCurrentUser()->getUid()) {
-//                                $entityManager = $this->getDoctrine()->getManager();
-//                                $entityManager->remove($userUidCharacter);
-//                                $entityManager->flush();
-//
-//                                $newUserUidCharacter = new UserUidCharacter();
-//                                $newUserUidCharacter->setUid($this->getCurrentUser()->getUid());
-//                                $newUserUidCharacter->setUser($this->getCurrentUser());
-//                                $newUserUidCharacter->setUidCharacterInfo((array)json_encode($characters));
-//                                $entityManager = $this->getDoctrine()->getManager();
-//                                $entityManager->persist($newUserUidCharacter);
-//                                $entityManager->flush();
-//                            }
-//                        }
-
-
-                } /* end foreach*/
-
-                if ($userUidCharacters === []) {
-                    $userUidDate = new UidReloadDate();
-                    $userUidDate->setUser($this->getCurrentUser());
-                    $userUidDate->setUid($this->getCurrentUser()->getUid());
-                    $userUidDate->setLastDate(new \DateTime());
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($userUidDate);
-                    $entityManager->flush();
-                }
-            }
-
-            $uidMap[] = array_map(null, $isUidAvailable, $uidProfile, $charactersSet);
-
+            $uidLastReloadDate = $this->getUserUidReloadDate();
         } else {
             $uidProfile = [
                 'Erreur' => 'Veuillez renseigner votre UID Genshin'

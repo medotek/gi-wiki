@@ -44,7 +44,7 @@
  } %}
 
 {% block body %}
-
+    <div id="wait" style="display:none;">Ajax loading</div>
     <div class="user-profile">
         {% for message in app.flashes('build-removed-error') %}
             <div class="alert alert-error">
@@ -52,6 +52,9 @@
             </div>
         {% endfor %}
         <div class="logout"><a href="{{ path('app_logout') }}">Se déconnecter</a></div>
+        <div class="section-user-objectives">
+            Objectifs
+        </div>
         <div class="section-user-builds" id="test">
             <div class="banner">
                 {% if uidProfile[0][0][0] == 1 %}
@@ -67,15 +70,20 @@
                 {% endif %}
                 <h1 class="username">{{ app.user.name }}</h1>
                 <div class="uid-display">
-                    <div class="uid-number">UID : {{ uidNumber }}</div>
-                    <div class="uid-modify">M</div>
-                    <form id="uid-form">
-                        <input type="number" maxlength="9" placeholder="Ton UID Genshin" name="uid" id="uid"
-                               value="{{ uidNumber }}">
-                        <input type="submit" value="valider">
+                    <form id="uid-form" class="is-readonly">
+                        <label for="uid">UID</label>
+                        <input id="uid" type="number" maxlength="9"
+                               placeholder="Ton UID Genshin"
+                               name="uid"
+                               class="form-control is-disabled"
+                               value="{{ uidNumber }}" disabled>
+                        <button type="button" class="btn-edit js-edit">Editer</button>
+                        <button type="button" class="btn-cancel js-cancel">Annuler</button>
+                        <input type="submit" class="btn-save js-save" value="Valider">
                     </form>
                 </div>
             </div>
+
             <div class="title-header">
                 <h3>Mon profil Genshin</h3>
                 <div class="blue-bar"></div>
@@ -83,74 +91,78 @@
             <div id="uidProfile">
 
 
-            <ul>
                 {% if uidProfile[0][0][0] == 1 %}
-{#                    {{ dump(uidProfile) }}#}
+                    {# {{ dump(uidProfile) }} #}
                     {# {{ dump(uidCharacters) }} #}
                     {% if uidProfile[0][0][2] == 10102 %}
-                        <li>Si vous souhaitez voir les informations liées à votre aventure, veuillez cocher "Public"
-                            sur le site hoyolab.com/genshin dans la rubrique "profil"
-                        </li>
+                        <div class="uid-no-public">
+                            Si vous souhaitez voir les informations liées à votre aventure, veuillez cocher "Public"
+                            sur le site hoyolab.com/genshin dans la rubrique "compte"
+                        </div>
                     {% else %}
-                        {% for key, value in uidProfile[0][2][1] %}
-                            <li>{{ key }}: {{ value }}</li>
-                        {% endfor %}
+                        <ul>
+                            {% for key, value in uidProfile[0][2][1] %}
+                                <li>{{ key }}: {{ value }}</li>
+                            {% endfor %}
+                            <li> {{ uidReloadDate|date("d/m/Y H:i") }}</li>
+                        </ul>
                     {% endif %}
                 {% else %}
-                    <li>UID non enregistrés</li> {% endif %}
-                    <li> {{ uidReloadDate|date("d/m/Y H:i") }}</li>
-            </ul>
-            <div class="iudCharacters">
-                {% if uidProfile[0][0][0] == 1 %}
-                    {% if uidProfile[0][0][2] == -1%}
-                    <div class="new-character-error">Un nouveau personnage vient d'arriver... Veuillez patienter afin
-                        de retrouver votre profil Genshin Impact.
-                    </div>
+                    <div class="uid-error">UID non enregistrés</div>
+                {% endif %}
 
-                    {% endif %}
-                    {% if uidProfile[0][1][1] == "Data is not public for the user" %}
-                        {# display nothing #}
-                    {% else %}
-                    {% for characters in uidCharacters %}
-                        <div class="user-character">
-                            {# Get character icon url #}
-                            <img src="{{ characters.icon }}" alt="" width="50px" height="auto">
-                            <div class="character-constellations">
-{#                                {% set constNumber = 0 %}#}
-{#                                #}{# Get character constellations #}
-{#                                {% for constellation in characters.constellations %}#}
-{#                                    {% if constellation.is_actived %}#}
-{#                                        {% set constNumber = constNumber + 1 %}#}
-{#                                    {% endif %}#}
-{#                                {% endfor %}#}
-{#                                C{{ constNumber }}#}
-                                C{{ characters.constellations_number }}
+                <div class="iudCharacters">
+                    {% if uidProfile[0][0][0] == 1 %}
+                        {% if uidProfile[0][0][2] == -1 %}
+                            <div class="new-character-error">Un nouveau personnage vient d'arriver... Veuillez patienter
+                                afin
+                                de retrouver votre profil Genshin Impact.
                             </div>
-                            <div class="character-weapon">
-                                <img src="{{ characters.weapon.icon }}" alt="{{ characters.weapon.name }}">
-                            </div>
-                            <div class="character-artifacts">
-                                {% for artifacts in characters.reliquaries %}
-                                    <img class="artifact-{{ artifacts.pos }}" src="{{ artifacts.icon }}"
-                                         alt="{{ artifacts.name }}">
-                                {% endfor %}
-                            </div>
-                            <div class="sets-effect">
-                                {% if characters.extra is not empty %}
-                                    <ul>
-                                        {% for sets in characters.extra.sets %}
-                                            <li><b>{{ sets.activation_number }} pièces </b>: {{ sets.effect }}
-                                            </li>
+
+                        {% endif %}
+                        {% if uidProfile[0][1][1] == "Data is not public for the user" %}
+                            {# display nothing #}
+                        {% else %}
+                            {% for characters in uidCharacters %}
+                                <div class="user-character">
+                                    {# Get character icon url #}
+                                    <img src="{{ characters.icon }}" alt="" width="50px" height="auto">
+                                    <div class="character-constellations">
+                                        {# {% set constNumber = 0 %} #}
+                                        {# #}{# Get character constellations #}
+                                        {# {% for constellation in characters.constellations %} #}
+                                        {# {% if constellation.is_actived %} #}
+                                        {# {% set constNumber = constNumber + 1 %} #}
+                                        {# {% endif %} #}
+                                        {# {% endfor %} #}
+                                        {# C{{ constNumber }} #}
+                                        C{{ characters.constellations_number }}
+                                    </div>
+                                    <div class="character-weapon">
+                                        <img src="{{ characters.weapon.icon }}" alt="{{ characters.weapon.name }}">
+                                    </div>
+                                    <div class="character-artifacts">
+                                        {% for artifacts in characters.reliquaries %}
+                                            <img class="artifact-{{ artifacts.pos }}" src="{{ artifacts.icon }}"
+                                                 alt="{{ artifacts.name }}">
                                         {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                {% endif %}
+                                    </div>
+                                    <div class="sets-effect">
+                                        {% if characters.extra is not empty %}
+                                            <ul>
+                                                {% for sets in characters.extra.sets %}
+                                                    <li><b>{{ sets.activation_number }} pièces </b>: {{ sets.effect }}
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+                </div>
             </div>
-        </div>
 
             <div class="title-header">
                 <h3>Mes Builds</h3>
