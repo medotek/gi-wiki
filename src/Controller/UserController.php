@@ -364,7 +364,8 @@ class UserController extends AbstractController
         dump($this->getCurrentUser());
         $uidMap = [];
         $newUidCharacters = [];
-
+        $uidLastReloadDate = null;
+        
         if ($userUidCharacters !== []) {
 
             /* @var UserUidCharacter $firstCharacter */
