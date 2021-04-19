@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class SecurityController extends AbstractController
 {
@@ -48,7 +50,7 @@ class SecurityController extends AbstractController
      * @param \Swift_Mailer $mailer
      * @return Response
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder,  \Swift_Mailer $mailer): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer): Response
     {
         $securityContext = $this->container->get('security.authorization_checker');
 
@@ -71,8 +73,21 @@ class SecurityController extends AbstractController
                 ->add('password', RepeatedType::class, array(
                     'type' => PasswordType::class,
                     'mapped' => false,
-                    'first_options' => ['label' => 'Nouveau mot de passe', 'attr' => ['placeholder'=>'Nouveau mot de passe']],
-                    'second_options' => ['label' => 'Confirmer le mot de passe' , 'attr' => ['placeholder'=> 'Confirmation du mot de passe']],
+                    'first_options' => [
+                        'constraints' => [
+                            new NotBlank([
+                                'message' => 'Veuillez entrer un mot de passe',
+                            ]),
+                            new Length([
+                                'min' => 6,
+                                'minMessage' => 'Le mot de passe doit comporter au minimum 6 charactères.',
+                                // max length allowed by Symfony for security reasons
+                                'max' => 30,
+                            ]),
+                        ],
+                        'label' => 'Nouveau mot de passe',
+                        'attr' => ['placeholder' => 'Nouveau mot de passe']],
+                    'second_options' => ['label' => 'Confirmer le mot de passe', 'attr' => ['placeholder' => 'Confirmation du mot de passe']],
                     'invalid_message' => 'Les mots de passe ne sont pas identiques',
                 ))
                 ->add('submit', SubmitType::class, ['label' => 'Créer le compte'])
