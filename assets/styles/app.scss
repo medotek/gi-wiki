@@ -444,8 +444,19 @@ body {
 
 @media screen and (min-width: 768px) {
   body {
+    margin-bottom: 100px;
     .gi-container {
       margin: 0 50px;
+
+
+      .mentions-legales {
+        position: fixed;
+        bottom: 0;
+        left: 225px;
+        z-index: 1;
+        background: linear-gradient(0, $giwiki-light-blue, transparent);
+        padding:20px;
+      }
     }
 
     .copyright-header {

@@ -90,7 +90,6 @@
             </div>
             <div id="uidProfile">
 
-
                 {% if uidProfile[0][0][0] == 1 %}
                     {# {{ dump(uidProfile) }} #}
                     {# {{ dump(uidCharacters) }} #}
@@ -100,12 +99,19 @@
                             sur le site hoyolab.com/genshin dans la rubrique "compte"
                         </div>
                     {% else %}
-                        <ul>
-                            {% for key, value in uidProfile[0][2][1] %}
-                                <li>{{ key }}: {{ value }}</li>
-                            {% endfor %}
-                            <li> {{ uidReloadDate|date("d/m/Y H:i") }}</li>
-                        </ul>
+                        <div class="user-info">
+{#                            {{ dump(uidProfile[0][2][1]) }}#}
+                                <div class="user-info-details">
+                                    <span style="display: none">achievement_number </span> {{ uidProfile[0][2][1]['achievement_number'] }}
+                                </div>
+                                <div class="user-info-details">
+                                    <span style="display: none"> active_day_number </span> {{ uidProfile[0][2][1]['active_day_number'] }}
+                                </div>
+                                <div class="user-info-details">
+                                    <span style="display: none"> spiral_abyss </span> {{ uidProfile[0][2][1]['spiral_abyss'] }}
+                                </div>
+                        </div>
+                        <div class="reloadDate">Dernière mise à jour des infos UID : {{ uidReloadDate|date("d/m/Y H:i") }}</div>
                     {% endif %}
                 {% else %}
                     <div class="uid-error">UID non enregistrés</div>
@@ -126,17 +132,11 @@
                             {% for characters in uidCharacters %}
                                 <div class="user-character">
                                     {# Get character icon url #}
-                                    <img src="{{ characters.icon }}" alt="" width="50px" height="auto">
+
+                                    <img class="character-icon" src="{{ characters.icon }}" alt="" width="50px"
+                                         height="50px">
                                     <div class="character-constellations">
-                                        {# {% set constNumber = 0 %} #}
-                                        {# #}{# Get character constellations #}
-                                        {# {% for constellation in characters.constellations %} #}
-                                        {# {% if constellation.is_actived %} #}
-                                        {# {% set constNumber = constNumber + 1 %} #}
-                                        {# {% endif %} #}
-                                        {# {% endfor %} #}
-                                        {# C{{ constNumber }} #}
-                                        C{{ characters.constellations_number }}
+                                        C{{ characters.constellations_number }}<br>
                                     </div>
                                     <div class="character-weapon">
                                         <img src="{{ characters.weapon.icon }}" alt="{{ characters.weapon.name }}">
@@ -157,6 +157,7 @@
                                             </ul>
                                         {% endif %}
                                     </div>
+                                    <div class="character-name">{{ characters.name }}</div>
                                 </div>
                             {% endfor %}
                         {% endif %}
