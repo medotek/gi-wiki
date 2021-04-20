@@ -11,11 +11,11 @@
                 {% endif %}
 
                 <h1 class="h3 mb-3 font-weight-normal">Se connecter</h1>
-                <input placeholder="Nom d'utilisateur" type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control"
-                       required
-                       autofocus><br>
-                <input placeholder="Mot de passe" type="password" name="password" id="inputPassword"
-                       class="form-control" required>
+                <label for="inputEmail"></label><input placeholder="Nom d'utilisateur" type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control"
+                                                       required
+                                                       autofocus><br>
+                <label for="inputPassword"></label><input placeholder="Mot de passe" type="password" name="password" id="inputPassword"
+                                                          class="form-control" required>
 
                 <input type="hidden" name="_csrf_token"
                        value="{{ csrf_token('authenticate') }}"
@@ -32,6 +32,9 @@
 
                 <div class="register-link">
                     Pas encore inscrit ?   <a href="{{ path('register') }}">Clique ici</a>
+                </div>
+                <div class="register-link">
+                    Mot de passe oublié?   <a href="{{ path('app_forgot_password_request') }}">Par ici</a>
                 </div>
             </form>
         </div>
