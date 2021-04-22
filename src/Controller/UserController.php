@@ -203,7 +203,6 @@ class UserController extends AbstractController
             }
         }
 
-        $uidLastReloadDate = null;
 //            dump($uidCharacters);
         if (array_key_exists("code", $uidCharacters)) {
             $charactersSet['code'] = $uidCharacters['code'];
@@ -264,8 +263,9 @@ class UserController extends AbstractController
                         }
 
                         foreach ($keys as $key) {
+                            //includes all effect from the set
+                            $characterSets[] = $reliquariesSet[$key]['affixes'][0];
                             $characterSets[] = $reliquariesSet[$key]['affixes'][1];
-
                         }
 
                         /*Add the new column to the character array*/
@@ -312,10 +312,9 @@ class UserController extends AbstractController
                 }
 
             } /* end foreach*/
+            /* @var UidReloadDate $reloadDate */
             if ($firstCharacter !== null) {
                 $reloadDate = $this->entityManager->getRepository(UidReloadDate::class)->findOneBy(['User' => $user, 'uid' => $user->getUid()]);
-                /* @var UidReloadDate $reloadDate */
-                dump($reloadDate);
                 $reloadDate->setLastDate(new \DateTime());
                 $entityManager->persist($reloadDate);
                 $entityManager->flush();
@@ -323,7 +322,6 @@ class UserController extends AbstractController
                 $reloadDate = $this->entityManager->getRepository(UidReloadDate::class)->findOneBy(['User' => $user, 'uid' => $user->getUid()]);
                 /* @var UidReloadDate $reloadDate */
                 if ($reloadDate !== null) {
-                    dump($reloadDate);
                     $reloadDate->setLastDate(new \DateTime());
                     $entityManager->persist($reloadDate);
                     $entityManager->flush();
@@ -361,7 +359,6 @@ class UserController extends AbstractController
 
         $userUidCharacters = $this->entityManager->getRepository(UserUidCharacter::class)->findBy(['user' => $this->getCurrentUser()->getId(), 'uid' => $this->getCurrentUser()->getUid()]);
 
-        dump($this->getCurrentUser());
         $uidMap = [];
         $newUidCharacters = [];
         $uidLastReloadDate = null;
