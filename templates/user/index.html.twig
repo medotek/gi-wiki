@@ -77,9 +77,9 @@
                                name="uid"
                                class="form-control is-disabled"
                                value="{{ uidNumber }}" disabled>
-                        <button type="button" class="btn-edit js-edit">Editer</button>
-                        <button type="button" class="btn-cancel js-cancel">Annuler</button>
-                        <input type="submit" class="btn-save js-save" value="Valider">
+                        <button type="button" class="btn-edit js-edit"><i class="fas fa-pen"></i></button>
+                        <button type="button" class="btn-cancel js-cancel"><i class="fas fa-times"></i></button>
+                        <button type="submit" class="btn-save js-save"><i class="fas fa-check"></i></button>
                     </form>
                 </div>
             </div>
@@ -100,18 +100,27 @@
                         </div>
                     {% else %}
                         <div class="user-info">
-{#                            {{ dump(uidProfile[0][2][1]) }}#}
-                                <div class="user-info-details">
-                                    <span style="display: none">achievement_number </span> {{ uidProfile[0][2][1]['achievement_number'] }}
-                                </div>
-                                <div class="user-info-details">
-                                    <span style="display: none"> active_day_number </span> {{ uidProfile[0][2][1]['active_day_number'] }}
-                                </div>
-                                <div class="user-info-details">
-                                    <span style="display: none"> spiral_abyss </span> {{ uidProfile[0][2][1]['spiral_abyss'] }}
-                                </div>
+                            <div class="user-info-details">
+                                <span style="display: none">Succès </span><i class="fas fa-trophy"></i> {{ uidProfile[0][2][1]['achievement_number'] }}
+                            </div>
+                            <div class="user-info-details">
+                                <span style="display: none">Jours de connexion</span> <i class="far fa-calendar-alt"></i>  {{ uidProfile[0][2][1]['active_day_number'] }}
+                            </div>
+                            <div class="user-info-details">
+                                <span style="display: none"> Abysse </span><i class="fas fa-medal"></i> {{ uidProfile[0][2][1]['spiral_abyss'] }}
+                            </div>
                         </div>
-                        <div class="reloadDate">Dernière mise à jour des infos UID : {{ uidReloadDate|date("d/m/Y H:i") }}</div>
+                        {# | format_datetime('full', locale='fr') | date("d/m/Y H:i", "Europe/Paris")) #}
+                        <div class="reloadDate">Dernière mise à jour des infos UID
+                            : {{ uidReloadDate | format_datetime('full', locale='fr') }}</div>
+                        <div class="filterDisplay">
+                            <div class="horizontalFilter filterActive">
+                                <i class="fas fa-stream"></i>
+                            </div>
+                            <div class="gridFilter">
+                                <i class="fas fa-border-all"></i>
+                            </div>
+                        </div>
                     {% endif %}
                 {% else %}
                     <div class="uid-error">UID non enregistrés</div>
@@ -129,12 +138,14 @@
                         {% if uidProfile[0][1][1] == "Data is not public for the user" %}
                             {# display nothing #}
                         {% else %}
-                            {% for characters in uidCharacters %}
-                                <div class="user-character">
+                            {% for index ,characters in uidCharacters %}
+                                <div class="user-character" id="user-character">
+                                    <span class="jsCharacterData" style="display: none" data-characters="{{ characters|json_encode }}"></span>
                                     {# Get character icon url #}
-
-                                    <img class="character-icon" src="{{ characters.icon }}" alt="" width="50px"
-                                         height="50px">
+                                    <div class="character-image">
+                                        <img class="character-icon" src="{{ characters.icon }}" alt="" width="50px"
+                                             height="50px">
+                                    </div>
                                     <div class="character-constellations">
                                         C{{ characters.constellations_number }}<br>
                                     </div>
@@ -151,6 +162,7 @@
                                         {% if characters.extra is not empty %}
                                             <ul>
                                                 {% for sets in characters.extra.sets %}
+
                                                     <li><b>{{ sets.activation_number }} pièces </b>: {{ sets.effect }}
                                                     </li>
                                                 {% endfor %}
@@ -171,14 +183,13 @@
             </div>
             <div class="builds">
                 <ul>
-                    {% for build in userBuild %}s
+                    {% for build in userBuild %}
                         <li>{{ build[1][0].name }}</li>
                     {% endfor %}
                 </ul>
                 <a href="{{ path('profile-builds') }}" class="all-builds-detail">Voir tous mes builds</a>
             </div>
         </div>
-
-
     </div>
+
 {% endblock %}
