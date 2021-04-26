@@ -101,13 +101,16 @@
                     {% else %}
                         <div class="user-info">
                             <div class="user-info-details">
-                                <span style="display: none">Succès </span><i class="fas fa-trophy"></i> {{ uidProfile[0][2][1]['achievement_number'] }}
+                                <span style="display: none">Succès </span><i
+                                        class="fas fa-trophy"></i> {{ uidProfile[0][2][1]['achievement_number'] }}
                             </div>
                             <div class="user-info-details">
-                                <span style="display: none">Jours de connexion</span> <i class="far fa-calendar-alt"></i>  {{ uidProfile[0][2][1]['active_day_number'] }}
+                                <span style="display: none">Jours de connexion</span> <i
+                                        class="far fa-calendar-alt"></i> {{ uidProfile[0][2][1]['active_day_number'] }}
                             </div>
                             <div class="user-info-details">
-                                <span style="display: none"> Abysse </span><i class="fas fa-medal"></i> {{ uidProfile[0][2][1]['spiral_abyss'] }}
+                                <span style="display: none"> Abysse </span><i
+                                        class="fas fa-medal"></i> {{ uidProfile[0][2][1]['spiral_abyss'] }}
                             </div>
                         </div>
                         {# | format_datetime('full', locale='fr') | date("d/m/Y H:i", "Europe/Paris")) #}
@@ -119,6 +122,19 @@
                             </div>
                             <div class="gridFilter">
                                 <i class="fas fa-border-all"></i>
+                            </div>
+
+                            <div class="element-filter">
+                                <button class="all"  data-filter="*">All</button>
+                                <button class="geo"  data-filter=".geo:not(.transition)">Geo</button>
+                                <button class="cryo"  data-filter=".cryo:not(.transition)">Cryo</button>
+                                <button class="anemo"  data-filter=".anemo:not(.transition)">Anemo</button>
+                                <button class="pyro"  data-filter=".pyro:not(.transition)">Pyro</button>
+                                <button class="electro"  data-filter=".electro:not(.transition)">Electro</button>
+                                <button class="hydro"  data-filter=".hydro:not(.transition)">Hydro</button>
+                                <button class="rarity-4"  data-filter=".rarity-4">4*</button>
+                                <button class="rarity-5"  data-filter=".rarity-5">5*</button>
+
                             </div>
                         </div>
                     {% endif %}
@@ -139,8 +155,9 @@
                             {# display nothing #}
                         {% else %}
                             {% for index ,characters in uidCharacters %}
-                                <div class="user-character" id="user-character">
-                                    <span class="jsCharacterData" style="display: none" data-characters="{{ characters|json_encode }}"></span>
+                                <div class="user-character {{ characters.element|lower }} rarity-{{ characters.rarity }} level-{{ characters.level }} affinity-{{ characters.fetter }}" id="user-character">
+                                    <span class="jsCharacterData" style="display: none"
+                                          data-characters="{{ characters|json_encode }}"></span>
                                     {# Get character icon url #}
                                     <div class="character-image">
                                         <img class="character-icon" src="{{ characters.icon }}" alt="" width="50px"
@@ -150,12 +167,16 @@
                                         C{{ characters.constellations_number }}<br>
                                     </div>
                                     <div class="character-weapon">
+                                        <span data-weapon="{{ characters.weapon|json_encode }}" style="display:none"></span>
                                         <img src="{{ characters.weapon.icon }}" alt="{{ characters.weapon.name }}">
                                     </div>
                                     <div class="character-artifacts">
                                         {% for artifacts in characters.reliquaries %}
-                                            <img class="artifact-{{ artifacts.pos }}" src="{{ artifacts.icon }}"
-                                                 alt="{{ artifacts.name }}">
+{#                                            <div class="artifact">#}
+                                                <span class="artifact-{{ artifacts.pos }}" data-artifacts="{{ artifacts|json_encode }}" style="display:none"></span>
+                                                <img class="artifact-{{ artifacts.pos }}" src="{{ artifacts.icon }}"
+                                                     alt="{{ artifacts.name }}">
+{#                                            </div>#}
                                         {% endfor %}
                                     </div>
                                     <div class="sets-effect">
@@ -170,6 +191,11 @@
                                         {% endif %}
                                     </div>
                                     <div class="character-name">{{ characters.name }}</div>
+                                    <div id="characterCardJs">
+                                        <div class="characterCard-name">
+                                            {{ characters.name }}
+                                        </div>
+                                    </div>
                                 </div>
                             {% endfor %}
                         {% endif %}

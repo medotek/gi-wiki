@@ -15,6 +15,27 @@ $(document).ready(function () {
         // set layoutMode
         layoutMode: 'vertical'
     });
+
+    var filterFns = {
+        // show if number is greater than 50
+        numberGreaterThan50: function () {
+            var number = $(this).find('.number').text();
+            return parseInt(number, 10) > 50;
+        },
+        // show if name ends with -ium
+        ium: function () {
+            var name = $(this).find('.name').text();
+            return name.match(/ium$/);
+        }
+    };
+
+    $('.element-filter').on('click', 'button', function () {
+        var filterValue = $(this).attr('data-filter');
+        // use filterFn if matches value
+        filterValue = filterFns[filterValue] || filterValue;
+        $grid.isotope({filter: filterValue});
+    });
+
     /*AJAX LOADER*/
 
     $("#user-build-remove").click(function () {
@@ -107,7 +128,7 @@ $(document).ready(function () {
     $('.gridFilter').click(function () {
         $('.horizontalFilter').removeClass("filterActive");
         $(this).addClass("filterActive");
-
+        $grid.isotope({filter: '*'});
         $('.user-profile .section-user-builds #uidProfile .iudCharacters .user-character').css({
             'display': 'block',
             'width': 'auto',
@@ -115,11 +136,23 @@ $(document).ready(function () {
             'min-height': 'inherit',
             'border-radius': '5px',
             'padding': '5px',
-            'margin': '15px'
+            'margin': '15px',
+            'height': 'auto',
+
         });
+
+        $('.user-profile .section-user-builds #uidProfile .iudCharacters .user-character .character-image .character-icon').css({
+            'width': 80,
+            'height': 80,
+            'border-top-left-radius': 5,
+            'border-top-right-radius': 5,
+        })
+
         $('.character-constellations, .character-weapon, .character-artifacts, .sets-effect, .character-name').css({
             'display': 'none',
         });
+
+        $('.iudCharacters > .user-character').addClass('cells');
         $grid.isotope({
             layoutMode: 'cellsByRow',
             itemSelector: '.user-character',
@@ -133,11 +166,11 @@ $(document).ready(function () {
     $('.horizontalFilter').click(function () {
         $('.gridFilter').removeClass("filterActive");
         $(this).addClass("filterActive");
-
-        const characterDatas = $('.iudCharacters.user-character');
-        characterDatas.each(function () {
-            console.log(characterDatas);
-        })
+        $grid.isotope({filter: '*'});
+        // // const characterDatas = $('.iudCharacters.user-character');
+        // characterDatas.each(function () {
+        //     // console.log(characterDatas);
+        // })
 
         $('.character-constellations, .character-weapon, .character-artifacts, .sets-effect, .character-name').css({
             'display': '',
@@ -152,6 +185,8 @@ $(document).ready(function () {
             'padding': ''
         });
 
+        $('.iudCharacters > .user-character').removeClass('cells');
+
         $grid.isotope({
             layoutMode: 'vertical',
             itemSelector: '.user-character',
@@ -163,12 +198,71 @@ $(document).ready(function () {
 
     });
 
-    $('#user-character > .jsCharacterData').each(function(index, item) {
-        const characterData = $(item).data('characters');
-        $(item).parent().on('mouseenter', function() {
-            // console.log((characterData));
-        });
-    });
 
-});
+            $('#user-character > .jsCharacterData').each(function (index, item) {
+                // const characterData = $(item).data('characters')
+
+                $(item).parent().children('#characterCardJs').css({
+                    "display": ""
+                })
+
+
+                // setTimeout(function () {
+                //     $(item).parent().on('mouseenter', function () {
+                //         if ($('.gridFilter').hasClass('filterActive')) {
+                //             // console.log((characterData));
+                //
+                //             setTimeout(function () {
+                //                 $(item).parent().children('#characterCardJs').css({
+                //                     "opacity": "0",
+                //                     "display": "block",
+                //                 }).show().animate({opacity: 1}, 100)
+                //             }, 500);
+                //         }
+                //     }).on('mouseleave', function () {
+                //         if ($('.gridFilter').hasClass('filterActive')) {
+                //
+                //             setTimeout(function () {
+                //                 $(item).parent().children('#characterCardJs').css({
+                //                     "opacity": "1",
+                //                     "display": "none"
+                //                 }).hide().animate({opacity: 0}, 100)
+                //             }, 500);
+                //         }
+                //     });
+                // }, 200);
+
+
+                $(item).parent().on('mouseenter', function () {
+                    $(this).addClass('campaign-hover');
+                    updateHover();
+                }).on('mouseleave', function () {
+                    $('.campaign-hover').removeClass('campaign-hover');
+                    updateHover();
+                });
+
+                // var offset = $("#characterCardJs").offset();
+                // var posY = offset.top - $(window).scrollTop();
+                // var posX = offset.left - $(window).scrollLeft();
+
+                function updateHover() {
+                    if ($(item).parent().hasClass('campaign-hover') && $('.gridFilter').hasClass('filterActive')) {
+                        $(item).parent().children('#characterCardJs').css({
+                            "opacity": "0",
+                            "display": "block",
+                        }).show().animate({opacity: 1}, 100)
+                    } else {
+                        $(item).parent().children('#characterCardJs').css({
+                            "opacity": "1",
+                            "display": "none"
+                        }).hide().animate({opacity: 0}, 100)
+
+
+                    }
+
+
+                }
+
+    });
+})
 

@@ -217,6 +217,22 @@
             }
           }
 
+          .hovercard {
+            display: none;
+          }
+
+          #characterCardJs {
+            z-index: 3;
+            width: 200px;
+            height: 400px;
+            display: none;
+            background-color: white;
+            border-radius: 20px;
+            position: absolute;
+            left: 100%;
+            top: -100px;
+          }
+
           .character-constellations {
             align-self: center;
             z-index: 1;
