@@ -65,6 +65,8 @@ $(document).ready(function () {
                         columnWidth: ''
                     }
                 });
+
+
             }
         } else {
             $(this).removeClass('active-filter');
@@ -211,6 +213,8 @@ $(document).ready(function () {
                 isFitWidth: true
             }
         })
+
+        $('#constellation-filter').removeClass('active-filter')
     });
 
 
@@ -254,7 +258,98 @@ $(document).ready(function () {
         $character.on('click', '.user-character', function () {
             $character.find('.active-character').removeClass('active-character');
             $(this).addClass('active-character');
-        });
+
+            if ($(this).has('.active-character'))
+
+
+                $('.uidCharacters').css({
+                    width: '60%'
+                })
+
+            $grid.isotope({
+                masonry: {
+                    columnWidth: ''
+                }
+            })
+
+            var characterInfo =
+                '<div id="character-info-isotope">' +
+                '' +
+                '</div>';
+            $(this).parent().after(characterInfo);
+            var stickyInfoTop = $('#character-info-isotope').offset().top;
+
+
+            var stickyCharacterInfo = function () {
+                var scrollTop = $(window).scrollTop();
+
+                if (scrollTop > stickyInfoTop) {
+                    $('#character-info-isotope').css({
+                        position: 'fixed',
+                        top: '10px',
+                        transform: 'inherit',
+                        width: $('#uidProfile').width() * 0.4,
+                        right: ($(window).width() - ($('#uidProfile').offset().left + $('#uidProfile').outerWidth()))
+                    }).addClass('sticky');
+
+                    var link = $('#character-info-isotope');
+
+
+                } else {
+                    $('#character-info-isotope').css({
+                        width: '',
+                        position: '',
+                        right: '',
+                        top: '',
+                        transform: '',
+                        height: ''
+                    }).removeClass('sticky');
+                }
+            };
+
+            stickyCharacterInfo();
+
+            $(window).on('scroll', function () {
+                stickyCharacterInfo();
+
+                var $el1 = $('.uidCharacters'),
+                    scrollTop1 = $(this).scrollTop(),
+                    scrollBot1 = scrollTop1 + $(this).height(),
+                    elTop1 = $el1.offset().top,
+                    elBottom1 = elTop1 + $el1.outerHeight(),
+                    visibleTop1 = elTop1 < scrollTop1 ? scrollTop1 : elTop1,
+                    visibleBottom1 = elBottom1 > scrollBot1 ? scrollBot1 : elBottom1;
+                var yikes1 = visibleBottom1 - visibleTop1
+
+                if ($('#character-info-isotope').hasClass('sticky')) {
+                    if (yikes1 < $('#character-info-isotope').height()) {
+                        $('#character-info-isotope').css({
+                            width: '',
+                            position: '',
+                            right: '',
+                            top: 'inherit',
+                            bottom: 0,
+                            transform: 'none',
+                            height: ''
+                        });
+                    }
+                }
+            });
+        })
+            // Remove active class on re-click
+            .on('click', '.active-character', function () {
+                $(this).removeClass('active-character');
+                $('.uidCharacters').css({
+                    width: ''
+                })
+
+                $grid.isotope({
+                    masonry: {
+                        columnWidth: ''
+                    }
+                })
+            });
+        ;
     });
 
     $('#user-character > .jsCharacterData').each(function (index, item) {
