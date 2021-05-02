@@ -9,22 +9,25 @@ jQueryBridget('isotope', Isotope, $);
 
 $(document).ready(function () {
 
-    const $grid = $('.iudCharacters').isotope({
+    const $grid = $('.uidCharacters').isotope({
         // main isotope options
         itemSelector: '.user-character',
         // set layoutMode
-        layoutMode: 'vertical'
+        layoutMode: 'vertical',
+        getSortData: {
+            constellations: '[data-constellations] parseInt'
+        },
     });
 
     var filterFns = {
         // show if number is greater than 50
         numberGreaterThan50: function () {
-            var number = $(this).find('.number').text();
+            var number = $(this).has('.number').text();
             return parseInt(number, 10) > 50;
         },
         // show if name ends with -ium
         ium: function () {
-            var name = $(this).find('.name').text();
+            var name = $(this).has('.name').text();
             return name.match(/ium$/);
         }
     };
@@ -33,8 +36,56 @@ $(document).ready(function () {
         var filterValue = $(this).attr('data-filter');
         // use filterFn if matches value
         filterValue = filterFns[filterValue] || filterValue;
-        $grid.isotope({filter: filterValue});
+        $grid.isotope({
+            filter: filterValue,
+        });
+    }).each(function (i, buttonGroup) {
+        var $buttonGroup = $(buttonGroup);
+        $buttonGroup.on('click', 'button', function () {
+            $buttonGroup.find('.active-filter').removeClass('active-filter');
+            $(this).addClass('active-filter');
+        });
     });
+
+    $('#constellation-filter').click(function () {
+
+        if (!$(this).hasClass('active-filter')) {
+            $(this).addClass('active-filter');
+            $grid.isotope({
+                sortBy: 'constellations',
+                sortAscending: false
+            });
+            if ($('.gridFilter').hasClass('filterActive')) {
+                $('.character-constellations').css({
+                    display: 'block',
+                    textAlign: 'center'
+                })
+                $grid.isotope({
+                    masonry: {
+                        columnWidth: ''
+                    }
+                });
+            }
+        } else {
+            $(this).removeClass('active-filter');
+            $grid.isotope({
+                sortBy: ''
+            });
+
+            if ($('.gridFilter').hasClass('filterActive')) {
+                $('.character-constellations').css({
+                    display: 'none',
+                    textAlign: ''
+                })
+
+                $grid.isotope({
+                    masonry: {
+                        columnWidth: ''
+                    }
+                });
+            }
+        }
+    })
 
     /*AJAX LOADER*/
 
@@ -85,12 +136,12 @@ $(document).ready(function () {
             var $form = $(this).closest('form');
             $form.toggleClass('is-readonly is-editing');
             var isReadonly = $form.hasClass('is-readonly');
-            $form.find('#uid').prop('disabled', isReadonly);
+            $form.has('#uid').prop('disabled', isReadonly);
         } else {
             var $form = $(this).closest('form');
             $form.toggleClass('is-readonly is-editing');
             var isReadonly = $form.hasClass('is-readonly');
-            $form.find('#uid').prop('disabled', isReadonly);
+            $form.has('#uid').prop('disabled', isReadonly);
             return false;
         }
     })
@@ -104,7 +155,7 @@ $(document).ready(function () {
         var $form = $(this).closest('form');
         $form.toggleClass('is-readonly is-editing');
         var isReadonly = $form.hasClass('is-readonly');
-        $form.find('#uid').prop('disabled', isReadonly);
+        $form.has('#uid').prop('disabled', isReadonly);
     });
 
     $('.js-save').on('click', function () {
@@ -122,14 +173,14 @@ $(document).ready(function () {
         var $form = $(this).closest('form');
         $form.toggleClass('is-readonly is-editing');
         var isReadonly = $form.hasClass('is-readonly');
-        $form.find('#uid').prop('disabled', isReadonly);
+        $form.has('#uid').prop('disabled', isReadonly);
     });
 
     $('.gridFilter').click(function () {
         $('.horizontalFilter').removeClass("filterActive");
         $(this).addClass("filterActive");
         $grid.isotope({filter: '*'});
-        $('.user-profile .section-user-builds #uidProfile .iudCharacters .user-character').css({
+        $('.user-profile .section-user-builds #uidProfile .uidCharacters .user-character').css({
             'display': 'block',
             'width': 'auto',
             'max-height': 'inherit',
@@ -141,7 +192,7 @@ $(document).ready(function () {
 
         });
 
-        $('.user-profile .section-user-builds #uidProfile .iudCharacters .user-character .character-image .character-icon').css({
+        $('.user-profile .section-user-builds #uidProfile .uidCharacters .user-character .character-image .character-icon').css({
             'width': 80,
             'height': 80,
             'border-top-left-radius': 5,
@@ -152,7 +203,7 @@ $(document).ready(function () {
             'display': 'none',
         });
 
-        $('.iudCharacters > .user-character').addClass('cells');
+        $('.uidCharacters > .user-character').addClass('cells');
         $grid.isotope({
             layoutMode: 'cellsByRow',
             itemSelector: '.user-character',
@@ -176,7 +227,7 @@ $(document).ready(function () {
             'display': '',
         });
 
-        $('.user-profile .section-user-builds #uidProfile .iudCharacters .user-character').css({
+        $('.user-profile .section-user-builds #uidProfile .uidCharacters .user-character').css({
             'display': '',
             'width': '',
             'max-height': '',
@@ -185,7 +236,7 @@ $(document).ready(function () {
             'padding': ''
         });
 
-        $('.iudCharacters > .user-character').removeClass('cells');
+        $('.uidCharacters > .user-character').removeClass('cells');
 
         $grid.isotope({
             layoutMode: 'vertical',
@@ -198,70 +249,78 @@ $(document).ready(function () {
 
     });
 
+    $('.uidCharacters').each(function (index, item) {
+        var $character = $(item);
+        $character.on('click', '.user-character', function () {
+            $character.find('.active-character').removeClass('active-character');
+            $(this).addClass('active-character');
+        });
+    });
 
-            $('#user-character > .jsCharacterData').each(function (index, item) {
-                // const characterData = $(item).data('characters')
+    $('#user-character > .jsCharacterData').each(function (index, item) {
+        // const characterData = $(item).data('characters')
 
+        $(item).parent().children('#characterCardJs').css({
+            "display": ""
+        })
+
+
+        // setTimeout(function () {
+        //     $(item).parent().on('mouseenter', function () {
+        //         if ($('.gridFilter').hasClass('filterActive')) {
+        //             // console.log((characterData));
+        //
+        //             setTimeout(function () {
+        //                 $(item).parent().children('#characterCardJs').css({
+        //                     "opacity": "0",
+        //                     "display": "block",
+        //                 }).show().animate({opacity: 1}, 100)
+        //             }, 500);
+        //         }
+        //     }).on('mouseleave', function () {
+        //         if ($('.gridFilter').hasClass('filterActive')) {
+        //
+        //             setTimeout(function () {
+        //                 $(item).parent().children('#characterCardJs').css({
+        //                     "opacity": "1",
+        //                     "display": "none"
+        //                 }).hide().animate({opacity: 0}, 100)
+        //             }, 500);
+        //         }
+        //     });
+        // }, 200);
+
+
+        // $(item).parent()
+        //     .on('mouseenter', function () {
+        //     $(this).addClass('campaign-hover');
+        //     updateHover();
+        // }).on('mouseleave', function () {
+        //     $('.campaign-hover').removeClass('campaign-hover');
+        //     updateHover();
+        // })
+
+        // var offset = $("#characterCardJs").offset();
+        // var posY = offset.top - $(window).scrollTop();
+        // var posX = offset.left - $(window).scrollLeft();
+
+        function updateHover() {
+            if ($(item).parent().hasClass('campaign-hover') && $('.gridFilter').hasClass('filterActive')) {
                 $(item).parent().children('#characterCardJs').css({
-                    "display": ""
-                })
+                    "opacity": "0",
+                    "display": "block",
+                }).show().animate({opacity: 1}, 100)
+            } else {
+                $(item).parent().children('#characterCardJs').css({
+                    "opacity": "1",
+                    "display": "none"
+                }).hide().animate({opacity: 0}, 100)
 
 
-                // setTimeout(function () {
-                //     $(item).parent().on('mouseenter', function () {
-                //         if ($('.gridFilter').hasClass('filterActive')) {
-                //             // console.log((characterData));
-                //
-                //             setTimeout(function () {
-                //                 $(item).parent().children('#characterCardJs').css({
-                //                     "opacity": "0",
-                //                     "display": "block",
-                //                 }).show().animate({opacity: 1}, 100)
-                //             }, 500);
-                //         }
-                //     }).on('mouseleave', function () {
-                //         if ($('.gridFilter').hasClass('filterActive')) {
-                //
-                //             setTimeout(function () {
-                //                 $(item).parent().children('#characterCardJs').css({
-                //                     "opacity": "1",
-                //                     "display": "none"
-                //                 }).hide().animate({opacity: 0}, 100)
-                //             }, 500);
-                //         }
-                //     });
-                // }, 200);
+            }
 
 
-                $(item).parent().on('mouseenter', function () {
-                    $(this).addClass('campaign-hover');
-                    updateHover();
-                }).on('mouseleave', function () {
-                    $('.campaign-hover').removeClass('campaign-hover');
-                    updateHover();
-                });
-
-                // var offset = $("#characterCardJs").offset();
-                // var posY = offset.top - $(window).scrollTop();
-                // var posX = offset.left - $(window).scrollLeft();
-
-                function updateHover() {
-                    if ($(item).parent().hasClass('campaign-hover') && $('.gridFilter').hasClass('filterActive')) {
-                        $(item).parent().children('#characterCardJs').css({
-                            "opacity": "0",
-                            "display": "block",
-                        }).show().animate({opacity: 1}, 100)
-                    } else {
-                        $(item).parent().children('#characterCardJs').css({
-                            "opacity": "1",
-                            "display": "none"
-                        }).hide().animate({opacity: 0}, 100)
-
-
-                    }
-
-
-                }
+        }
 
     });
 })

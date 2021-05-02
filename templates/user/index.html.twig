@@ -125,24 +125,26 @@
                             </div>
 
                             <div class="element-filter">
-                                <button class="all"  data-filter="*">All</button>
-                                <button class="geo"  data-filter=".geo:not(.transition)">Geo</button>
-                                <button class="cryo"  data-filter=".cryo:not(.transition)">Cryo</button>
-                                <button class="anemo"  data-filter=".anemo:not(.transition)">Anemo</button>
-                                <button class="pyro"  data-filter=".pyro:not(.transition)">Pyro</button>
-                                <button class="electro"  data-filter=".electro:not(.transition)">Electro</button>
-                                <button class="hydro"  data-filter=".hydro:not(.transition)">Hydro</button>
-                                <button class="rarity-4"  data-filter=".rarity-4">4*</button>
-                                <button class="rarity-5"  data-filter=".rarity-5">5*</button>
-
+                                <button class="all active-filter" data-filter="*">All</button>
+                                <button class="geo" data-filter=".geo:not(.transition)">Geo</button>
+                                <button class="cryo" data-filter=".cryo:not(.transition)">Cryo</button>
+                                <button class="anemo" data-filter=".anemo:not(.transition)">Anemo</button>
+                                <button class="pyro" data-filter=".pyro:not(.transition)">Pyro</button>
+                                <button class="electro" data-filter=".electro:not(.transition)">Electro</button>
+                                <button class="hydro" data-filter=".hydro:not(.transition)">Hydro</button>
+                                <button class="rarity-4" data-filter=".rarity-4">4*</button>
+                                <button class="rarity-5" data-filter=".rarity-5">5*</button>
                             </div>
+                            <br>
+
+                            <button id="constellation-filter">Sort by constellations</button>
                         </div>
                     {% endif %}
                 {% else %}
                     <div class="uid-error">UID non enregistrés</div>
                 {% endif %}
 
-                <div class="iudCharacters">
+                <div class="uidCharacters">
                     {% if uidProfile[0][0][0] == 1 %}
                         {% if uidProfile[0][0][2] == -1 %}
                             <div class="new-character-error">Un nouveau personnage vient d'arriver... Veuillez patienter
@@ -155,9 +157,27 @@
                             {# display nothing #}
                         {% else %}
                             {% for index ,characters in uidCharacters %}
-                                <div class="user-character {{ characters.element|lower }} rarity-{{ characters.rarity }} level-{{ characters.level }} affinity-{{ characters.fetter }}" id="user-character">
-                                    <span class="jsCharacterData" style="display: none"
-                                          data-characters="{{ characters|json_encode }}"></span>
+                                <div class="user-character {{ characters.element|lower }} rarity-{{ characters.rarity }} level-{{ characters.level }} affinity-{{ characters.fetter }} "
+                                     data-constellations="{{ characters.constellations_number }}" id="user-character">
+                                    <span class="jsCharacterData" style="display: none">
+                                          <span id="characterDataId" data-characters-id="{{ characters.id }}"> </span>
+                                                <span data-characters-name="{{ characters.name }}"> </span>
+                                          <span id="characterDataIcon"
+                                                data-characters-icon="{{ characters.icon }}"> </span>
+                                                <span data-characters-image="{{ characters.image }}"> </span>
+                                          <span id="characterDataImage"
+                                                data-characters-fetter="{{ characters.fetter }}"> </span>
+                                                 <span data-characters-level="{{ characters.level }}"> </span>
+                                          <span id="characterDataRarity"
+                                                data-characters-rarity="{{ characters.rarity }}"> </span>
+                                                <span data-characters-weapon="{{ characters.weapon|json_encode }}"> </span>
+                                          <span id="characterDataReliquaries"
+                                                data-characters-reliquaries="{{ characters.reliquaries|json_encode }}"> </span>
+                                          <span id="characterDataConstellations"
+                                                data-characters-constellation-number="{{ characters.constellations_number }}"> </span>
+                                          <span id="characterDataExtra"
+                                                data-characters-extra="{{ characters.extra|json_encode }}"> </span>
+                                    </span>
                                     {# Get character icon url #}
                                     <div class="character-image">
                                         <img class="character-icon" src="{{ characters.icon }}" alt="" width="50px"
@@ -167,16 +187,19 @@
                                         C{{ characters.constellations_number }}<br>
                                     </div>
                                     <div class="character-weapon">
-                                        <span data-weapon="{{ characters.weapon|json_encode }}" style="display:none"></span>
+                                        <span data-weapon="{{ characters.weapon|json_encode }}"
+                                              style="display:none"></span>
                                         <img src="{{ characters.weapon.icon }}" alt="{{ characters.weapon.name }}">
                                     </div>
                                     <div class="character-artifacts">
                                         {% for artifacts in characters.reliquaries %}
-{#                                            <div class="artifact">#}
-                                                <span class="artifact-{{ artifacts.pos }}" data-artifacts="{{ artifacts|json_encode }}" style="display:none"></span>
-                                                <img class="artifact-{{ artifacts.pos }}" src="{{ artifacts.icon }}"
-                                                     alt="{{ artifacts.name }}">
-{#                                            </div>#}
+                                            {# <div class="artifact"> #}
+                                            <span class="artifact-{{ artifacts.pos }}"
+                                                  data-artifacts="{{ artifacts|json_encode }}"
+                                                  style="display:none"></span>
+                                            <img class="artifact-{{ artifacts.pos }}" src="{{ artifacts.icon }}"
+                                                 alt="{{ artifacts.name }}">
+                                            {# </div> #}
                                         {% endfor %}
                                     </div>
                                     <div class="sets-effect">

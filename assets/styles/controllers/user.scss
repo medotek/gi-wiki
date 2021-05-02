@@ -1,6 +1,17 @@
 @import '../global';
 
 /********************************************[User profile css]********************************************/
+.active-filter {
+  background-color: $giwiki-orange !important;
+  color: $giwiki-white !important;
+  border: none !important;
+  padding: 5px 10px !important;
+}
+
+.active-character {
+  border:2px solid $giwiki-orange !important;
+}
+
 .user-builds-overall {
   .user-build-edit {
     text-decoration: none;
@@ -30,26 +41,40 @@
     position: relative;
 
     .filterDisplay {
+
+      .element-filter {
+        width: calc(100% - 100px);
+        button {
+          margin-bottom: 5px;
+          border: none;
+          outline: none;
+          background-color: white;
+          color: $giwiki-dark-blue;
+          padding: 5px 10px;
+        }
+      }
+
       .gridFilter, .horizontalFilter {
         width: fit-content;
         position: absolute;
-        color:$giwiki-dark-blue;
-        background-color:$giwiki-white;
+        color: $giwiki-dark-blue;
+        background-color: $giwiki-white;
         padding: 10px;
         border-radius: 5px;
+
         svg {
           font-size: 25px;
         }
       }
 
       .gridFilter:hover, .horizontalFilter:hover {
-        background-color:$giwiki-orange;
-        color:$giwiki-white;
+        background-color: $giwiki-orange;
+        color: $giwiki-white;
       }
 
       .filterActive {
-        background-color:$giwiki-orange;
-        color:$giwiki-white;
+        background-color: $giwiki-orange;
+        color: $giwiki-white;
       }
 
       .horizontalFilter {
@@ -186,8 +211,8 @@
         font-weight: 600;
       }
 
-      .iudCharacters {
-        margin-top:50px;
+      .uidCharacters {
+        margin-top: 50px;
         display: flex;
         flex-wrap: wrap;
         align-items: flex-start;
@@ -213,7 +238,7 @@
             z-index: 1;
 
             .character-icon {
-              border-radius:50px;
+              border-radius: 50px;
             }
           }
 
@@ -395,7 +420,7 @@
 
     .section-user-builds {
       #uidProfile {
-        .iudCharacters {
+        .uidCharacters {
           .user-character {
             .sets-effect {
               ul {
