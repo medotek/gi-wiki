@@ -336,13 +336,29 @@ class UserController extends AbstractController
         return $uidMap;
     }
 
-    public function getUserUidReloadDate(): ?\DateTimeInterface
+    /**
+     * @return \App\Entity\UidReloadDate|object|null
+     */
+    public function getUserUidReloadDate()
     {
 
         /* @var UidReloadDate $uidReloadDate */
-        $uidReloadDate = $this->entityManager->getRepository(UidReloadDate::class)->findOneBy(['uid' => $this->getCurrentUser()->getUid(), 'User' => $this->getCurrentUser()]);
+        if ($this->entityManager->getRepository(UidReloadDate::class)->findOneBy(['uid' => $this->getCurrentUser()->getUid(), 'User' => $this->getCurrentUser()]) === null) {
+            $yes = null;
+        } else {
+            $uidReloadDate = $this->entityManager->getRepository(UidReloadDate::class)->findOneBy(['uid' => $this->getCurrentUser()->getUid(), 'User' => $this->getCurrentUser()]);
 
-        return $uidReloadDate->getLastDate();
+           $yes = $uidReloadDate->getLastDate();
+        }
+        return  $yes;
+    }
+
+    /**
+     * @Route("/account/profile/uid-reload", name="user-uid-reload")
+     */
+    public function reloadCharactersInfo()
+    {
+
     }
 
     /**
