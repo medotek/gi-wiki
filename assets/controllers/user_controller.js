@@ -136,12 +136,12 @@ $(document).ready(function () {
             var $form = $(this).closest('form');
             $form.toggleClass('is-readonly is-editing');
             var isReadonly = $form.hasClass('is-readonly');
-            $form.has('#uid').prop('disabled', isReadonly);
+            $('#uid').prop('disabled', isReadonly);
         } else {
             var $form = $(this).closest('form');
             $form.toggleClass('is-readonly is-editing');
             var isReadonly = $form.hasClass('is-readonly');
-            $form.has('#uid').prop('disabled', isReadonly);
+            $('#uid').prop('disabled', isReadonly);
             return false;
         }
     })
@@ -155,7 +155,7 @@ $(document).ready(function () {
         var $form = $(this).closest('form');
         $form.toggleClass('is-readonly is-editing');
         var isReadonly = $form.hasClass('is-readonly');
-        $form.has('#uid').prop('disabled', isReadonly);
+        $('#uid').prop('disabled', isReadonly);
     });
 
     $('.js-save').on('click', function () {
@@ -173,7 +173,7 @@ $(document).ready(function () {
         var $form = $(this).closest('form');
         $form.toggleClass('is-readonly is-editing');
         var isReadonly = $form.hasClass('is-readonly');
-        $form.has('#uid').prop('disabled', isReadonly);
+        $('#uid').prop('disabled', isReadonly);
     });
 
     $('.gridFilter').click(function () {
