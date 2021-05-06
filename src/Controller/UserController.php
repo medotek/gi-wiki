@@ -336,6 +336,153 @@ class UserController extends AbstractController
         return $uidMap;
     }
 
+
+    /**
+     * Reload characters for an uid user by conditons
+     * @Route("/account/profile/uid-reload-characters", name="user-uid-characters-reload")
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function reloadUserGenshinInfo(): RedirectResponse
+    {
+        $charactersSet = [];
+        $characterKey = 0;
+        $newUidCharacters = [];
+
+
+        $userUidCharacters = $this->entityManager->getRepository(UserUidCharacter::class)->findBy(['user' => $this->getCurrentUser()->getId(), 'uid' => $this->getCurrentUser()->getUid()]);
+        $entityManager = $this->getDoctrine()->getManager();
+        foreach ($userUidCharacters as $userUidCharacter) {
+            $entityManager->remove($userUidCharacter);
+            $entityManager->flush();
+        }
+
+        $uidProfile = $this->getProfileByUID('getuserinfo', $this->getCurrentUser()->getUid());
+        $uidCharacters = $this->getProfileByUID('getusercharacters', $this->getCurrentUser()->getUid());
+
+//            dump($uidCharacters);
+        if (array_key_exists("code", $uidCharacters)) {
+            $charactersSet['code'] = $uidCharacters['code'];
+        } else {
+            foreach ($uidCharacters as $characters) {
+
+                $characterKey++;
+                dump($characters['reliquaries']);
+                $characterReliquaries[] = $characters['reliquaries'];
+                /*access to the current key of the characterReliquaries array*/
+
+                $reliquariesId = [];
+                $reliquariesSet = [];
+                foreach ($characterReliquaries[$characterKey - 1] as $reliquary) {
+                    $reliquariesId[] = $reliquary['set']['id'];
+                    $reliquariesSet[] = $reliquary['set'];
+                }
+
+                $counts = array_count_values($reliquariesId);
+
+                $setEffectId = [];
+                $setsEffectId = [];
+                /*Verify if there is any duplicate values on an array given*/
+                foreach ($counts as $id => $count) {
+                    /*if there is more than 1 duplicate values execute : */
+                    if ($count > 1 & $count < 4) {
+                        $setEffectId[] = $id;
+                    } else {
+                        if ($count >= 4) /*if there is 4 or more than 4 duplicate values execute : */ {
+                            $setsEffectId[] = $id;
+                        }
+                    }
+
+                }
+
+                if (!empty($setEffectId)) {
+                    $keys = [];
+
+                    /*Get keys for a value given in an array*/
+                    $characterSets = [];
+                    foreach ($setEffectId as $id) {
+                        $keys[] = array_search($id, array_column($reliquariesSet, 'id'));
+                    }
+
+                    /* push sets of $reliquariesSet by an extracted key in a new array*/
+                    foreach ($keys as $key) {
+                        $characterSets[] = $reliquariesSet[$key]['affixes'][0];
+                    }
+
+                    /*Add the new column to the character array*/
+                    $characters['extra'] = ['sets' => $characterSets];
+                } else {
+                    if (!empty($setsEffectId)) {
+                        $keys = [];
+                        $characterSets = [];
+
+                        foreach ($setsEffectId as $id) {
+                            $keys[] = array_search($id, array_column($reliquariesSet, 'id'));
+                        }
+
+                        foreach ($keys as $key) {
+                            //includes all effect from the set
+                            $characterSets[] = $reliquariesSet[$key]['affixes'][0];
+                            $characterSets[] = $reliquariesSet[$key]['affixes'][1];
+                        }
+
+                        /*Add the new column to the character array*/
+                        $characters['extra'] = ['sets' => $characterSets];
+                    }
+                }
+
+                $number = 0;
+                foreach ($characters['constellations'] as $constellation) {
+                    if ($constellation['is_actived']) {
+                        $number++;
+                    }
+                }
+
+                $characters['constellations_number'] = $number;
+
+                /*if the array hasn't got the extra column, push one in it which is empty */
+                if (!array_key_exists("extra", (array)$characters)) {
+                    $characters['extra'] = [];
+                }
+
+
+                /*if the user has no character with his uid then store them all in the db*/
+
+                if ($userUidCharacters === []) {
+                    /* TODO: REPLACE THE DATE WITH A NEW DATE IF THE UID EXISTS IN ; DO NOT DELETE THE DATA JUST CHANGE IT*/
+                    $userUidCharacter = new UserUidCharacter();
+                    $userUidCharacter->setUid($this->getCurrentUser()->getUid());
+                    $userUidCharacter->setUser($this->getCurrentUser());
+                    $userUidCharacter->setCharacterId((int)$characters['id']);
+                    $userUidCharacter->setUidCharacterInfo((array)$characters);
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($userUidCharacter);
+                    $entityManager->flush();
+
+                    $currentUser = $this->getCurrentUser();
+                    $currentUser->setUserUidInfo($uidProfile);
+                    $entityManager->persist($currentUser);
+                    $entityManager->flush();
+
+                    /*Push characters (with a new column) on a new array*/
+                    $newUidCharacters[] = $characters;
+
+                }
+
+            } /* end foreach*/
+
+            $reloadDate = $this->entityManager->getRepository(UidReloadDate::class)->findOneBy(['User' => $this->getCurrentUser(), 'uid' => $this->getCurrentUser()->getUid()]);
+            /* @var UidReloadDate $reloadDate */
+            if ($reloadDate !== null) {
+                $reloadDate->setLastDate(new \DateTime());
+                $entityManager->persist($reloadDate);
+                $entityManager->flush();
+            } else {
+                $this->addUidReloadDate($userUidCharacters);
+            }
+        }
+        return $this->redirectToRoute('user');
+    }
+
     /**
      * @return \App\Entity\UidReloadDate|object|null
      */
@@ -348,9 +495,9 @@ class UserController extends AbstractController
         } else {
             $uidReloadDate = $this->entityManager->getRepository(UidReloadDate::class)->findOneBy(['uid' => $this->getCurrentUser()->getUid(), 'User' => $this->getCurrentUser()]);
 
-           $yes = $uidReloadDate->getLastDate();
+            $yes = $uidReloadDate->getLastDate();
         }
-        return  $yes;
+        return $yes;
     }
 
     /**
@@ -378,7 +525,7 @@ class UserController extends AbstractController
         $uidMap = [];
         $newUidCharacters = [];
         $uidLastReloadDate = null;
-        
+
         if ($userUidCharacters !== []) {
 
             /* @var UserUidCharacter $firstCharacter */
@@ -420,7 +567,7 @@ class UserController extends AbstractController
         $UidCharacters = $this->entityManager->getRepository(UserUidCharacter::class)->findBy(['user' => $this->getCurrentUser()->getId(), 'uid' => $this->getCurrentUser()->getUid()]);
 
 
-        foreach($UidCharacters as $UidCharacter) {
+        foreach ($UidCharacters as $UidCharacter) {
             /* @var UserUidCharacter $UidCharacter */
             $newUidCharacters[] = $UidCharacter->getUidCharacterInfo();
         }

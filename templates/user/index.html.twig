@@ -82,6 +82,9 @@
                         <button type="submit" class="btn-save js-save"><i class="fas fa-check"></i></button>
                     </form>
                 </div>
+                {% if app.user.uid is not null %}
+                    <a href="{{ path('user-uid-characters-reload') }}">recharger les infos UID</a>
+                {% endif %}
             </div>
 
             <div class="title-header">
@@ -224,7 +227,10 @@
                         {% endif %}
                     {% endif %}
                 </div>
+                <div id="character-info-isotope">
+                </div>
             </div>
+
 
             <div class="title-header">
                 <h3>Mes Builds</h3>
