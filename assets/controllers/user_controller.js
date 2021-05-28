@@ -1,6 +1,7 @@
 import '../styles/controllers/user.scss';
+import 'animate.css';
 
-var Isotope = require('isotope-layout');
+const Isotope = require('isotope-layout');
 
 require('isotope-cells-by-row');
 
@@ -15,9 +16,13 @@ $(document).ready(function () {
         // set layoutMode
         layoutMode: 'vertical',
         getSortData: {
-            constellations: '[data-constellations] parseInt'
+            constellations: '[data-constellations] parseInt',
+            level: '[data-level] parseInt',
+            fetter: '[data-fetter] parseInt',
         },
     });
+
+    const $characterInfoIsotope = $('#character-info-isotope')
 
     var filterFns = {
         // show if number is greater than 50
@@ -76,6 +81,90 @@ $(document).ready(function () {
 
             if ($('.gridFilter').hasClass('filterActive')) {
                 $('.character-constellations').css({
+                    display: 'none',
+                    textAlign: ''
+                })
+
+                $grid.isotope({
+                    masonry: {
+                        columnWidth: ''
+                    }
+                });
+            }
+        }
+    })
+
+    $('#level-filter').click(function () {
+
+        if (!$(this).hasClass('active-filter')) {
+            $(this).addClass('active-filter');
+            $grid.isotope({
+                sortBy: 'level',
+                sortAscending: false
+            });
+            if ($('.gridFilter').hasClass('filterActive')) {
+                $('.character-level').css({
+                    display: 'block',
+                    textAlign: 'center'
+                })
+                $grid.isotope({
+                    masonry: {
+                        columnWidth: ''
+                    }
+                });
+
+
+            }
+        } else {
+            $(this).removeClass('active-filter');
+            $grid.isotope({
+                sortBy: ''
+            });
+
+            if ($('.gridFilter').hasClass('filterActive')) {
+                $('.character-level').css({
+                    display: 'none',
+                    textAlign: ''
+                })
+
+                $grid.isotope({
+                    masonry: {
+                        columnWidth: ''
+                    }
+                });
+            }
+        }
+    })
+
+    $('#fetter-filter').click(function () {
+
+        if (!$(this).hasClass('active-filter')) {
+            $(this).addClass('active-filter');
+            $grid.isotope({
+                sortBy: 'fetter',
+                sortAscending: false
+            });
+            if ($('.gridFilter').hasClass('filterActive')) {
+                $('.character-fetter').css({
+                    display: 'block',
+                    textAlign: 'center'
+                })
+                $grid.isotope({
+                    masonry: {
+                        columnWidth: ''
+                    }
+                });
+
+
+            }
+        } else {
+            $(this).removeClass('active-filter');
+            $grid.isotope({
+                sortBy: ''
+            });
+
+            if ($('.gridFilter').hasClass('filterActive')) {
+                $('.character-fetter').css({
                     display: 'none',
                     textAlign: ''
                 })
@@ -180,8 +269,15 @@ $(document).ready(function () {
 
     $('.gridFilter').click(function () {
         $('.horizontalFilter').removeClass("filterActive");
+
         $(this).addClass("filterActive");
         $grid.isotope({filter: '*'});
+
+        $('.element-filter').each(function (i, buttonGroup) {
+            var $buttonGroup = $(buttonGroup);
+            $buttonGroup.find('.active-filter').removeClass('active-filter');
+        }).find('button:first-child').addClass('active-filter');
+
         $('.user-profile .section-user-builds #uidProfile .uidCharacters .user-character').css({
             'display': 'block',
             'width': 'auto',
@@ -221,12 +317,12 @@ $(document).ready(function () {
     $('.horizontalFilter').click(function () {
         $('.gridFilter').removeClass("filterActive");
         $(this).addClass("filterActive");
+        $('.uidCharacters > .user-character').removeClass('active-character')
+        $('.element-filter').each(function (i, buttonGroup) {
+            var $buttonGroup = $(buttonGroup);
+            $buttonGroup.find('.active-filter').removeClass('active-filter');
+        }).find('button:first-child').addClass('active-filter');
         $grid.isotope({filter: '*'});
-        // // const characterDatas = $('.iudCharacters.user-character');
-        // characterDatas.each(function () {
-        //     // console.log(characterDatas);
-        // })
-
         $('.character-constellations, .character-weapon, .character-artifacts, .sets-effect, .character-name').css({
             'display': '',
         });
@@ -246,111 +342,210 @@ $(document).ready(function () {
             layoutMode: 'vertical',
             itemSelector: '.user-character',
             masonry: {
-                isFitWidth: true
+                isFitWidth: true,
+                columnWidth: ''
             }
         })
+        $('#character-info-isotope').css({
+            display: 'none',
+        });
 
+        $('.uidCharacters').css({
+            width: ''
+        })
 
     });
+
+
+    var stickyInfoTop = $('#character-info-isotope').offset().top;
+
+
+    var stickyCharacterInfo = function () {
+        if ($('.gridFilter').hasClass('filterActive')) {
+            var scrollTop = $(window).scrollTop();
+
+            if (scrollTop > stickyInfoTop) {
+                $('#character-info-isotope').css({
+                    position: 'fixed',
+                    top: '10px',
+                    transform: 'inherit',
+                    width: $('#uidProfile').width() * 0.4,
+                    right: ($(window).width() - ($('#uidProfile').offset().left + $('#uidProfile').outerWidth()))
+                }).addClass('sticky');
+            } else {
+                $('#character-info-isotope').css({
+                    width: '',
+                    position: '',
+                    right: '',
+                    top: '',
+                    transform: '',
+                    height: ''
+                }).removeClass('sticky');
+            }
+        }
+    };
+
 
     $('.uidCharacters').each(function (index, item) {
         var $character = $(item);
         $character.on('click', '.user-character', function () {
-            $character.find('.active-character').removeClass('active-character');
-            $(this).addClass('active-character');
+            if ($('.gridFilter').hasClass('filterActive')) {
+                var $characterId = $(this).find('.jsCharacterData #characterDataId').data('characters-id');
+                var $characterName = $(this).find('.jsCharacterData #characterDataName').data('characters-name');
+                var $characterImage = $(this).find('.jsCharacterData #characterDataImage').data('characters-image');
+                var $characterFetter = $(this).find('.jsCharacterData #characterDataFetter').data('characters-fetter');
+                var $characterLevel = $(this).find('.jsCharacterData #characterDataLevel').data('characters-level');
+                var $characterRarity = $(this).find('.jsCharacterData #characterDataRarity').data('characters-rarity');
+                var $characterReliquaries = $(this).find('.jsCharacterData #characterDataReliquaries').data('characters-reliquaries');
+                var $characterConstellations = $(this).find('.jsCharacterData #characterDataConstellations').data('characters-constellations');
+                var $characterExtra = $(this).find('.jsCharacterData #characterDataExtra').data('characters-extra');
 
-            if ($(this).has('.active-character'))
-
-
-                $('.uidCharacters').css({
-                    width: '60%'
-                })
-
-            $grid.isotope({
-                masonry: {
-                    columnWidth: ''
-                }
-            })
-
-            var characterInfo =
-                '<div id="character-info-isotope">' +
-                '' +
-                '</div>';
-            $(this).parent().after(characterInfo);
-            var stickyInfoTop = $('#character-info-isotope').offset().top;
-
-
-            var stickyCharacterInfo = function () {
-                var scrollTop = $(window).scrollTop();
-
-                if (scrollTop > stickyInfoTop) {
-                    $('#character-info-isotope').css({
-                        position: 'fixed',
-                        top: '10px',
-                        transform: 'inherit',
-                        width: $('#uidProfile').width() * 0.4,
-                        right: ($(window).width() - ($('#uidProfile').offset().left + $('#uidProfile').outerWidth()))
-                    }).addClass('sticky');
-
-                    var link = $('#character-info-isotope');
-
-
-                } else {
-                    $('#character-info-isotope').css({
-                        width: '',
-                        position: '',
-                        right: '',
-                        top: '',
-                        transform: '',
-                        height: ''
-                    }).removeClass('sticky');
-                }
-            };
-
-            stickyCharacterInfo();
-
-            $(window).on('scroll', function () {
-                stickyCharacterInfo();
-
-                var $el1 = $('.uidCharacters'),
-                    scrollTop1 = $(this).scrollTop(),
-                    scrollBot1 = scrollTop1 + $(this).height(),
-                    elTop1 = $el1.offset().top,
-                    elBottom1 = elTop1 + $el1.outerHeight(),
-                    visibleTop1 = elTop1 < scrollTop1 ? scrollTop1 : elTop1,
-                    visibleBottom1 = elBottom1 > scrollBot1 ? scrollBot1 : elBottom1;
-                var yikes1 = visibleBottom1 - visibleTop1
-
-                if ($('#character-info-isotope').hasClass('sticky')) {
-                    if (yikes1 < $('#character-info-isotope').height()) {
-                        $('#character-info-isotope').css({
-                            width: '',
-                            position: '',
-                            right: '',
-                            top: 'inherit',
-                            bottom: 0,
-                            transform: 'none',
-                            height: ''
-                        });
+                var $imageSelector = $('#character-info-isotope > .character-info-grid > #character-info-image > img')
+                var $detailsSelector = $('#character-info-details')
+                if ($(this).has('.active-character')) {
+                        // animate__fadeInLeft
+                    var cImageWidthFunc = function () {
+                        const $giContainerOuterWidth = $('.gi-container').outerWidth(true);
+                        const $giContainerPaddingRightWidth = ($giContainerOuterWidth - $('.gi-container').innerWidth()) / 2
+                        const $cImageWidth = $('#character-info-isotope').width() + $giContainerPaddingRightWidth
+                        $imageSelector.attr('src', $characterImage).css({
+                            width: $cImageWidth,
+                            height: $('#character-info-isotope').height()
+                        })
                     }
+
+                    $detailsSelector.addClass('animate__animated animate__fadeInLeft').css({
+                        display:'block',
+                        position: 'absolute',
+                        top: 20,
+                        left: 20,
+                    }).on('animationend', function() {
+                        console.log("genshin animate end")
+                    });
+
+                    cImageWidthFunc()
+                    $(this).on('resize load', function () {
+                        cImageWidthFunc()
+                    })
+
+
+                    $('#character-info-isotope > .character-info-grid > #character-info-image >  #img-loading').css('display', 'block')
+                    $('#character-info-isotope > .character-info-grid > #character-info-image > #cImage').removeClass('animate__animated animate__fadeIn').css('display', 'none')
+                    $imageSelector.on('load', function () {
+                        $('#character-info-isotope > .character-info-grid > #character-info-image > #img-loading').css('display', '')
+                        $('#character-info-isotope > .character-info-grid > #character-info-image > #cImage').addClass('animate__animated animate__fadeIn').css('display', '')
+                        $('#character-info-isotope > .character-info-grid > #character-info-details > #name').text($characterName)
+                        $('#character-info-isotope > .character-info-grid > #character-info-details > #level').text('Niveau ' + $characterLevel)
+                        $('#character-info-isotope > .character-info-grid > #character-info-details > #fetter').text('Affinité ' + $characterFetter)
+                    });
+
+                    $('#character-info-isotope').css({
+                        display: 'block'
+                    })
+
+                    $('.uidCharacters').css({
+                        width: '60%'
+                    })
+                    $grid.isotope({
+                        masonry: {
+                            columnWidth: ''
+                        }
+                    })
+
+
+                    var stickyInfoTop = $('#character-info-isotope').offset().top;
+                    var stickyCharacterInfo = function () {
+                        var scrollTop = $(window).scrollTop();
+                        if (scrollTop > stickyInfoTop) {
+                            $('#character-info-isotope').css({
+                                position: 'fixed',
+                                top: '10px',
+                                transform: 'inherit',
+                                width: $('#uidProfile').width() * 0.4,
+                                right: ($(window).width() - ($('#uidProfile').offset().left + $('#uidProfile').outerWidth()))
+                            }).addClass('sticky');
+                            console.log('scrollTop: ' + scrollTop)
+                            console.log('stickyInfoTop : ' + stickyInfoTop)
+                        } else {
+                            $('#character-info-isotope').css({
+                                width: '',
+                                position: '',
+                                right: '',
+                                top: '',
+                                transform: '',
+                                height: ''
+                            }).removeClass('sticky');
+                        }
+                    };
+
+                    $(window).on('scroll resize load', function () {
+                        stickyCharacterInfo();
+                    });
+                    $character.find('.active-character').removeClass('active-character');
+                    $(this).addClass('active-character');
+                    stickyCharacterInfo();
+
+
+                    $(window).on('scroll', function () {
+                        stickyCharacterInfo();
+
+                        var $el1 = $('.uidCharacters'),
+                            scrollTop1 = $(this).scrollTop(),
+                            scrollBot1 = scrollTop1 + $(this).height(),
+                            elTop1 = $el1.offset().top,
+                            elBottom1 = elTop1 + $el1.outerHeight(),
+                            visibleTop1 = elTop1 < scrollTop1 ? scrollTop1 : elTop1,
+                            visibleBottom1 = elBottom1 > scrollBot1 ? scrollBot1 : elBottom1;
+                        var yikes1 = visibleBottom1 - visibleTop1
+
+                        if ($('#character-info-isotope').hasClass('sticky')) {
+                            if (yikes1 < $('#character-info-isotope').height()) {
+                                $('#character-info-isotope').css({
+                                    width: '',
+                                    position: '',
+                                    right: '',
+                                    top: 'inherit',
+                                    bottom: 0,
+                                    transform: 'none',
+                                    height: ''
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    $detailsSelector.removeClass('animate__animated animate__fadeInLeft').css({
+                        display:'',
+                        position: '',
+                        top: '',
+                        left: '',
+                    })
                 }
-            });
+            }
         })
+
             // Remove active class on re-click
             .on('click', '.active-character', function () {
                 $(this).removeClass('active-character');
                 $('.uidCharacters').css({
                     width: ''
                 })
+                stickyCharacterInfo();
+
 
                 $grid.isotope({
                     masonry: {
                         columnWidth: ''
                     }
                 })
+                $('#character-info-isotope').css({
+                    display: 'none'
+                })
+
             });
-        ;
+
+
     });
+
 
     $('#user-character > .jsCharacterData').each(function (index, item) {
         // const characterData = $(item).data('characters')
@@ -359,64 +554,8 @@ $(document).ready(function () {
             "display": ""
         })
 
-
-        // setTimeout(function () {
-        //     $(item).parent().on('mouseenter', function () {
-        //         if ($('.gridFilter').hasClass('filterActive')) {
-        //             // console.log((characterData));
-        //
-        //             setTimeout(function () {
-        //                 $(item).parent().children('#characterCardJs').css({
-        //                     "opacity": "0",
-        //                     "display": "block",
-        //                 }).show().animate({opacity: 1}, 100)
-        //             }, 500);
-        //         }
-        //     }).on('mouseleave', function () {
-        //         if ($('.gridFilter').hasClass('filterActive')) {
-        //
-        //             setTimeout(function () {
-        //                 $(item).parent().children('#characterCardJs').css({
-        //                     "opacity": "1",
-        //                     "display": "none"
-        //                 }).hide().animate({opacity: 0}, 100)
-        //             }, 500);
-        //         }
-        //     });
-        // }, 200);
-
-
-        // $(item).parent()
-        //     .on('mouseenter', function () {
-        //     $(this).addClass('campaign-hover');
-        //     updateHover();
-        // }).on('mouseleave', function () {
-        //     $('.campaign-hover').removeClass('campaign-hover');
-        //     updateHover();
-        // })
-
-        // var offset = $("#characterCardJs").offset();
-        // var posY = offset.top - $(window).scrollTop();
-        // var posX = offset.left - $(window).scrollLeft();
-
-        function updateHover() {
-            if ($(item).parent().hasClass('campaign-hover') && $('.gridFilter').hasClass('filterActive')) {
-                $(item).parent().children('#characterCardJs').css({
-                    "opacity": "0",
-                    "display": "block",
-                }).show().animate({opacity: 1}, 100)
-            } else {
-                $(item).parent().children('#characterCardJs').css({
-                    "opacity": "1",
-                    "display": "none"
-                }).hide().animate({opacity: 0}, 100)
-
-
-            }
-
-
-        }
-
     });
+
+
 })
 
