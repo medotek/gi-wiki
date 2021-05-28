@@ -55,7 +55,7 @@
         <div class="section-user-objectives">
             Objectifs
         </div>
-        <div class="section-user-builds" id="test">
+        <div class="section-user-builds">
             <div class="banner">
                 {% if uidProfile[0][0][0] == 1 %}
                     {% if uidProfile[0][1][1] == "Data is not public for the user" %}
@@ -140,40 +140,53 @@
                             </div>
                             <br>
 
-                            <button id="constellation-filter">Sort by constellations</button>
+                            <div class="characteristic-filter">
+                                <label for="">Trier par</label>
+                                <button id="constellation-filter">Constellations</button>
+                                <button id="level-filter">Niveaux</button>
+                                <button id="fetter-filter">Affinité</button>
+                            </div>
                         </div>
                     {% endif %}
                 {% else %}
                     <div class="uid-error">UID non enregistrés</div>
                 {% endif %}
+                <div class="uidCharacters-container">
+                    <div class="uidCharacters">
+                        {% if uidProfile[0][0][0] == 1 %}
+                            {% if uidProfile[0][0][2] == -1 %}
+                                <div class="new-character-error">Un nouveau personnage vient d'arriver... Veuillez
+                                    patienter
+                                    afin
+                                    de retrouver votre profil Genshin Impact.
+                                </div>
 
-                <div class="uidCharacters">
-                    {% if uidProfile[0][0][0] == 1 %}
-                        {% if uidProfile[0][0][2] == -1 %}
-                            <div class="new-character-error">Un nouveau personnage vient d'arriver... Veuillez patienter
-                                afin
-                                de retrouver votre profil Genshin Impact.
-                            </div>
-
-                        {% endif %}
-                        {% if uidProfile[0][1][1] == "Data is not public for the user" %}
-                            {# display nothing #}
-                        {% else %}
-                            {% for index ,characters in uidCharacters %}
-                                <div class="user-character {{ characters.element|lower }} rarity-{{ characters.rarity }} level-{{ characters.level }} affinity-{{ characters.fetter }} "
-                                     data-constellations="{{ characters.constellations_number }}" id="user-character">
+                            {% endif %}
+                            {% if uidProfile[0][1][1] == "Data is not public for the user" %}
+                                {# display nothing #}
+                            {% else %}
+                                {% for index ,characters in uidCharacters %}
+                                    <div class="user-character {{ characters.element|lower }} rarity-{{ characters.rarity }}"
+                                         data-constellations="{{ characters.constellations_number }}"
+                                         data-level="{{ characters.level }}"
+                                         data-fetter="{{ characters.fetter }}"
+                                         id="user-character">
                                     <span class="jsCharacterData" style="display: none">
                                           <span id="characterDataId" data-characters-id="{{ characters.id }}"> </span>
-                                                <span data-characters-name="{{ characters.name }}"> </span>
+                                          <span id="characterDataName"
+                                                data-characters-name="{{ characters.name }}"> </span>
                                           <span id="characterDataIcon"
                                                 data-characters-icon="{{ characters.icon }}"> </span>
-                                                <span data-characters-image="{{ characters.image }}"> </span>
                                           <span id="characterDataImage"
+                                                data-characters-image="{{ characters.image }}"> </span>
+                                          <span id="characterDataFetter"
                                                 data-characters-fetter="{{ characters.fetter }}"> </span>
-                                                 <span data-characters-level="{{ characters.level }}"> </span>
+                                                 <span id="characterDataLevel"
+                                                       data-characters-level="{{ characters.level }}"> </span>
                                           <span id="characterDataRarity"
                                                 data-characters-rarity="{{ characters.rarity }}"> </span>
-                                                <span data-characters-weapon="{{ characters.weapon|json_encode }}"> </span>
+                                        <span id="characterDataWeapon"
+                                              data-characters-weapon="{{ characters.weapon|json_encode }}"> </span>
                                           <span id="characterDataReliquaries"
                                                 data-characters-reliquaries="{{ characters.reliquaries|json_encode }}"> </span>
                                           <span id="characterDataConstellations"
@@ -181,68 +194,91 @@
                                           <span id="characterDataExtra"
                                                 data-characters-extra="{{ characters.extra|json_encode }}"> </span>
                                     </span>
-                                    {# Get character icon url #}
-                                    <div class="character-image">
-                                        <img class="character-icon" src="{{ characters.icon }}" alt="" width="50px"
-                                             height="50px">
-                                    </div>
-                                    <div class="character-constellations">
-                                        C{{ characters.constellations_number }}<br>
-                                    </div>
-                                    <div class="character-weapon">
+                                        {# Get character icon url #}
+                                        <div class="character-image">
+                                            <img class="character-icon" src="{{ characters.icon }}" alt="" width="50px"
+                                                 height="50px">
+                                        </div>
+                                        <div class="character-constellations">
+                                            C{{ characters.constellations_number }}<br>
+                                        </div>
+                                        <div class="character-level">
+                                            Lv. {{ characters.level }}<br>
+                                        </div>
+                                        <div class="character-fetter">
+                                            Affinité {{ characters.fetter }}<br>
+                                        </div>
+                                        <div class="character-weapon">
                                         <span data-weapon="{{ characters.weapon|json_encode }}"
                                               style="display:none"></span>
-                                        <img src="{{ characters.weapon.icon }}" alt="{{ characters.weapon.name }}">
-                                    </div>
-                                    <div class="character-artifacts">
-                                        {% for artifacts in characters.reliquaries %}
-                                            {# <div class="artifact"> #}
-                                            <span class="artifact-{{ artifacts.pos }}"
-                                                  data-artifacts="{{ artifacts|json_encode }}"
-                                                  style="display:none"></span>
-                                            <img class="artifact-{{ artifacts.pos }}" src="{{ artifacts.icon }}"
-                                                 alt="{{ artifacts.name }}">
-                                            {# </div> #}
-                                        {% endfor %}
-                                    </div>
-                                    <div class="sets-effect">
-                                        {% if characters.extra is not empty %}
-                                            <ul>
-                                                {% for sets in characters.extra.sets %}
+                                            <img src="{{ characters.weapon.icon }}" alt="{{ characters.weapon.name }}">
+                                        </div>
+                                        <div class="character-artifacts">
+                                            {% for artifacts in characters.reliquaries %}
+                                                {# <div class="artifact"> #}
+                                                <span class="artifact-{{ artifacts.pos }}"
+                                                      data-artifacts="{{ artifacts|json_encode }}"
+                                                      style="display:none"></span>
+                                                <img class="artifact-{{ artifacts.pos }}" src="{{ artifacts.icon }}"
+                                                     alt="{{ artifacts.name }}">
+                                                {# </div> #}
+                                            {% endfor %}
+                                        </div>
+                                        <div class="sets-effect">
+                                            {% if characters.extra is not empty %}
+                                                <ul>
+                                                    {% for sets in characters.extra.sets %}
 
-                                                    <li><b>{{ sets.activation_number }} pièces </b>: {{ sets.effect }}
-                                                    </li>
-                                                {% endfor %}
-                                            </ul>
-                                        {% endif %}
-                                    </div>
-                                    <div class="character-name">{{ characters.name }}</div>
-                                    <div id="characterCardJs">
-                                        <div class="characterCard-name">
-                                            {{ characters.name }}
+                                                        <li><b>{{ sets.activation_number }}
+                                                                pièces </b>: {{ sets.effect }}
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </div>
+                                        <div class="character-name">{{ characters.name }}</div>
+                                        <div id="characterCardJs">
+                                            <div class="characterCard-name">
+                                                {{ characters.name }}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% endfor %}
+                                {% endfor %}
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
+                    </div>
                 </div>
                 <div id="character-info-isotope">
+                    <div class="character-info-grid">
+                        <div id="character-info-image">
+                            <img id="cImage" src="" alt="">
+                            <div id="img-loading">
+                                <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="">
+                            </div>
+                        </div>
+                        <div id="character-info-details">
+                            <div id="name"></div>
+                            <div id="level"></div>
+                            <div id="fetter"></div>
+                            <div id="reliquaries"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-
-            <div class="title-header">
-                <h3>Mes Builds</h3>
-                <div class="blue-bar"></div>
-            </div>
-            <div class="builds">
-                <ul>
-                    {% for build in userBuild %}
-                        <li>{{ build[1][0].name }}</li>
-                    {% endfor %}
-                </ul>
-                <a href="{{ path('profile-builds') }}" class="all-builds-detail">Voir tous mes builds</a>
+            <div class="build-section">
+                <div class="title-header">
+                    <h3>Mes Builds</h3>
+                    <div class="blue-bar"></div>
+                </div>
+                <div class="builds">
+                    <ul>
+                        {% for build in userBuild %}
+                            <li>{{ build[1][0].name }}</li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{{ path('profile-builds') }}" class="all-builds-detail">Voir tous mes builds</a>
+                </div>
             </div>
         </div>
     </div>
