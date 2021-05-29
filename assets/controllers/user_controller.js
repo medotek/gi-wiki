@@ -203,8 +203,6 @@ $(document).ready(function () {
                 }
             });
 
-            // data = JSON.stringify(data);
-
             $.ajax({
                 type: 'post',
                 url: '/account/profile/set/uid',
@@ -403,8 +401,12 @@ $(document).ready(function () {
 
                 var $imageSelector = $('#character-info-isotope > .character-info-grid > #character-info-image > img')
                 var $detailsSelector = $('#character-info-details')
+                let $characterIdLoop = []
                 if ($(this).has('.active-character')) {
 
+                    /**
+                     * Function to display properly the character img
+                     */
                     var cImageWidthFunc = function () {
                         const $giContainerOuterWidth = $('.gi-container').outerWidth(true);
                         const $giContainerPaddingRightWidth = ($giContainerOuterWidth - $('.gi-container').innerWidth()) / 2
@@ -429,25 +431,39 @@ $(document).ready(function () {
 
                     cImageWidthFunc()
 
-
-                    $(this).delay(500, function () {
+                    /**
+                     * Display character Reliquaries with a timeout for each reliquary
+                     * Timeout : 150 ms
+                     */
+                    function characterReliquaries() {
                         var $delay_loop = 0;
-                        // console.log('idLoop empty looks like ' + $characterIdLoop )
-                        // if ($characterIdLoop === undefined)
-                        //     console.log('idLoop = null')
-                        // var $characterIdLoop = $characterId;
-                        // console.log('idLoop now looks like ' + $characterIdLoop )
                         for (let i = $characterReliquaries.length; i > 0; i--) {
                             $delay_loop++;
+                            $('#character-info-details #reliquaries ul').append('<li class="reliquary-pos-' + $characterReliquaries[i - 1].pos +
+                                '"><img src="' + $characterReliquaries[i - 1].icon + '" alt="' + $characterReliquaries[i - 1].name + '"></li>')
+                            $('#character-info-details #reliquaries ul > .reliquary-pos-' + i).addClass('animate__animated animate__fadeInLeft')
                             setTimeout(function () {
-                                $('#character-info-details #reliquaries ul').append('<li class="reliquary-pos-' + $characterReliquaries[i - 1].pos +
-                                    '"><img src="' + $characterReliquaries[i - 1].icon + '" alt="' + $characterReliquaries[i - 1].name + '"></li>')
+                                $('#character-info-details #reliquaries ul > .reliquary-pos-' + i).css({display: 'block'})
+                            }, 150 * $delay_loop)
 
-                                $('#character-info-details #reliquaries ul > .reliquary-pos-' + i).addClass('animate__animated animate__fadeInLeft')
-                                console.log('interval')
-                            }, 200 * $delay_loop)
                         }
-                    })
+                    }
+
+                    /**
+                     * We wanted to create here a variable that could store the current characterId of the element with the class active-character
+                     * Then i made condition about the current situation
+                     */
+
+                    if ($characterIdLoop['characterId'] !== '' || $characterIdLoop['characterId'] !== $characterId) {
+                        //if the current character id doesn't match with the id stored, then replace that one, and remove the ul content
+                        //to be replaced by the new one
+                        console.log('wrong character, the current one is ' + $characterName)
+                        $('#character-info-details #reliquaries ul').empty();
+                        characterReliquaries()
+                    } else {
+                        $characterIdLoop['characterId'] = $characterId;
+                    }
+
 
                     $('#character-info-isotope > .character-info-grid > #character-info-image >  #img-loading').css('display', 'block')
                     $('#character-info-isotope > .character-info-grid > #character-info-image > #cImage').removeClass('animate__animated animate__fadeIn').css('display', 'none')
@@ -478,6 +494,7 @@ $(document).ready(function () {
                     var stickyCharacterInfo = function () {
                         var scrollTop = $(window).scrollTop();
                         if (scrollTop > stickyInfoTop) {
+
                             $('#character-info-isotope').css({
                                 position: 'fixed',
                                 top: '10px',
@@ -495,18 +512,7 @@ $(document).ready(function () {
                                 height: ''
                             }).removeClass('sticky');
                         }
-                    };
 
-                    $(window).on('scroll resize load', function () {
-                        stickyCharacterInfo();
-                    });
-                    $character.find('.active-character').removeClass('active-character');
-                    $(this).addClass('active-character');
-                    stickyCharacterInfo();
-
-
-                    $(window).on('scroll', function () {
-                        stickyCharacterInfo();
 
                         var $el1 = $('.uidCharacters'),
                             scrollTop1 = $(this).scrollTop(),
@@ -530,6 +536,21 @@ $(document).ready(function () {
                                 });
                             }
                         }
+                    };
+
+                    $(window).on('scroll resize load', function () {
+                        stickyCharacterInfo();
+                    });
+                    $character.find('.active-character').removeClass('active-character');
+                    $(this).addClass('active-character', function()  {
+                        characterReliquaries()
+                    });
+                    stickyCharacterInfo();
+
+
+                    $(window).on('scroll', function () {
+                        stickyCharacterInfo();
+
                     });
                 } else {
                     $detailsSelector.removeClass('animate__animated animate__fadeInLeft').css({
@@ -543,8 +564,6 @@ $(document).ready(function () {
                 }
             }
         })
-
-
             // Remove active class on re-click
             .on('click', '.active-character', function () {
                 $(this).removeClass('active-character');
@@ -552,8 +571,6 @@ $(document).ready(function () {
                     width: ''
                 })
                 stickyCharacterInfo();
-
-
                 $grid.isotope({
                     masonry: {
                         columnWidth: ''
@@ -563,21 +580,15 @@ $(document).ready(function () {
                     display: 'none'
                 })
 
+                $('#character-info-details #reliquaries ul').empty();
             });
-
-
     });
 
 
     $('#user-character > .jsCharacterData').each(function (index, item) {
-        // const characterData = $(item).data('characters')
-
         $(item).parent().children('#characterCardJs').css({
             "display": ""
         })
-
     });
-
-
 })
 
