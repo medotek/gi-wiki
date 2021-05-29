@@ -269,15 +269,46 @@
             top: -20px;
             display: flex;
             background-color: white;
-            padding: 5px;
+            padding: 10px;
             border-radius: 50%;
+
+            img {
+              width: 50px;
+            }
           }
 
+          #draggable {
+            #setsInfo {
+              position: absolute;
+              padding: 10px;
+              cursor: pointer;
+              top:0;
+              &:hover {
+                span {
+                  background-color: $giwiki-orange;
+                }
+              }
+              span {
+                position: absolute;
+                background-color: $giwiki-light-blue;
+                width: 5px;
+                border-radius: 20px;
+                //opacity: 0.5;
+              }
+            }
+          }
           #character-info-details {
+
+            #name {
+              font-weight: 600;
+            }
+
             #reliquaries {
               ul  {
                 list-style: none;
                 padding: 0;
+                position: relative;
+
                 > li {
                     display: none;
                     img {

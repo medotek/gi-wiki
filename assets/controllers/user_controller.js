@@ -70,8 +70,6 @@ $(document).ready(function () {
                         columnWidth: ''
                     }
                 });
-
-
             }
         } else {
             $(this).removeClass('active-filter');
@@ -268,6 +266,10 @@ $(document).ready(function () {
     $('.gridFilter').click(function () {
         $('.horizontalFilter').removeClass("filterActive");
 
+        $('.user-profile .section-user-builds #uidProfile .uidCharacters-container .uidCharacters .user-character').css({
+            display: 'block'
+        })
+
         $(this).addClass("filterActive");
         $grid.isotope({filter: '*'});
 
@@ -387,183 +389,210 @@ $(document).ready(function () {
     $('.uidCharacters').each(function (index, item) {
         var $character = $(item);
         $character.on('click', '.user-character', function () {
-            if ($('.gridFilter').hasClass('filterActive')) {
-                var $characterId = $(this).find('.jsCharacterData #characterDataId').data('characters-id');
-                var $characterName = $(this).find('.jsCharacterData #characterDataName').data('characters-name');
-                var $characterImage = $(this).find('.jsCharacterData #characterDataImage').data('characters-image');
-                var $characterFetter = $(this).find('.jsCharacterData #characterDataFetter').data('characters-fetter');
-                var $characterLevel = $(this).find('.jsCharacterData #characterDataLevel').data('characters-level');
-                var $characterRarity = $(this).find('.jsCharacterData #characterDataRarity').data('characters-rarity');
-                var $characterReliquaries = $(this).find('.jsCharacterData #characterDataReliquaries').data('characters-reliquaries');
-                var $characterConstellations = $(this).find('.jsCharacterData #characterDataConstellations').data('characters-constellations');
-                var $characterExtra = $(this).find('.jsCharacterData #characterDataExtra').data('characters-extra');
-                var $characterElement = $(this).find('.jsCharacterData #characterDataElement').data('characters-element');
+                if ($('.gridFilter').hasClass('filterActive')) {
+                    var $characterId = $(this).find('.jsCharacterData #characterDataId').data('characters-id');
+                    var $characterName = $(this).find('.jsCharacterData #characterDataName').data('characters-name');
+                    var $characterImage = $(this).find('.jsCharacterData #characterDataImage').data('characters-image');
+                    var $characterFetter = $(this).find('.jsCharacterData #characterDataFetter').data('characters-fetter');
+                    var $characterLevel = $(this).find('.jsCharacterData #characterDataLevel').data('characters-level');
+                    var $characterRarity = $(this).find('.jsCharacterData #characterDataRarity').data('characters-rarity');
+                    var $characterReliquaries = $(this).find('.jsCharacterData #characterDataReliquaries').data('characters-reliquaries');
+                    var $characterConstellations = $(this).find('.jsCharacterData #characterDataConstellations').data('characters-constellations');
+                    var $characterExtra = $(this).find('.jsCharacterData #characterDataExtra').data('characters-extra');
+                    var $characterElement = $(this).find('.jsCharacterData #characterDataElement').data('characters-element');
 
-                var $imageSelector = $('#character-info-isotope > .character-info-grid > #character-info-image > img')
-                var $detailsSelector = $('#character-info-details')
-                let $characterIdLoop = []
-                if ($(this).has('.active-character')) {
+                    var $imageSelector = $('#character-info-isotope > .character-info-grid > #character-info-image > img')
+                    var $detailsSelector = $('#character-info-details')
+                    let $characterIdLoop = []
+                    if ($(this).has('.active-character')) {
 
-                    /**
-                     * Function to display properly the character img
-                     */
-                    var cImageWidthFunc = function () {
-                        const $giContainerOuterWidth = $('.gi-container').outerWidth(true);
-                        const $giContainerPaddingRightWidth = ($giContainerOuterWidth - $('.gi-container').innerWidth()) / 2
-                        const $cImageWidth = $('#character-info-isotope').width() + $giContainerPaddingRightWidth
-                        $imageSelector.attr('src', $characterImage).css({
-                            width: $cImageWidth,
-                            height: $('#character-info-isotope').height()
+                        /**
+                         * Function to display properly the character img
+                         */
+                        var cImageWidthFunc = function () {
+                            const $giContainerOuterWidth = $('.gi-container').outerWidth(true);
+                            const $giContainerPaddingRightWidth = ($giContainerOuterWidth - $('.gi-container').innerWidth()) / 2
+                            const $cImageWidth = $('#character-info-isotope').width() + $giContainerPaddingRightWidth
+                            $imageSelector.attr('src', $characterImage).css({
+                                width: $cImageWidth,
+                                height: $('#character-info-isotope').height()
+                            })
+
+                            $('#character-element img').attr('src', '/build/elements/Element_' + $characterElement + '.png')
+                                .attr('alt', 'Element ' + $characterElement)
+                                .addClass('animate__animated animate__fadeIn')
+                        }
+
+                        $detailsSelector.addClass('animate__animated animate__fadeInLeft').css({
+                            display: 'block',
+                            position: 'absolute',
+                            top: 20,
+                            left: 20,
+                        });
+
+
+                        cImageWidthFunc()
+
+                        /**
+                         * Display character Reliquaries with a timeout for each reliquary
+                         * Timeout : 150 ms
+                         */
+                        function characterReliquaries() {
+                            var $delay_loop = 0;
+
+                            var $reliquariesList = $('#character-info-details #reliquaries ul')
+                            for (let i = $characterReliquaries.length; i > 0; i--) {
+                                $delay_loop++;
+                                $reliquariesList.append('<li class="reliquary-pos-' + $characterReliquaries[i - 1].pos +
+                                    '"><img src="' + $characterReliquaries[i - 1].icon + '" alt="' + $characterReliquaries[i - 1].name + '"></li>')
+                                $('#character-info-details #reliquaries ul > .reliquary-pos-' + i).addClass('animate__animated animate__fadeInLeft')
+                                setTimeout(function () {
+                                    $('#character-info-details #reliquaries ul > .reliquary-pos-' + i).css({display: 'flex'})
+                                }, 150 * $delay_loop)
+                            }
+
+                            $('#draggable').append('<div id="setsInfo"><span></span></div>');
+                            if ($characterReliquaries.length > 3)
+                                setTimeout(function () {
+                                    $('#setsInfo').css({
+                                        height: 200,
+                                        left: 0,
+                                        top: ($('#character-info-image').height() - 200) / 2,
+                                        // left: $reliquariesList.children('li').children('img').width() + 5
+                                    }).addClass('animate__animated animate__fadeIn').children('span').css({
+                                        top: 0,
+                                        left: '50%',
+                                        transform: 'translateX(-50%)',
+                                        height: 200,
+                                    })
+
+                                }, 600)
+                            $('#setsInfo').on('mouseenter', function () {
+                                $(this).animate({
+                                    left: 5,
+                                }, 100)
+
+                            }).on('mouseleave', function () {
+                                $(this).animate({
+                                    left: 0,
+                                }, 100)
+                            })
+                        }
+
+                        /**
+                         * We wanted to create here a variable that could store the current characterId of the element with the class active-character
+                         * Then i made condition about the current situation
+                         */
+
+                        if ($characterIdLoop['characterId'] !== '' || $characterIdLoop['characterId'] !== $characterId) {
+                            //if the current character id doesn't match with the id stored, then replace that one, and remove the ul content
+                            //to be replaced by the new one
+                            console.log('wrong character, the current one is ' + $characterName)
+                            $('#character-info-details #reliquaries ul, #character-info-isotope #draggable').empty();
+                            characterReliquaries()
+                        } else {
+                            $characterIdLoop['characterId'] = $characterId;
+                        }
+
+
+                        $('#character-info-isotope > .character-info-grid > #character-info-image >  #img-loading').css('display', 'block')
+                        $('#character-info-isotope > .character-info-grid > #character-info-image > #cImage').removeClass('animate__animated animate__fadeIn').css('display', 'none')
+
+                        $imageSelector.on('load', function () {
+                            $('#character-info-isotope > .character-info-grid > #character-info-image > #img-loading').css('display', '')
+                            $('#character-info-isotope > .character-info-grid > #character-info-image > #cImage').addClass('animate__animated animate__fadeIn').css('display', '')
+                            $('#character-info-isotope > .character-info-grid > #character-info-details > #name').text($characterName)
+                            $('#character-info-isotope > .character-info-grid > #character-info-details > #level').text('Niveau ' + $characterLevel)
+                            $('#character-info-isotope > .character-info-grid > #character-info-details > #fetter').text('Affinité ' + $characterFetter)
+                        });
+
+                        $('#character-info-isotope').css({
+                            display: 'block'
                         })
 
-                        $('#character-element img').attr('src', '/build/elements/Element_' + $characterElement + '.png')
-                            .attr('alt', 'Element ' + $characterElement)
-                            .addClass('animate__animated animate__fadeIn')
-                    }
-
-                    $detailsSelector.addClass('animate__animated animate__fadeInLeft').css({
-                        display: 'block',
-                        position: 'absolute',
-                        top: 20,
-                        left: 20,
-                    });
+                        $('.uidCharacters').css({
+                            width: '60%'
+                        })
+                        $grid.isotope({
+                            masonry: {
+                                columnWidth: ''
+                            }
+                        })
 
 
-                    cImageWidthFunc()
+                        var stickyInfoTop = $('#character-info-isotope').offset().top;
+                        var stickyCharacterInfo = function () {
+                            var scrollTop = $(window).scrollTop();
+                            if (scrollTop > stickyInfoTop) {
 
-                    /**
-                     * Display character Reliquaries with a timeout for each reliquary
-                     * Timeout : 150 ms
-                     */
-                    function characterReliquaries() {
-                        var $delay_loop = 0;
-                        for (let i = $characterReliquaries.length; i > 0; i--) {
-                            $delay_loop++;
-                            $('#character-info-details #reliquaries ul').append('<li class="reliquary-pos-' + $characterReliquaries[i - 1].pos +
-                                '"><img src="' + $characterReliquaries[i - 1].icon + '" alt="' + $characterReliquaries[i - 1].name + '"></li>')
-                            $('#character-info-details #reliquaries ul > .reliquary-pos-' + i).addClass('animate__animated animate__fadeInLeft')
-                            setTimeout(function () {
-                                $('#character-info-details #reliquaries ul > .reliquary-pos-' + i).css({display: 'block'})
-                            }, 150 * $delay_loop)
-
-                        }
-                    }
-
-                    /**
-                     * We wanted to create here a variable that could store the current characterId of the element with the class active-character
-                     * Then i made condition about the current situation
-                     */
-
-                    if ($characterIdLoop['characterId'] !== '' || $characterIdLoop['characterId'] !== $characterId) {
-                        //if the current character id doesn't match with the id stored, then replace that one, and remove the ul content
-                        //to be replaced by the new one
-                        console.log('wrong character, the current one is ' + $characterName)
-                        $('#character-info-details #reliquaries ul').empty();
-                        characterReliquaries()
-                    } else {
-                        $characterIdLoop['characterId'] = $characterId;
-                    }
-
-
-                    $('#character-info-isotope > .character-info-grid > #character-info-image >  #img-loading').css('display', 'block')
-                    $('#character-info-isotope > .character-info-grid > #character-info-image > #cImage').removeClass('animate__animated animate__fadeIn').css('display', 'none')
-
-                    $imageSelector.on('load', function () {
-                        $('#character-info-isotope > .character-info-grid > #character-info-image > #img-loading').css('display', '')
-                        $('#character-info-isotope > .character-info-grid > #character-info-image > #cImage').addClass('animate__animated animate__fadeIn').css('display', '')
-                        $('#character-info-isotope > .character-info-grid > #character-info-details > #name').text($characterName)
-                        $('#character-info-isotope > .character-info-grid > #character-info-details > #level').text('Niveau ' + $characterLevel)
-                        $('#character-info-isotope > .character-info-grid > #character-info-details > #fetter').text('Affinité ' + $characterFetter)
-                    });
-
-                    $('#character-info-isotope').css({
-                        display: 'block'
-                    })
-
-                    $('.uidCharacters').css({
-                        width: '60%'
-                    })
-                    $grid.isotope({
-                        masonry: {
-                            columnWidth: ''
-                        }
-                    })
-
-
-                    var stickyInfoTop = $('#character-info-isotope').offset().top;
-                    var stickyCharacterInfo = function () {
-                        var scrollTop = $(window).scrollTop();
-                        if (scrollTop > stickyInfoTop) {
-
-                            $('#character-info-isotope').css({
-                                position: 'fixed',
-                                top: '10px',
-                                transform: 'inherit',
-                                width: $('#uidProfile').width() * 0.4,
-                                right: ($(window).width() - ($('#uidProfile').offset().left + $('#uidProfile').outerWidth()))
-                            }).addClass('sticky');
-                        } else {
-                            $('#character-info-isotope').css({
-                                width: '',
-                                position: '',
-                                right: '',
-                                top: '',
-                                transform: '',
-                                height: ''
-                            }).removeClass('sticky');
-                        }
-
-
-                        var $el1 = $('.uidCharacters'),
-                            scrollTop1 = $(this).scrollTop(),
-                            scrollBot1 = scrollTop1 + $(this).height(),
-                            elTop1 = $el1.offset().top,
-                            elBottom1 = elTop1 + $el1.outerHeight(),
-                            visibleTop1 = elTop1 < scrollTop1 ? scrollTop1 : elTop1,
-                            visibleBottom1 = elBottom1 > scrollBot1 ? scrollBot1 : elBottom1;
-                        var yikes1 = visibleBottom1 - visibleTop1
-
-                        if ($('#character-info-isotope').hasClass('sticky')) {
-                            if (yikes1 < $('#character-info-isotope').height()) {
+                                $('#character-info-isotope').css({
+                                    position: 'fixed',
+                                    top: '10px',
+                                    transform: 'inherit',
+                                    width: $('#uidProfile').width() * 0.4,
+                                    right: ($(window).width() - ($('#uidProfile').offset().left + $('#uidProfile').outerWidth()))
+                                }).addClass('sticky');
+                            } else {
                                 $('#character-info-isotope').css({
                                     width: '',
                                     position: '',
                                     right: '',
-                                    top: 'inherit',
-                                    bottom: 0,
-                                    transform: 'none',
+                                    top: '',
+                                    transform: '',
                                     height: ''
-                                });
+                                }).removeClass('sticky');
                             }
-                        }
-                    };
+                        };
 
-                    $(window).on('scroll resize load', function () {
-                        stickyCharacterInfo();
-                    });
-                    $character.find('.active-character').removeClass('active-character');
-                    $(this).addClass('active-character', function()  {
-                        characterReliquaries()
-                    });
-                    stickyCharacterInfo();
-
-
-                    $(window).on('scroll', function () {
+                        $(window).on('scroll resize load', function () {
+                            stickyCharacterInfo();
+                        });
+                        $character.find('.active-character').removeClass('active-character');
+                        $(this).addClass('active-character', function () {
+                            characterReliquaries()
+                        });
                         stickyCharacterInfo();
 
-                    });
-                } else {
-                    $detailsSelector.removeClass('animate__animated animate__fadeInLeft').css({
-                        display: '',
-                        position: '',
-                        top: '',
-                        left: '',
-                    })
 
-                    $('#character-element img').removeClass('animate__animated animate__fadeIn')
+                        $(window).on('scroll', function () {
+                            stickyCharacterInfo();
+
+                            var $el1 = $('.uidCharacters'),
+                                scrollTop1 = $(this).scrollTop(),
+                                scrollBot1 = scrollTop1 + $(this).height(),
+                                elTop1 = $el1.offset().top,
+                                elBottom1 = elTop1 + $el1.outerHeight(),
+                                visibleTop1 = elTop1 < scrollTop1 ? scrollTop1 : elTop1,
+                                visibleBottom1 = elBottom1 > scrollBot1 ? scrollBot1 : elBottom1;
+                            var yikes1 = visibleBottom1 - visibleTop1
+
+                            if ($('#character-info-isotope').hasClass('sticky')) {
+                                if (yikes1 < $('#character-info-isotope').height()) {
+                                    $('#character-info-isotope').css({
+                                        width: '',
+                                        position: '',
+                                        right: '',
+                                        top: 'inherit',
+                                        bottom: 0,
+                                        transform: 'none',
+                                        height: ''
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        $detailsSelector.removeClass('animate__animated animate__fadeInLeft').css({
+                            display: '',
+                            position: '',
+                            top: '',
+                            left: '',
+                        })
+
+                        $('#character-element img').removeClass('animate__animated animate__fadeIn')
+                    }
                 }
             }
-        })
+        )
             // Remove active class on re-click
             .on('click', '.active-character', function () {
                 $(this).removeClass('active-character');
@@ -580,7 +609,7 @@ $(document).ready(function () {
                     display: 'none'
                 })
 
-                $('#character-info-details #reliquaries ul').empty();
+                $('#character-info-details #reliquaries ul, #character-info-isotope #draggable').empty();
             });
     });
 
