@@ -241,7 +241,6 @@
 
                                                 <ul>
                                                     {% for sets in characters.extra %}
-                                                        {{ dump(sets) }}
                                                         {% if  sets.setsName | length == 1 and sets.setEffect|length == 2 %}
                                                             <li><b>
                                                                     {{ sets.setsName[0] }} (4 pièces)</b>: <br>
