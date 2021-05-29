@@ -43,6 +43,16 @@
      "45":"https://upload-os-bbs.mihoyo.com/game_record/genshin/character_image/UI_AvatarIcon_Rosaria.png"
  } %}
 
+{% set elements = {
+    'cryo': 'Cryo',
+    'pyro': 'Pyro',
+    'electro': 'Electro',
+    'anemo': 'Anemo',
+    'dendro': 'Dendro',
+    'geo': 'Geo',
+    'hydro': 'Hydro'
+} %}
+
 {% block body %}
     <div id="wait" style="display:none;">Ajax loading</div>
     <div class="user-profile">
@@ -185,6 +195,8 @@
                                                        data-characters-level="{{ characters.level }}"> </span>
                                           <span id="characterDataRarity"
                                                 data-characters-rarity="{{ characters.rarity }}"> </span>
+                                          <span id="characterDataElement"
+                                                data-characters-element="{{ characters.element }}"></span>
                                         <span id="characterDataWeapon"
                                               data-characters-weapon="{{ characters.weapon|json_encode }}"> </span>
                                           <span id="characterDataReliquaries"
@@ -239,7 +251,6 @@
                                         <div class="character-name">{{ characters.name }}</div>
                                         <div id="characterCardJs">
                                             <div class="characterCard-name">
-                                                {{ characters.name }}
                                             </div>
                                         </div>
                                     </div>
@@ -260,7 +271,12 @@
                             <div id="name"></div>
                             <div id="level"></div>
                             <div id="fetter"></div>
-                            <div id="reliquaries"></div>
+                            <div id="reliquaries">
+                                <ul></ul>
+                            </div>
+                        </div>
+                        <div id="character-element">
+                            <img src="" alt="">
                         </div>
                     </div>
                 </div>

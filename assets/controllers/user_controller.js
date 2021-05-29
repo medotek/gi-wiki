@@ -399,11 +399,12 @@ $(document).ready(function () {
                 var $characterReliquaries = $(this).find('.jsCharacterData #characterDataReliquaries').data('characters-reliquaries');
                 var $characterConstellations = $(this).find('.jsCharacterData #characterDataConstellations').data('characters-constellations');
                 var $characterExtra = $(this).find('.jsCharacterData #characterDataExtra').data('characters-extra');
+                var $characterElement = $(this).find('.jsCharacterData #characterDataElement').data('characters-element');
 
                 var $imageSelector = $('#character-info-isotope > .character-info-grid > #character-info-image > img')
                 var $detailsSelector = $('#character-info-details')
                 if ($(this).has('.active-character')) {
-                        // animate__fadeInLeft
+
                     var cImageWidthFunc = function () {
                         const $giContainerOuterWidth = $('.gi-container').outerWidth(true);
                         const $giContainerPaddingRightWidth = ($giContainerOuterWidth - $('.gi-container').innerWidth()) / 2
@@ -412,25 +413,45 @@ $(document).ready(function () {
                             width: $cImageWidth,
                             height: $('#character-info-isotope').height()
                         })
+
+                        $('#character-element img').attr('src', '/build/elements/Element_' + $characterElement + '.png')
+                            .attr('alt', 'Element ' + $characterElement)
+                            .addClass('animate__animated animate__fadeIn')
                     }
 
                     $detailsSelector.addClass('animate__animated animate__fadeInLeft').css({
-                        display:'block',
+                        display: 'block',
                         position: 'absolute',
                         top: 20,
                         left: 20,
-                    }).on('animationend', function() {
-                        console.log("genshin animate end")
                     });
 
-                    cImageWidthFunc()
-                    $(this).on('resize load', function () {
-                        cImageWidthFunc()
-                    })
 
+                    cImageWidthFunc()
+
+
+                    $(this).delay(500, function () {
+                        var $delay_loop = 0;
+                        // console.log('idLoop empty looks like ' + $characterIdLoop )
+                        // if ($characterIdLoop === undefined)
+                        //     console.log('idLoop = null')
+                        // var $characterIdLoop = $characterId;
+                        // console.log('idLoop now looks like ' + $characterIdLoop )
+                        for (let i = $characterReliquaries.length; i > 0; i--) {
+                            $delay_loop++;
+                            setTimeout(function () {
+                                $('#character-info-details #reliquaries ul').append('<li class="reliquary-pos-' + $characterReliquaries[i - 1].pos +
+                                    '"><img src="' + $characterReliquaries[i - 1].icon + '" alt="' + $characterReliquaries[i - 1].name + '"></li>')
+
+                                $('#character-info-details #reliquaries ul > .reliquary-pos-' + i).addClass('animate__animated animate__fadeInLeft')
+                                console.log('interval')
+                            }, 200 * $delay_loop)
+                        }
+                    })
 
                     $('#character-info-isotope > .character-info-grid > #character-info-image >  #img-loading').css('display', 'block')
                     $('#character-info-isotope > .character-info-grid > #character-info-image > #cImage').removeClass('animate__animated animate__fadeIn').css('display', 'none')
+
                     $imageSelector.on('load', function () {
                         $('#character-info-isotope > .character-info-grid > #character-info-image > #img-loading').css('display', '')
                         $('#character-info-isotope > .character-info-grid > #character-info-image > #cImage').addClass('animate__animated animate__fadeIn').css('display', '')
@@ -464,8 +485,6 @@ $(document).ready(function () {
                                 width: $('#uidProfile').width() * 0.4,
                                 right: ($(window).width() - ($('#uidProfile').offset().left + $('#uidProfile').outerWidth()))
                             }).addClass('sticky');
-                            console.log('scrollTop: ' + scrollTop)
-                            console.log('stickyInfoTop : ' + stickyInfoTop)
                         } else {
                             $('#character-info-isotope').css({
                                 width: '',
@@ -514,14 +533,17 @@ $(document).ready(function () {
                     });
                 } else {
                     $detailsSelector.removeClass('animate__animated animate__fadeInLeft').css({
-                        display:'',
+                        display: '',
                         position: '',
                         top: '',
                         left: '',
                     })
+
+                    $('#character-element img').removeClass('animate__animated animate__fadeIn')
                 }
             }
         })
+
 
             // Remove active class on re-click
             .on('click', '.active-character', function () {
