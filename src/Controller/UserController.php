@@ -203,7 +203,6 @@ class UserController extends AbstractController
             }
         }
 
-//            dump($uidCharacters);
         if (array_key_exists("code", $uidCharacters)) {
             $charactersSet['code'] = $uidCharacters['code'];
         } else {
@@ -242,22 +241,24 @@ class UserController extends AbstractController
 
                     /*Get keys for a value given in an array*/
                     $characterSets = [];
+                    $characterSetsName = [];
                     foreach ($setEffectId as $id) {
                         $keys[] = array_search($id, array_column($reliquariesSet, 'id'));
                     }
 
                     /* push sets of $reliquariesSet by an extracted key in a new array*/
                     foreach ($keys as $key) {
+                        $characterSetsName[] = $reliquariesSet[$key]['name'];
                         $characterSets[] = $reliquariesSet[$key]['affixes'][0];
                     }
 
                     /*Add the new column to the character array*/
-                    $characters['extra'] = ['sets' => $characterSets];
+                    $characters['extra'] = ['sets' => ['setsName' => $characterSetsName, 'setEffect' => $characterSets]];
                 } else {
                     if (!empty($setsEffectId)) {
                         $keys = [];
                         $characterSets = [];
-
+                        $characterSetsName = [];
                         foreach ($setsEffectId as $id) {
                             $keys[] = array_search($id, array_column($reliquariesSet, 'id'));
                         }
@@ -266,10 +267,11 @@ class UserController extends AbstractController
                             //includes all effect from the set
                             $characterSets[] = $reliquariesSet[$key]['affixes'][0];
                             $characterSets[] = $reliquariesSet[$key]['affixes'][1];
+                            $characterSetsName[] = $reliquariesSet[$key]['name'];
                         }
 
                         /*Add the new column to the character array*/
-                        $characters['extra'] = ['sets' => $characterSets];
+                        $characters['extra'] = ['sets' => ['setsName' => $characterSetsName, 'setEffect' => $characterSets]];
                     }
                 }
 
@@ -366,7 +368,7 @@ class UserController extends AbstractController
             foreach ($uidCharacters as $characters) {
 
                 $characterKey++;
-                dump($characters['reliquaries']);
+                dump($characters);
                 $characterReliquaries[] = $characters['reliquaries'];
                 /*access to the current key of the characterReliquaries array*/
 
@@ -399,12 +401,14 @@ class UserController extends AbstractController
 
                     /*Get keys for a value given in an array*/
                     $characterSets = [];
+                    $characterSetsName = [];
                     foreach ($setEffectId as $id) {
                         $keys[] = array_search($id, array_column($reliquariesSet, 'id'));
                     }
 
                     /* push sets of $reliquariesSet by an extracted key in a new array*/
                     foreach ($keys as $key) {
+                        $characterSetsName[] = $reliquariesSet[$key]['name'];
                         $characterSets[] = $reliquariesSet[$key]['affixes'][0];
                     }
 
@@ -414,7 +418,7 @@ class UserController extends AbstractController
                     if (!empty($setsEffectId)) {
                         $keys = [];
                         $characterSets = [];
-
+                        $characterSetsName = [];
                         foreach ($setsEffectId as $id) {
                             $keys[] = array_search($id, array_column($reliquariesSet, 'id'));
                         }
@@ -423,10 +427,12 @@ class UserController extends AbstractController
                             //includes all effect from the set
                             $characterSets[] = $reliquariesSet[$key]['affixes'][0];
                             $characterSets[] = $reliquariesSet[$key]['affixes'][1];
+                            $characterSetsName[] = $reliquariesSet[$key]['name'];
                         }
 
                         /*Add the new column to the character array*/
                         $characters['extra'] = ['sets' => $characterSets];
+                        $characters['extra'] = ['setsName' => $characterSetsName];
                     }
                 }
 

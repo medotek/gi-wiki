@@ -238,12 +238,26 @@
                                         </div>
                                         <div class="sets-effect">
                                             {% if characters.extra is not empty %}
-                                                <ul>
-                                                    {% for sets in characters.extra.sets %}
 
-                                                        <li><b>{{ sets.activation_number }}
-                                                                pièces </b>: {{ sets.effect }}
-                                                        </li>
+                                                <ul>
+                                                    {% for sets in characters.extra %}
+                                                        {{ dump(sets) }}
+                                                        {% if  sets.setsName | length == 1 and sets.setEffect|length == 2 %}
+                                                            <li><b>
+                                                                    {{ sets.setsName[0] }} (4 pièces)</b>: <br>
+                                                                {% for key,name in sets.setEffect %}
+                                                                    <b>({{ sets.setEffect[key].activation_number }})</b> {{ sets.setEffect[key].effect }}<br>
+                                                                {% endfor %}
+                                                            </li>
+                                                        {% else %}
+                                                            {% for key,name in sets.setsName %}
+                                                                <li><b>
+                                                                        {{ name }}
+                                                                        ({{ sets.setEffect[key].activation_number }}
+                                                                        )</b>: {{ sets.setEffect[key].effect }}
+                                                                </li>
+                                                            {% endfor %}
+                                                        {% endif %}
                                                     {% endfor %}
                                                 </ul>
                                             {% endif %}
