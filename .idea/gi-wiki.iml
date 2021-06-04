@@ -116,5 +116,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="twitter-bootstrap" level="application" />
+    <orderEntry type="library" name="isotope-layout" level="application" />
   </component>
 </module>
