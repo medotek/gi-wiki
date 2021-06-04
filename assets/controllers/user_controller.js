@@ -357,13 +357,13 @@ $(document).ready(function () {
     });
 
 
-    var stickyInfoTop = $('#character-info-isotope').offset().top;
+
 
 
     var stickyCharacterInfo = function () {
         if ($('.gridFilter').hasClass('filterActive')) {
+            var stickyInfoTop = $('#character-info-isotope').offset().top;
             var scrollTop = $(window).scrollTop();
-
             if (scrollTop > stickyInfoTop) {
                 $('#character-info-isotope').css({
                     position: 'fixed',
@@ -477,6 +477,14 @@ $(document).ready(function () {
                                     left: 0,
                                 }, 100)
                             })
+
+                            $reliquariesList.children('li').each( function () {
+                                $(this).on('mouseenter', function() {
+                                    $(this).children('img').toggleClass('animate-scaling');
+                                }).on('mouseleave', function() {
+                                    $(this).children('img').removeClass('animate-scaling');
+                                })
+                            })
                         }
 
                         /**
@@ -489,7 +497,7 @@ $(document).ready(function () {
                             //to be replaced by the new one
                             console.log('wrong character, the current one is ' + $characterName)
                             $('#character-info-details #reliquaries ul, #character-info-isotope #draggable').empty();
-                            characterReliquaries()
+                            setTimeout(characterReliquaries(), 200);
                         } else {
                             $characterIdLoop['characterId'] = $characterId;
                         }
@@ -549,7 +557,7 @@ $(document).ready(function () {
                         });
                         $character.find('.active-character').removeClass('active-character');
                         $(this).addClass('active-character', function () {
-                            characterReliquaries()
+                            setTimeout(characterReliquaries(), 200);
                         });
                         stickyCharacterInfo();
 
