@@ -400,6 +400,7 @@ $(document).ready(function () {
                     var $characterConstellations = $(this).find('.jsCharacterData #characterDataConstellations').data('characters-constellations');
                     var $characterExtra = $(this).find('.jsCharacterData #characterDataExtra').data('characters-extra');
                     var $characterElement = $(this).find('.jsCharacterData #characterDataElement').data('characters-element');
+                    var $characterElementImage = $(this).find('.jsCharacterData #characterDataElement').data('characters-element-img');
 
                     var $imageSelector = $('#character-info-isotope > .character-info-grid > #character-info-image > img')
                     var $detailsSelector = $('#character-info-details')
@@ -418,7 +419,7 @@ $(document).ready(function () {
                                 height: $('#character-info-isotope').height()
                             })
 
-                            $('#character-element img').attr('src', '/build/elements/Element_' + $characterElement + '.png')
+                            $('#character-element img').attr('src', $characterElementImage)
                                 .attr('alt', 'Element ' + $characterElement)
                                 .addClass('animate__animated animate__fadeIn')
                         }

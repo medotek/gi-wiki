@@ -196,7 +196,8 @@
                                           <span id="characterDataRarity"
                                                 data-characters-rarity="{{ characters.rarity }}"> </span>
                                           <span id="characterDataElement"
-                                                data-characters-element="{{ characters.element }}"></span>
+                                                data-characters-element="{{ characters.element }}"
+                                                data-characters-element-img="{{ asset("build/elements/Element_"~  characters.element ~ ".png") }}"></span>
                                         <span id="characterDataWeapon"
                                               data-characters-weapon="{{ characters.weapon|json_encode }}"> </span>
                                           <span id="characterDataReliquaries"
