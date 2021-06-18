@@ -385,7 +385,7 @@ $(document).ready(function () {
         }
     };
 
-
+    //Display characters info
     $('.uidCharacters').each(function (index, item) {
         var $character = $(item);
         $character.on('click', '.user-character', function () {
