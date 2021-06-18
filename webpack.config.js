@@ -82,7 +82,9 @@ Encore
     })
 
     .copyFiles({
-        from: './assets/images'
+        from: './assets/images',
+        // for prod
+        to: 'images/[path][name].[hash:8].[ext]'
     })
 
 ;
