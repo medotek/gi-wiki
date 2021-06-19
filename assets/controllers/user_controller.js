@@ -201,7 +201,7 @@ $(document).ready(function () {
                 }
             });
 
-            $.ajax({
+            let uidAjax = $.ajax({
                 type: 'post',
                 url: '/account/profile/set/uid',
                 dataType: 'json',
@@ -219,6 +219,9 @@ $(document).ready(function () {
                 }
             });
 
+            uidAjax.done( function () {
+                location.reload();
+            })
 
             var $form = $(this).closest('form');
             $form.toggleClass('is-readonly is-editing');
@@ -357,9 +360,6 @@ $(document).ready(function () {
     });
 
 
-
-
-
     var stickyCharacterInfo = function () {
         if ($('.gridFilter').hasClass('filterActive')) {
             var stickyInfoTop = $('#character-info-isotope').offset().top;
@@ -479,10 +479,10 @@ $(document).ready(function () {
                                 }, 100)
                             })
 
-                            $reliquariesList.children('li').each( function () {
-                                $(this).on('mouseenter', function() {
+                            $reliquariesList.children('li').each(function () {
+                                $(this).on('mouseenter', function () {
                                     $(this).children('img').toggleClass('animate-scaling');
-                                }).on('mouseleave', function() {
+                                }).on('mouseleave', function () {
                                     $(this).children('img').removeClass('animate-scaling');
                                 })
                             })
