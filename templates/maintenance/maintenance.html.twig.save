@@ -1,0 +1,33 @@
+<head>
+    <meta charset="UTF-8">
+    <title>Gudako.club sera bientôt disponible !</title>
+
+    <!-- Meta Description -->
+    <link rel="shortcut icon"
+          href="https://cdn.discordapp.com/attachments/436849356847710220/850417721564463114/BROo.PNG"
+          type="image/x-icon">
+    <link type="application/json+oembed" href="https://cdn.discordapp.com/attachments/661571444135690242/851896308297498654/gud-meta-ako.json" />
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gudako.club">
+    <meta property="og:title" content="Gudako.club - Partage tes builds Genshin Impact">
+    <meta property="og:description"
+          content="Dans un futur proche, Gudako.club arrivera avec plusieurs fonctionnalités tel que partager sa box Genshin, créer et partager ses builds et un même avoir accès à un wiki.">
+https://cdn.discordapp.com/attachments/661571444135690242/851896308297498654/gud-meta-ako.json    <meta property="og:image"
+          content="https://cdn.discordapp.com/attachments/436849356847710220/850419156583317504/bro.PNG">
+    <meta name="theme-color" content="#FF0000">
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://gudako.club">
+    <meta property="twitter:title" content="Gudako.club - Partage tes builds Genshin Impact">
+    <meta property="twitter:description"
+          content="Dans un futur proche, Gudako.club arrivera avec plusieurs fonctionnalités tel que partager sa box Genshin, créer et partager ses builds et un même avoir accès à un wiki.">
+    <meta property="twitter:image"
+          content="https://cdn.discordapp.com/attachments/436849356847710220/850419156583317504/bro.PNG">
+</head>
+
+<body>
+<p>Gudako impact arrive bientôt!</p>
+</body>
+
+
+

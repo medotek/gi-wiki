@@ -293,20 +293,20 @@ class UserController extends AbstractController
                 /*if the user has no character with his uid then store them all in the db*/
 
                 if ($userUidCharacters === []) {
-                    /* TODO: REPLACE THE DATE WITH A NEW DATE IF THE UID EXISTS IN ; DO NOT DELETE THE DATA JUST CHANGE IT*/
-                    $userUidCharacter = new UserUidCharacter();
-                    $userUidCharacter->setUid($this->getCurrentUser()->getUid());
-                    $userUidCharacter->setUser($this->getCurrentUser());
-                    $userUidCharacter->setCharacterId((int)$characters['id']);
-                    $userUidCharacter->setUidCharacterInfo((array)$characters);
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($userUidCharacter);
-                    $entityManager->flush();
-
-                    $currentUser = $this->getCurrentUser();
-                    $currentUser->setUserUidInfo($uidProfile);
-                    $entityManager->persist($currentUser);
-                    $entityManager->flush();
+//                    /* TODO: REPLACE THE DATE WITH A NEW DATE IF THE UID EXISTS IN ; DO NOT DELETE THE DATA JUST CHANGE IT*/
+//                    $userUidCharacter = new UserUidCharacter();
+//                    $userUidCharacter->setUid($this->getCurrentUser()->getUid());
+//                    $userUidCharacter->setUser($this->getCurrentUser());
+//                    $userUidCharacter->setCharacterId((int)$characters['id']);
+//                    $userUidCharacter->setUidCharacterInfo((array)$characters);
+//                    $entityManager = $this->getDoctrine()->getManager();
+//                    $entityManager->persist($userUidCharacter);
+//                    $entityManager->flush();
+//
+//                    $currentUser = $this->getCurrentUser();
+//                    $currentUser->setUserUidInfo($uidProfile);
+//                    $entityManager->persist($currentUser);
+//                    $entityManager->flush();
 
                     /*Push characters (with a new column) on a new array*/
                     $newUidCharacters[] = $characters;
@@ -340,7 +340,7 @@ class UserController extends AbstractController
 
 
     /**
-     * Reload characters for an uid user by conditons
+     * Reload characters for an uid user by conditions
      * @Route("/account/profile/uid-reload-characters", name="user-uid-characters-reload")
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
@@ -368,7 +368,7 @@ class UserController extends AbstractController
             foreach ($uidCharacters as $characters) {
 
                 $characterKey++;
-                dump($characters);
+//                dump($characters);
                 $characterReliquaries[] = $characters['reliquaries'];
                 /*access to the current key of the characterReliquaries array*/
 
